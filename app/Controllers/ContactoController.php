@@ -5,10 +5,11 @@
 	use League\Plates\Engine;
 
 	class ContactoController {
+
 		protected $templates;
 
 		public function __construct() {
-			$this->templates = new Engine('../templates');
+			$this->templates = new Engine('../resources/views');
 		}
 
 		public function index() {

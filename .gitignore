@@ -1,0 +1,9 @@
+# Ignorar la carpeta .idea
+.idea/
+
+# Ignorar la carpeta vendor
+vendor/
+
+# Opcional: Ignorar archivos de Composer si no quieres que estén en el repositorio
+composer.lock
+composer.phar

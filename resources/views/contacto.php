@@ -1,4 +1,9 @@
-<?php $this->layout('layout'); ?>
+<?php $this->layout('master'); ?>
+<?php $this->start('css'); ?>
+
+    <link rel="stylesheet" href="stylesContact.css">
+
+<?php $this->stop() ?>
 
 <?php $this->start('header') ?>
 <h1 class="title">Contacto</h1>
