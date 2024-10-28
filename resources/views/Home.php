@@ -14,11 +14,19 @@
 <?php $this->start('listado') ?>
 <h1>Lista de Usuarios</h1>
 <ul>
-<?php foreach ($users as $user): ?>
+    <?php foreach ($users as $user): ?>
         <li><?= $user['name']; ?> - <?= $user['email']; ?> </li>
     <?php endforeach; ?>
 
 </ul>
+
+<h1>Lista de Kebabs</h1>
+<div>
+	<?php
+	use App\Models\Listador;
+    Listador::listar($kebabs); ?> <!-- Llamamos al método listar aquí -->
+</div>
+
 <?php $this->stop() ?>
 
 <?php $this->start('seccion-prueba') ?>

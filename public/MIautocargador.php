@@ -5,7 +5,6 @@
 
 	// Registramos el autocargador
 	spl_autoload_register(function ($clase) use ($base) {
-
 		// Convertimos el namespace en una ruta de archivo
 		$ruta = str_replace('\\', '/', $clase);
 
