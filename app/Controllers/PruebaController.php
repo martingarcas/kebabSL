@@ -10,7 +10,7 @@ class PruebaController {
         $this->templates = new Engine('../resources/views');
     }
 
-    public function index() {
-        echo $this->templates->render('prueba');
+    public function index($view) {
+        echo $this->templates->render($view);
     }
 }

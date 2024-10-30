@@ -9,13 +9,13 @@
 	$path = isset($_GET['menu']) ? $_GET['menu'] : '';
 
 	// Determinar el controlador y el método a utilizar
-	$controllerMethod = $routes[$path] ?? [App\Controllers\HomeController::class, 'index'];
+	$controllerMethod = $routes[$path] ?? [App\Controllers\HomeController::class, 'index', 'home'];
 
 	// Separar el controlador y el método obtenidos del routes
-	list($controllerClass, $method) = $controllerMethod;
+	list($controllerClass, $method, $view) = $controllerMethod;
 
 	// Crear una instancia del controlador y llamar al método
 	$controller = new $controllerClass();
-	$controller->$method();
+	$controller->$method($view);
 
 ?>

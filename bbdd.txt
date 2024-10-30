@@ -1,0 +1,59 @@
+Estoy implementando una base de datos en mi proyecto, se trata de una venta de kebabs online y estas son algunas indicaciones:
+
+Entidades(cada entidad la nombraré precedida de un "+"):
+
++Kebab:
+	-id (pk)
+	-nombre 
+	-foto (introducida como una cadena)
+	-precio
+
++Ingredientes:
+	-id(pk)
+	-nombre
+	-foto(introducida como una cadena)
+	-precio
+
++Alergenos:
+	-id(pk)
+	-nombre
+	-foto(introducida como una cadena)
+
++Usuario:
+	-id(pk)
+	-nombre
+	-apellido1
+	-apellido2
+	-contraseña
+	-telefono
+	-email
+	-direccion
+	-foto(introducida como una cadena)
+	-monedero
+	-carrito(JSON[obtener datos de la entidad pedido])
+
++Producto_pedido:
+	-id(numerolineapedido, pk)
+	-cantidad(int)
+	-datos(JSON=clave kebab y clave ingredientes)
+
++Pedido:
+	-id
+	-fecha, hora
+	-Estado
+	-Precio
+	-Direccion
+
+-->
+Relaciones:
+Un kebab tiene uno o muchos ingredientes;
+Un ingrediente puede pertenecer a ninguno o a muchos kebabs;
+Un alergeno puede pertenecer a ninguno o a muchos ingredientes;
+Un ingrediente puede tener uno o muchos alergenos;
+Un usuario puede tener ninguno o muchos pedidos;
+Un pedido solo puede ser de un usuario;
+;
+;
+<--
+
+-->Estoy trabajando con workbench<--

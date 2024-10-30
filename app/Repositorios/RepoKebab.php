@@ -43,11 +43,11 @@
 
             if ($registroKebab) {
 
-                $kebab             = new Kebab();
-                $kebab->id         = $registroKebab["id"];
-                $kebab->carne    = $registroKebab["carne"];
-                $kebab->verdura       = $registroKebab["verdura"];
-                $kebab->salsa       = $registroKebab["salsa"];
+                $kebab          = new Kebab();
+                $kebab->id      = $registroKebab["id"];
+                $kebab->carne 	= $registroKebab["carne"];
+                $kebab->verdura = $registroKebab["verdura"];
+                $kebab->salsa   = $registroKebab["salsa"];
             }
 
             return $kebab;
@@ -74,9 +74,9 @@
             }
 
             $id         = $nuevoKebab[0];
-            $carne    = $nuevoKebab[1];
-            $verdura       = $nuevoKebab[2];
-            $salsa       = $nuevoKebab[3];
+            $carne 		= $nuevoKebab[1];
+            $verdura 	= $nuevoKebab[2];
+            $salsa      = $nuevoKebab[3];
 
             $stm = $this->con->prepare("UPDATE kebab SET id = :id, carne = :carne, verdura = :verdura, salsa = :salsa WHERE id = :id");
             $stm->execute(['id' => $id, 'carne' => $carne, 'verdura' => $verdura, 'salsa' => $salsa]);

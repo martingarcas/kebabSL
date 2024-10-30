@@ -5,9 +5,9 @@
 	use App\Controllers\ContactoController;
 
 	$routes = [
-		'' 			=> [HomeController::class, 'index'],
-		'prueba' 	=> [PruebaController::class, 'index'],
-		'contacto' 	=> [ContactoController::class, 'index'],
+		'' 			=> [HomeController::class, 'index', 'home'],
+		'prueba' 	=> [PruebaController::class, 'index', 'prueba'],
+		'contacto' 	=> [ContactoController::class, 'index', 'contacto'],
 	];
 
 	return $routes;
