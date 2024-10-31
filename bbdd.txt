@@ -27,7 +27,6 @@ Entidades(cada entidad la nombraré precedida de un "+"):
 	-contraseña
 	-telefono
 	-email
-	-direccion
 	-foto(introducida como una cadena)
 	-monedero
 	-carrito(JSON[obtener datos de la entidad pedido])
@@ -42,8 +41,11 @@ Entidades(cada entidad la nombraré precedida de un "+"):
 	-fecha, hora
 	-Estado
 	-Precio
-	-Direccion
 
++Direccion:
+	-id
+	-calle
+	-numero
 -->
 Relaciones:
 Un kebab tiene uno o muchos ingredientes;
@@ -52,7 +54,7 @@ Un alergeno puede pertenecer a ninguno o a muchos ingredientes;
 Un ingrediente puede tener uno o muchos alergenos;
 Un usuario puede tener ninguno o muchos pedidos;
 Un pedido solo puede ser de un usuario;
-;
+Relación entre pedido y dirección;
 ;
 <--
 

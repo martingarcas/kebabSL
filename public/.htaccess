@@ -1,0 +1,11 @@
+RewriteEngine On
+
+# Permitir el acceso a index.php para las rutas definidas
+RewriteCond %{REQUEST_URI} !^/index\.php$
+# Verifica si la ruta solicitada no es un archivo existente
+RewriteCond %{REQUEST_FILENAME} !-f
+# Verifica si la ruta solicitada no es un directorio existente
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Redirigir todas las solicitudes a index.php
+RewriteRule ^(.*)$ index.php [QSA,L]

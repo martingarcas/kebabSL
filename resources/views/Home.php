@@ -33,7 +33,7 @@
     <section class="hero">
         <h1 class="hero-title">Bienvenido a Nuestro Sitio</h1>
         <p class="hero-description">Descubre contenido increíble y aprende más sobre nosotros.</p>
-        <a href="?menu=contacto" class="hero-button">Comenzar</a>
+        <a href="contacto" class="hero-button">Comenzar</a>
     </section>
 <?php $this->stop() ?>
 
