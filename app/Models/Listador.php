@@ -26,9 +26,9 @@ namespace App\Models;
 
                 // Mostramos la información de cada animal
                 echo "ID: " 		. $kebab['id'] . " ";
-                echo "Carne: " 		. $kebab['carne'] . " ";
-                echo "Verdura: " 	. $kebab['verdura'] . " ";
-                echo "Salsa: " 		. $kebab['salsa'] . " ";
+                echo "Carne: " 		. $kebab['nombre'] . " ";
+                echo "Verdura: " 	. $kebab['foto'] . " ";
+                echo "Salsa: " 		. $kebab['precio'] . " ";
                 echo "<br>";
             }
         }

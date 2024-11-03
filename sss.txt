@@ -1,0 +1,3 @@
+-Peticiones Ajax (saber si los elementos los mostramos desde javascript o php, )
+api se va a usar en que casos
+renderizar desde  el back o desde  api

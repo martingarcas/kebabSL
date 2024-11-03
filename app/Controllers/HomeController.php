@@ -32,6 +32,15 @@ class HomeController {
 			// Pasar los kebabs y los usuarios a la vista
 			echo $this->templates->render($view, ['kebabs' => $kebabs, 'users' => $users]);
 		}
+
+
+		public function editKebap () {
+
+			// Entra petición, la recibe tu router -> llama al controlador correspondiente ->
+			// realiza la acción, persiste si hace falta datos y devuelve los datos o una confirmación de la acción. lo que haga flta.
+
+
+		}
 	}
 
 ?>

@@ -5,22 +5,52 @@
 
     class Kebab implements iMuestra{
 
-        public $id;
-        public $carne;
-        public $verdura;
-        public $salsa;
+        private $id;
+		private $nombre;
+		private $foto;
+		private $precio;
 
-        public function __construct($id, $carne, $verdura, $salsa) {
+        public function __construct($id, $nombre, $foto, $precio) {
 
             $this->id       = $id;
-            $this->carne  	= $carne;
-            $this->verdura  = $verdura;
-            $this->salsa    = $salsa;
+            $this->nombre  	= $nombre;
+            $this->foto  	= $foto;
+            $this->precio   = $precio;
         }
+
+		public function getId() {
+
+		}
+
+        public function getNombre() {
+
+        	return $this->nombre;
+		}
+
+		public function setNombre($nombre) {
+
+        	$this->nombre = $nombre;
+		}
+
+		public function getFoto() {
+
+		}
+
+		public function setFoto() {
+
+		}
+
+		public function getPrecio() {
+
+		}
+
+		public function setPrecio() {
+
+		}
 
         public function muestra() {
             
-            return "[{$this->id}] - Kebab de {$this->carne} con: {$this->verdura} y con salsa {$this->salsa}.";
+            return "[{$this->id}] - Kebab de {$this->nombre} con: {$this->foto} y con salsa {$this->precio}.";
         }
 
     }

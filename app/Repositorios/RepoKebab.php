@@ -68,18 +68,20 @@
 
             $nuevoKebab = [];
 
-            foreach ($obj as $valor) {
+            /*foreach ($obj as $valor) {
                 
                 $nuevoKebab [] = $valor;
-            }
+            }*/
 
-            $id         = $nuevoKebab[0];
-            $carne 		= $nuevoKebab[1];
-            $verdura 	= $nuevoKebab[2];
-            $salsa      = $nuevoKebab[3];
+            $id 	= $nuevoKebab['id'];
+            $nombre = $nuevoKebab['nombre'];
+            $foto 	= $nuevoKebab['foto'];
+			$precio = $nuevoKebab['precio'];
 
             $stm = $this->con->prepare("UPDATE kebab SET id = :id, carne = :carne, verdura = :verdura, salsa = :salsa WHERE id = :id");
             $stm->execute(['id' => $id, 'carne' => $carne, 'verdura' => $verdura, 'salsa' => $salsa]);
+
+            return 'correcta / no';
         }
 
         public function delete($id) {
