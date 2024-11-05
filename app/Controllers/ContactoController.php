@@ -4,6 +4,8 @@
 
 	use League\Plates\Engine;
 
+//	phpinfo();
+
 	class ContactoController {
 
 		protected $templates;

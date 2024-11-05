@@ -2,7 +2,7 @@
 
     //$base = $_SERVER['DOCUMENT_ROOT'] ."/localhost/clasesCoches";
     //require_once "$base/Modelo/Coche.php";
-	namespace App\Repositorios; // Asegúrate de que esto esté aquí.
+	namespace App\Repositorios;
 
     class RepoKebab implements RepoCrud {
 
@@ -17,18 +17,19 @@
 
             $nuevoKebab = [];
 
-            foreach ($obj as $valor) {
+            /*foreach ($obj as $valor) {
                 
                 $nuevoKebab [] = $valor;
-            }
+            }*/
 
-            $id         = $nuevoKebab[0];
-            $carne 		= $nuevoKebab[1];
-            $verdura 	= $nuevoKebab[2];
-            $salsa      = $nuevoKebab[3];
+			$id 	= $nuevoKebab['id'];
+			$nombre = $nuevoKebab['nombre'];
+			$foto 	= $nuevoKebab['foto'];
+			$precio = $nuevoKebab['precio'];
 
-            $stm = $this->con->prepare("INSERT INTO kebab (id, carne, verdura, salsa) VALUES (:id, :carne, :verdura, :salsa)");
-            $stm->execute(['id' => $id, 'carne' => $carne, 'verdura' => $verdura, 'salsa' => $salsa]);
+
+            $stm = $this->con->prepare("INSERT INTO kebab (id, nombre, foto, precio) VALUES (:id, :nombre, :foto, :precio)");
+            $stm->execute(['id' => $id, 'nombre' => $nombre, 'foto' => $foto, 'precio' => $precio]);
             
 
         }
@@ -45,9 +46,9 @@
 
                 $kebab          = new Kebab();
                 $kebab->id      = $registroKebab["id"];
-                $kebab->carne 	= $registroKebab["carne"];
-                $kebab->verdura = $registroKebab["verdura"];
-                $kebab->salsa   = $registroKebab["salsa"];
+                $kebab->nombre 	= $registroKebab["carne"];
+                $kebab->foto 	= $registroKebab["verdura"];
+                $kebab->precio  = $registroKebab["salsa"];
             }
 
             return $kebab;
@@ -78,10 +79,10 @@
             $foto 	= $nuevoKebab['foto'];
 			$precio = $nuevoKebab['precio'];
 
-            $stm = $this->con->prepare("UPDATE kebab SET id = :id, carne = :carne, verdura = :verdura, salsa = :salsa WHERE id = :id");
-            $stm->execute(['id' => $id, 'carne' => $carne, 'verdura' => $verdura, 'salsa' => $salsa]);
+            $stm = $this->con->prepare("UPDATE kebab SET id = :id, nombre = :nombre, foto = :foto, precio = :precio WHERE id = :id");
+            $stm->execute(['id' => $id, 'nombre' => $nombre, 'foto' => $foto, 'precio' => $precio]);
 
-            return 'correcta / no';
+//            return 'correcta / no';
         }
 
         public function delete($id) {

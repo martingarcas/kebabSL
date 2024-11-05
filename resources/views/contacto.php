@@ -11,6 +11,7 @@
 
 <?php $this->start('formulario') ?>
 <p>Formulario de contacto aquí.</p>
+
 <?php $this->stop() ?>
 
 <?php $this->start('footer') ?>

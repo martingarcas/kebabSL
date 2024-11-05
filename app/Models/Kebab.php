@@ -1,7 +1,7 @@
 <?php
 
-	namespace App\Models; // Asegúrate de que esto esté aquí.
-	use App\Repositorios\iMuestra; // Asegúrate de importar la interfaz correctamente
+	namespace App\Models;
+	use App\Repositorios\iMuestra;
 
     class Kebab implements iMuestra{
 
@@ -20,6 +20,7 @@
 
 		public function getId() {
 
+			return $this->id;
 		}
 
         public function getNombre() {
@@ -34,18 +35,22 @@
 
 		public function getFoto() {
 
+			return $this->foto;
 		}
 
-		public function setFoto() {
+		public function setFoto($foto) {
 
+			$this->foto = $foto;
 		}
 
 		public function getPrecio() {
 
+			return $this->precio;
 		}
 
-		public function setPrecio() {
+		public function setPrecio($precio) {
 
+			$this->precio = $precio;
 		}
 
         public function muestra() {
