@@ -2,34 +2,34 @@
 
 	namespace App\Models;
 
-    class Kebab {
+	class Ingrediente {
 
-        private $id;
+		private $id;
 		private $nombre;
 		private $foto;
 		private $precio;
 
-        public function __construct($id, $nombre, $foto, $precio) {
+		public function __construct($id, $nombre, $foto, $precio) {
 
-            $this->id       = $id;
-            $this->nombre  	= $nombre;
-            $this->foto  	= $foto;
-            $this->precio   = $precio;
-        }
+			$this->id       = $id;
+			$this->nombre  	= $nombre;
+			$this->foto  	= $foto;
+			$this->precio   = $precio;
+		}
 
 		public function getId() {
 
 			return $this->id;
 		}
 
-        public function getNombre() {
+		public function getNombre() {
 
-        	return $this->nombre;
+			return $this->nombre;
 		}
 
 		public function setNombre($nombre) {
 
-        	$this->nombre = $nombre;
+			$this->nombre = $nombre;
 		}
 
 		public function getFoto() {
@@ -52,5 +52,6 @@
 			$this->precio = $precio;
 		}
 
-    }
+	}
+
 ?>
