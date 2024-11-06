@@ -8,6 +8,7 @@ Transacciones
 begintransaction y commit
 rollback
 no se pueden dejar pedidos a medias
+devolver codigos en la api con http_response_code
 -Con silverio parte cliente:
     Mantenimiento Kebab =>  nombre, foto, precio/base, descripcion(ingredientes?), ingredientes,
     filtro para ingredientes, se pueden arrastrar al otro hueco de ingredientes para completar el kebab

@@ -7,12 +7,14 @@
 		private $id;
 		private $calle;
 		private $numero;
+		private $activa;
 
-		public function __construct($id, $calle, $numero) {
+		public function __construct($id, $calle, $numero, $activa) {
 
 			$this->id       = $id;
 			$this->calle  	= $calle;
 			$this->numero  	= $numero;
+			$this->activa  	= $activa;
 		}
 
 		public function getId() {
@@ -38,6 +40,12 @@
 		public function setNumero($numero) {
 
 			$this->numero = $numero;
+		}
+
+		public function setActiva($activa) {
+
+			$this->activa = $activa;
+
 		}
 
 	}

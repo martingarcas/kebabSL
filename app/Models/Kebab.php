@@ -8,10 +8,10 @@
 		private $nombre;
 		private $foto;
 		private $precio;
+		private $ingredientes = [];
 
-        public function __construct($id, $nombre, $foto, $precio) {
+        public function __construct($nombre, $foto, $precio) {
 
-            $this->id       = $id;
             $this->nombre  	= $nombre;
             $this->foto  	= $foto;
             $this->precio   = $precio;
@@ -52,5 +52,36 @@
 			$this->precio = $precio;
 		}
 
-    }
+		public function getIngredientes() {
+
+        	return $this->ingredientes;
+		}
+
+		public function existeIngrediente(Ingrediente $ingrediente) {
+
+			$clave = $ingrediente->getId();
+
+			return isset($this->ingredientes[$clave]);
+		}
+
+		public function agregarIngrediente(Ingrediente $ingrediente) {
+
+        	if (!$this->existeIngrediente($ingrediente)) {
+
+				$clave = $ingrediente->getId();
+				$this->ingredientes[$clave] = $ingrediente;
+			}
+		}
+
+		public function borrarIngrediente(Ingrediente $ingrediente) {
+
+			if ($this->existeIngrediente($ingrediente)) {
+
+				$clave = $ingrediente->getId();
+				unset($this->ingredientes[$clave]);
+			}
+		}
+
+	}
+
 ?>

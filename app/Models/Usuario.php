@@ -14,6 +14,8 @@
 		private $foto;
 		private $monedero;
 		private $carrito;
+		private $direcciones = [];
+		private $alergenos = [];
 
 		public function __construct($id, $nombre, $apellido1, $apellido2, $contrasenna, $telefono, $email, $foto, $monedero, $carrito) {
 
@@ -113,6 +115,7 @@
 
 			$this->monedero = $monedero;
 		}
+
 		public function getCarrito() {
 
 			return $this->carrito;
@@ -121,6 +124,53 @@
 		public function setCarrito($carrito) {
 
 			$this->carrito = $carrito;
+		}
+
+		public function getDirecciones() {
+
+			return $this->direcciones;
+		}
+
+		public function existeDireccion(Direccion $direccion) {
+
+			$clave = $direccion->getId();
+
+			return isset($this->direcciones[$clave]);
+		}
+
+		public function agregarDireccion($calle, $numero, $activa) {
+
+			$direccion = new Direccion($calle, $numero, $activa);
+
+			if ($activa) {
+				$this->cambiarActiva($direccion);
+			}
+
+			$this->direcciones = $direccion;
+
+			if (!$this->existeDireccion($direccion)) {
+
+				$clave = $direccion->getId();
+				$this->direcciones[$clave] = $direccion;
+			}
+		}
+
+		public function borrarDireccion(Direccion $direccion) {
+
+			if ($this->existeDireccion($direccion)) {
+
+				$clave = $direccion->getId();
+				unset($this->direcciones[$clave]);
+			}
+		}
+
+		public function cambiarActiva(Direccion $direccion) {
+
+
+			//recorrer array direcciones, la que encuentro a true la cambio a false ($activa)
+			//busco la coincidencia de la direccion que quiero cambiar
+			//llamo setactiva = true
+
 		}
 
 	}

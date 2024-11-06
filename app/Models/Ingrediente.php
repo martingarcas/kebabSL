@@ -8,6 +8,7 @@
 		private $nombre;
 		private $foto;
 		private $precio;
+		private $alergenos = [];
 
 		public function __construct($id, $nombre, $foto, $precio) {
 
@@ -50,6 +51,36 @@
 		public function setPrecio($precio) {
 
 			$this->precio = $precio;
+		}
+
+		public function getAlergenos() {
+
+			return $this->alergeno;
+		}
+
+		public function existeAlergeno(Alergeno $alergeno) {
+
+			$clave = $alergeno->getId();
+
+			return isset($this->alergeno[$clave]);
+		}
+
+		public function agregarAlergeno(Alergeno $alergeno) {
+
+			if (!$this->existeAlergeno($alergeno)) {
+
+				$clave = $alergeno->getId();
+				$this->alergeno[$clave] = $alergeno;
+			}
+		}
+
+		public function borrarAlergeno(Alergeno $alergeno) {
+
+			if ($this->existeAlergeno($alergeno)) {
+
+				$clave = $alergeno->getId();
+				unset($this->alergeno[$clave]);
+			}
 		}
 
 	}
