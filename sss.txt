@@ -44,3 +44,5 @@ devolver codigos en la api con http_response_code
      https://codepen.io/G470/pen/PLbMLL
      https://codepen.io/dede_brahma/pen/jaqJqL
       la imagen, hacer animacion keyframes para que la imagen tenga movimiento a la hora de moverla.(obligatorio)
+
+      OBJETO VALIDATOR EN HELPER CON LOGIN Y SESIÓN

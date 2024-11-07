@@ -1,6 +1,7 @@
 <?php
 
 	namespace App\Models;
+	use App\Models\Direccion;
 
 	class Usuario {
 
@@ -17,9 +18,8 @@
 		private $direcciones = [];
 		private $alergenos = [];
 
-		public function __construct($id, $nombre, $apellido1, $apellido2, $contrasenna, $telefono, $email, $foto, $monedero, $carrito) {
+		public function __construct($nombre, $apellido1, $apellido2, $contrasenna, $telefono, $email, $foto, $monedero, $carrito) {
 
-			$this->id       	= $id;
 			$this->nombre 		= $nombre;
 			$this->apellido1 	= $apellido1;
 			$this->apellido2 	= $apellido2;
@@ -29,6 +29,22 @@
 			$this->foto 		= $foto;
 			$this->monedero 	= $monedero;
 			$this->carrito 		= $carrito;
+		}
+
+		public function crearUsuario($id, $nombre, $apellido1, $apellido2, $contrasenna, $telefono, $email, $foto, $monedero, $carrito, $direcciones, $alergenos) {
+
+			$this->id 			= $id;
+			$this->nombre 		= $nombre;
+			$this->apellido1 	= $apellido1;
+			$this->apellido2 	= $apellido2;
+			$this->contrasenna 	= $contrasenna;
+			$this->telefono 	= $telefono;
+			$this->email 		= $email;
+			$this->foto 		= $foto;
+			$this->monedero 	= $monedero;
+			$this->carrito 		= $carrito;
+			$this->direcciones 	= $carrito;
+			$this->alergenos 	= $alergenos;
 		}
 
 		public function getId() {
@@ -131,6 +147,17 @@
 			return $this->direcciones;
 		}
 
+		public function setDirecciones($direcciones) {
+
+			foreach ($direcciones as $direccion) {
+
+				if (!$this->existeDireccion($direccion)) {
+
+					$this->agregarDireccion($direccion);
+				}
+			}
+		}
+
 		public function existeDireccion(Direccion $direccion) {
 
 			$clave = $direccion->getId();
@@ -164,13 +191,20 @@
 			}
 		}
 
-		public function cambiarActiva(Direccion $direccion) {
+		public function cambiarActiva(Direccion $activaDireccion) {
 
+			if ($this->existeDireccion($activaDireccion)) {
 
-			//recorrer array direcciones, la que encuentro a true la cambio a false ($activa)
-			//busco la coincidencia de la direccion que quiero cambiar
-			//llamo setactiva = true
+				$activaDireccion->setActiva(true);
 
+				foreach ($this->direcciones as $direccion) {
+
+					if ($direccion != $activaDireccion) {
+
+						$direccion->setActiva(false);
+					}
+				}
+			}
 		}
 
 	}

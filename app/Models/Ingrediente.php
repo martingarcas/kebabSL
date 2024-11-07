@@ -10,12 +10,20 @@
 		private $precio;
 		private $alergenos = [];
 
-		public function __construct($id, $nombre, $foto, $precio) {
+		public function __construct($nombre, $foto, $precio) {
 
-			$this->id       = $id;
 			$this->nombre  	= $nombre;
 			$this->foto  	= $foto;
 			$this->precio   = $precio;
+		}
+
+		public function crearIngrediente($id, $nombre, $foto, $precio, $alergenos) {
+
+			$this->id  				= $id;
+			$this->nombre  			= $nombre;
+			$this->foto  			= $foto;
+			$this->precio 			= $precio;
+			$this->alergenos[] 		= $alergenos;
 		}
 
 		public function getId() {
@@ -56,6 +64,17 @@
 		public function getAlergenos() {
 
 			return $this->alergeno;
+		}
+
+		public function setAlergenos($alergenos) {
+
+			foreach ($alergenos as $alergeno) {
+
+				if (!$this->existeAlergeno($alergeno)) {
+
+					$this->agregarAlergeno($alergeno);
+				}
+			}
 		}
 
 		public function existeAlergeno(Alergeno $alergeno) {

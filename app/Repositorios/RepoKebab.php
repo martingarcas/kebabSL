@@ -30,7 +30,8 @@
 
             $stm = $this->con->prepare("INSERT INTO kebab (id, nombre, foto, precio) VALUES (:id, :nombre, :foto, :precio)");
             $stm->execute(['id' => $id, 'nombre' => $nombre, 'foto' => $foto, 'precio' => $precio]);
-            
+
+            //devolver id/objeto
 
         }
 

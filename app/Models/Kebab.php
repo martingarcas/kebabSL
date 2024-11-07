@@ -17,6 +17,15 @@
             $this->precio   = $precio;
         }
 
+        public function crearKebab($id, $nombre, $foto, $precio, $ingredientes) {
+
+			$this->id  				= $id;
+			$this->nombre  			= $nombre;
+			$this->foto  			= $foto;
+			$this->precio 			= $precio;
+			$this->ingredientes[] 	= $ingredientes;
+		}
+
 		public function getId() {
 
 			return $this->id;
@@ -55,6 +64,17 @@
 		public function getIngredientes() {
 
         	return $this->ingredientes;
+		}
+
+		public function setIngredientes($ingredientes) {
+
+			foreach ($ingredientes as $ingrediente) {
+
+				if (!$this->existeIngrediente($ingrediente)) {
+
+					$this->agregarIngrediente($ingrediente);
+				}
+			}
 		}
 
 		public function existeIngrediente(Ingrediente $ingrediente) {

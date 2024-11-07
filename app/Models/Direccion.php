@@ -9,9 +9,9 @@
 		private $numero;
 		private $activa;
 
-		public function __construct($id, $calle, $numero, $activa) {
+		public function __construct($id = null, $calle, $numero, $activa) {
 
-			$this->id       = $id;
+			$this->id       = $id ?? null;
 			$this->calle  	= $calle;
 			$this->numero  	= $numero;
 			$this->activa  	= $activa;

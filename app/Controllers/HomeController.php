@@ -5,7 +5,6 @@
 	use App\Repositorios\RepoKebab;
 	use App\Repositorios\Conexion;
 	use App\Models\Kebab;
-	use App\Models\User;
 	use League\Plates\Engine;
 
 class HomeController {

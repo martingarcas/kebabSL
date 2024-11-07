@@ -9,9 +9,9 @@
 		private $nombre;
 		private $foto;
 
-		public function __construct($id, $nombre, $foto) {
+		public function __construct($id = null, $nombre, $foto) {
 
-			$this->id       = $id;
+			$this->id       = $id ?? null;
 			$this->nombre  	= $nombre;
 			$this->foto  	= $foto;
 		}
