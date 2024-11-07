@@ -63,7 +63,7 @@
 
 		public function getAlergenos() {
 
-			return $this->alergeno;
+			return $this->alergenos;
 		}
 
 		public function setAlergenos($alergenos) {
@@ -81,7 +81,7 @@
 
 			$clave = $alergeno->getId();
 
-			return isset($this->alergeno[$clave]);
+			return isset($this->alergenos[$clave]);
 		}
 
 		public function agregarAlergeno(Alergeno $alergeno) {
@@ -89,7 +89,7 @@
 			if (!$this->existeAlergeno($alergeno)) {
 
 				$clave = $alergeno->getId();
-				$this->alergeno[$clave] = $alergeno;
+				$this->alergenos[$clave] = $alergeno;
 			}
 		}
 
@@ -98,7 +98,7 @@
 			if ($this->existeAlergeno($alergeno)) {
 
 				$clave = $alergeno->getId();
-				unset($this->alergeno[$clave]);
+				unset($this->alergenos[$clave]);
 			}
 		}
 

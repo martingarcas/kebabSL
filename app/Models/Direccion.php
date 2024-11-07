@@ -42,6 +42,11 @@
 			$this->numero = $numero;
 		}
 
+		public function getActiva() {
+
+			return $this->activa;
+		}
+
 		public function setActiva($activa) {
 
 			$this->activa = $activa;

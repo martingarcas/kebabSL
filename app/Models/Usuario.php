@@ -43,7 +43,7 @@
 			$this->foto 		= $foto;
 			$this->monedero 	= $monedero;
 			$this->carrito 		= $carrito;
-			$this->direcciones 	= $carrito;
+			$this->direcciones 	= $direcciones;
 			$this->alergenos 	= $alergenos;
 		}
 
@@ -165,15 +165,12 @@
 			return isset($this->direcciones[$clave]);
 		}
 
-		public function agregarDireccion($calle, $numero, $activa) {
+		public function agregarDireccion(Direccion $direccion) {
 
-			$direccion = new Direccion($calle, $numero, $activa);
+			if ($direccion->getActiva()) {
 
-			if ($activa) {
 				$this->cambiarActiva($direccion);
 			}
-
-			$this->direcciones = $direccion;
 
 			if (!$this->existeDireccion($direccion)) {
 
@@ -199,11 +196,52 @@
 
 				foreach ($this->direcciones as $direccion) {
 
-					if ($direccion != $activaDireccion) {
+					if ($direccion->getId() != $activaDireccion->getId()) {
 
 						$direccion->setActiva(false);
 					}
 				}
+			}
+		}
+
+		public function getAlergenos() {
+
+			return $this->alergenos;
+		}
+
+		public function setAlergenos($alergenos) {
+
+			foreach ($alergenos as $alergeno) {
+
+				if (!$this->existeAlergeno($alergeno)) {
+
+					$this->agregarAlergeno($alergeno);
+				}
+			}
+		}
+
+		public function existeAlergeno(Alergeno $alergeno) {
+
+			$clave = $alergeno->getId();
+
+			return isset($this->alergenos[$clave]);
+		}
+
+		public function agregarAlergeno(Alergeno $alergeno) {
+
+			if (!$this->existeAlergeno($alergeno)) {
+
+				$clave = $alergeno->getId();
+				$this->alergenos[$clave] = $alergeno;
+			}
+		}
+
+		public function borrarAlergeno(Alergeno $alergeno) {
+
+			if ($this->existeAlergeno($alergeno)) {
+
+				$clave = $alergeno->getId();
+				unset($this->alergenos[$clave]);
 			}
 		}
 
