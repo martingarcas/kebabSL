@@ -2,6 +2,7 @@
 
 	namespace App\Controllers;
 
+	use App\Models\User;
 	use App\Repositorios\RepoKebab;
 	use App\Repositorios\Conexion;
 	use App\Models\Kebab;
