@@ -9,14 +9,17 @@
 		private $estado;
 		private $precio;
 		private $direccion;
+		private Usuario $usuario;
+		private LineaPedido $linea_pedido;
 
-		public function __construct($id, $fecha, $estado, $precio, $direccion) {
+		public function __construct($id = null, $fecha, $estado, $precio, $direccion, $usuario) {
 
-			$this->id       	= $id;
+			$this->id       	= $id ?? null;
 			$this->fecha  		= $fecha;
 			$this->estado  		= $estado;
 			$this->precio 		= $precio;
 			$this->direccion 	= $direccion;
+			$this->usuario		= $usuario;
 		}
 
 		public function getId() {
@@ -62,6 +65,11 @@
 		public function setDireccion($direccion) {
 
 			$this->direccion = $direccion;
+		}
+
+		public function getUsuario() {
+
+			return $this->usuario;
 		}
 	
 	}
