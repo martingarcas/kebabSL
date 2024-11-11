@@ -1,7 +1,6 @@
 <?php
 
 	namespace App\Models;
-	use App\Models\Direccion;
 
 	class Usuario {
 
@@ -12,13 +11,14 @@
 		private $contrasenna;
 		private $telefono;
 		private $email;
+		private $dni;
 		private $foto;
 		private $monedero;
 		private $carrito;
 		private $direcciones = [];
 		private $alergenos = [];
 
-		public function __construct($nombre, $apellido1, $apellido2, $contrasenna, $telefono, $email, $foto, $monedero, $carrito) {
+		public function __construct($nombre, $apellido1, $apellido2, $contrasenna, $telefono, $email, $dni, $foto, $monedero, $carrito) {
 
 			$this->nombre 		= $nombre;
 			$this->apellido1 	= $apellido1;
@@ -26,12 +26,13 @@
 			$this->contrasenna 	= $contrasenna;
 			$this->telefono 	= $telefono;
 			$this->email 		= $email;
+			$this->dni 			= $dni;
 			$this->foto 		= $foto;
 			$this->monedero 	= $monedero;
 			$this->carrito 		= $carrito;
 		}
 
-		public function crearUsuario($id, $nombre, $apellido1, $apellido2, $contrasenna, $telefono, $email, $foto, $monedero, $carrito, $direcciones, $alergenos) {
+		public function crearUsuario($id, $nombre, $apellido1, $apellido2, $contrasenna, $telefono, $email, $dni, $foto, $monedero, $carrito, $direcciones, $alergenos) {
 
 			$this->id 			= $id;
 			$this->nombre 		= $nombre;
@@ -40,6 +41,7 @@
 			$this->contrasenna 	= $contrasenna;
 			$this->telefono 	= $telefono;
 			$this->email 		= $email;
+			$this->dni 			= $dni;
 			$this->foto 		= $foto;
 			$this->monedero 	= $monedero;
 			$this->carrito 		= $carrito;
@@ -110,6 +112,16 @@
 		public function setEmail($email) {
 
 			$this->email = $email;
+		}
+
+		public function getDni() {
+
+			return $this->dni;
+		}
+
+		public function setDni($dni) {
+
+			$this->dni = $dni;
 		}
 
 		public function getFoto() {

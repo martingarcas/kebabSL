@@ -9,6 +9,7 @@
 
     <?= $this->section('header')?>
     <?= $this->section('listado')?>
+    <?= $this->section('formulario')?>
     <?= $this->section('seccion-prueba')?>
     <?= $this->section('footer')?>
 
