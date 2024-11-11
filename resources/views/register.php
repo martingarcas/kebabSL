@@ -37,17 +37,41 @@
 				</form>
 
 				<!--Register-->
-				<form action="../../app/Controllers/RegisterController.php" class="formulario__register">
+				<form action="/register-post" method="POST" class="formulario__register">
 					<h2>Regístrarse</h2>
-					<input type="text" placeholder="Nombre" required>
-					<input type="text" placeholder="Correo Electronico" required>
-					<input type="text" placeholder="DNI" required>
-					<input type="password" placeholder="Contraseña" required>
-					<br><br>
+					<input type="text" name="nombre" placeholder="Nombre" value="<?= isset($data['nombre']) ? $data['nombre'] : ''; ?>">
+					<?php if (isset($errores) && in_array("El nombre es obligatorio.", $errores)) : ?>
+						<span class="error">El nombre es obligatorio.</span>
+					<?php endif; ?>
+
+					<input type="text" name="email" placeholder="Correo Electronico" value="<?= isset($data['email']) ? $data['email'] : ''; ?>">
+					<?php if (isset($errores) && in_array("El correo electrónico no es válido.", $errores)) : ?>
+						<span class="error">El correo electrónico no es válido.</span>
+					<?php endif; ?>
+
+					<input type="text" name="dni" placeholder="DNI" value="<?= isset($data['dni']) ? $data['dni'] : ''; ?>" required>
+					<?php if (isset($errores) && in_array("El DNI es obligatorio.", $errores)) : ?>
+						<span class="error">El DNI es obligatorio.</span>
+					<?php endif; ?>
+
+					<input type="password" name="contrasenna" placeholder="Contraseña" value="<?= isset($data['contrasenna']) ? $data['contrasenna'] : ''; ?>" >
+					<?php if (isset($errores) && in_array("La contraseña es obligatoria.", $errores)) : ?>
+						<span class="error">La contraseña es obligatoria.</span>
+					<?php endif; ?>
+
 					<h2>Dirección</h2>
-					<input type="text" placeholder="Calle" required>
-					<input type="text" placeholder="Número" required>
-					<button>Regístrarse</button>
+					<input type="text" name="calle" placeholder="Calle" value="<?= isset($data['calle']) ? $data['calle'] : ''; ?>" >
+					<?php if (isset($errores) && in_array("La calle es obligatoria.", $errores)) : ?>
+						<span class="error">La calle es obligatoria.</span>
+					<?php endif; ?>
+
+					<input type="text" name="numero" placeholder="Número" value="<?= isset($data['numero']) ? $data['numero'] : ''; ?>" required>
+					<?php if (isset($errores) && in_array("El número es obligatorio.", $errores)): ?>
+						<span class="error">El número es obligatorio.</span>
+					<?php elseif (isset($errores) && in_array("El número debe ser un valor numérico.", $errores)): ?>
+						<span class="error">El número debe ser un valor numérico.</span>
+					<?php endif; ?>
+					<button type="submit" value="registrar">Regístrarse</button>
 				</form>
 			</div>
 		</div>

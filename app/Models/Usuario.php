@@ -18,7 +18,7 @@
 		private $direcciones = [];
 		private $alergenos = [];
 
-		public function __construct($nombre, $apellido1, $apellido2, $contrasenna, $telefono, $email, $dni, $foto, $monedero, $carrito) {
+		public function __construct($nombre, $apellido1 = null, $apellido2 = null, $contrasenna, $telefono = null, $email, $dni, $foto = null, $monedero = null, $carrito = null) {
 
 			$this->nombre 		= $nombre;
 			$this->apellido1 	= $apellido1;
@@ -52,6 +52,11 @@
 		public function getId() {
 
 			return $this->id;
+		}
+
+		public function setId($id) {
+
+			$this->id = $id;
 		}
 
 		public function getNombre() {

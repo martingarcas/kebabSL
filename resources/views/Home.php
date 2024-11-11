@@ -11,6 +11,9 @@
 <h1 class="title">Welcome!</h1>
 <?php $this->stop() ?>
 
+<!-- Mostrar el mensaje de éxito si el parámetro 'success' está en la URL -->
+
+
 <?php $this->start('listado') ?>
 <h1>Lista de Usuarios</h1>
 <ul>
@@ -19,13 +22,6 @@
     <?php endforeach; ?>
 
 </ul>
-
-<h1>Lista de Kebabs</h1>
-<div>
-	<?php
-	use App\Models\Listador;
-    Listador::listar($kebabs); ?> <!-- Llamamos al método listar aquí -->
-</div>
 
 <?php $this->stop() ?>
 

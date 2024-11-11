@@ -3,9 +3,6 @@
 	namespace App\Controllers;
 
 	use App\Models\User;
-	use App\Repositorios\RepoKebab;
-	use App\Repositorios\Conexion;
-	use App\Models\Kebab;
 	use League\Plates\Engine;
 
 class HomeController {
@@ -17,11 +14,12 @@ class HomeController {
 		}
 
 		public function index($view) {
-			// Crear una instancia del repositorio de kebabs
-			$repoKebab = new RepoKebab(Conexion::getConection());
 
-			// Obtener todos los kebabs
-			$kebabs = $repoKebab->getAll();
+			// Verificar si el parámetro 'success' está presente en la URL
+			$successMessage = null;
+			if (isset($_GET['success']) && $_GET['success'] == 'true') {
+				$successMessage = '¡Usuario registrado con éxito! Ahora puedes iniciar sesión.';
+			}
 
 			// Crear una instancia del modelo User
 			$userModel = new User();
@@ -30,7 +28,7 @@ class HomeController {
 			$users = $userModel->getUsers();
 
 			// Pasar los kebabs y los usuarios a la vista
-			echo $this->templates->render($view, ['kebabs' => $kebabs, 'users' => $users]);
+			echo $this->templates->render($view, ['successMessage' => $successMessage, 'users' => $users]);
 		}
 
 
