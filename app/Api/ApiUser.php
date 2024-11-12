@@ -59,6 +59,7 @@ class ApiUser {
 			$pdo->commit();
 
 			// Si todo sale bien, devolver una respuesta de éxito
+			//devolver un json/encode
 			return ['status' => 'success', 'message' => 'Usuario y dirección creados con éxito'];
 
 		} catch (\Exception $e) {

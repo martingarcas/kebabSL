@@ -3,6 +3,7 @@
 	namespace App\Controllers;
 
 	use App\Models\User;
+	use App\Repositorios\RepoUser;
 	use League\Plates\Engine;
 
 class HomeController {
@@ -15,20 +16,11 @@ class HomeController {
 
 		public function index($view) {
 
-			// Verificar si el parámetro 'success' está presente en la URL
-			$successMessage = null;
-			if (isset($_GET['success']) && $_GET['success'] == 'true') {
-				$successMessage = '¡Usuario registrado con éxito! Ahora puedes iniciar sesión.';
-			}
-
-			// Crear una instancia del modelo User
-			$userModel = new User();
-
-			// Obtener todos los usuarios
-			$users = $userModel->getUsers();
+			$repoUser = new RepoUser();
+			$usuario = $repoUser->getById(1);
 
 			// Pasar los kebabs y los usuarios a la vista
-			echo $this->templates->render($view, ['successMessage' => $successMessage, 'users' => $users]);
+			echo $this->templates->render($view, ['usuario' => $usuario]);
 		}
 
 

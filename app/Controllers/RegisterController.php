@@ -1,120 +1,143 @@
 <?php
 
-	namespace App\Controllers;
+namespace App\Controllers;
 
-	use App\Api\ApiUser;
-	use League\Plates\Engine;
+use App\Api\ApiUser;
+use App\Models\Direccion;
+use App\Models\Usuario;
+use App\Repositorios\Conexion;
+use App\Repositorios\RepoDireccion;
+use App\Repositorios\RepoUser;
+use App\Utils\Validator;
+use League\Plates\Engine;
+use App\Utils\Validacion;  // Incluir la clase Validacion
 
-	class RegisterController {
+class RegisterController {
 
-		protected $templates;
+	protected $templates;
 
-		public function __construct() {
-			$this->templates = new Engine('../resources/views');
+	public function __construct() {
+		$this->templates = new Engine('../resources/views');
+	}
+
+	public function createUser() {
+		// Crear una instancia de la clase Validacion
+		$validator = new Validator();
+
+		// Array donde almacenar los datos del formulario
+		$data = [
+			'nombre'      => $_POST['nombre'] ?? '',
+			'apellido1'   => $_POST['apellido1'] ?? null,
+			'apellido2'   => $_POST['apellido2'] ?? null,
+			'email'       => $_POST['email'] ?? '',
+			'dni'         => $_POST['dni'] ?? '',
+			'calle'       => $_POST['calle'] ?? '',
+			'numero'      => $_POST['numero'] ?? '',
+			'contrasenna' => $_POST['contrasenna'] ?? '',
+			'telefono'    => $_POST['telefono'] ?? null,
+			'foto'        => $_POST['foto'] ?? null,
+			'monedero'    => $_POST['monedero'] ?? null,
+			'carrito'     => $_POST['carrito'] ?? null,
+		];
+
+		// Realizar las validaciones
+		$errores = [];
+
+		// Validar cada campo con los métodos de la clase Validacion
+		if (($mensaje = $validator->Requerido('nombre')) !== true) {
+			$errores['nombre'] = $mensaje;
 		}
 
-		// Este es el método que maneja el formulario de registro
-		public function createUser() {
-			// Verificar si el formulario ha sido enviado
-			if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+		if (($mensaje = $validator->Requerido('contrasenna')) !== true) {
+			$errores['contrasenna'] = $mensaje;
+		}
 
-				// Obtener los datos del formulario
-				$data = [
-					'nombre' 		=> $_POST['nombre'] ?? '',
-					'apellido1' 	=> $_POST['apellido1'] ?? null,
-					'apellido2' 	=> $_POST['apellido2'] ?? null,
-					'email' 		=> $_POST['email'] ?? '',
-					'dni' 			=> $_POST['dni'] ?? '',
-					'calle' 		=> $_POST['calle'] ?? '',
-					'numero' 		=> $_POST['numero'] ?? '',
-					'contrasenna' 	=> $_POST['contrasenna'],
-					'telefono' 		=> $_POST['telefono'] ?? null,
-					'foto' 			=> $_POST['foto'] ?? null,
-					'monedero' 		=> $_POST['monedero'] ?? null,
-					'carrito' 		=> $_POST['carrito'] ?? null,
-					'activa' 		=> 1 // Suponemos que la dirección está activa por defecto
-				];
+		if (($mensaje = $validator->Requerido('dni')) !== true || ($mensaje = $validator->Dni('dni')) !== true) {
+			$errores['dni'] = $mensaje;
+		}
 
-				// Validar campos obligatorios
-				$errores = [];
+		if (($mensaje = $validator->Requerido('email')) !== true || ($mensaje = $validator->Email('email')) !== true) {
+			$errores['email'] = $mensaje;
+		}
 
-				// Validar que el nombre no esté vacío
-				if (empty($data['nombre'])) {
-					$errores[] = "El nombre es obligatorio.";
+		if (($mensaje = $validator->Requerido('calle')) !== true) {
+			$errores['calle'] = $mensaje;
+		}
+
+		if (($mensaje = $validator->Requerido('numero')) !== true) {
+			$errores['numero'] = $mensaje;
+		}
+
+		// Si hay errores, devolverlos
+		if (count($errores) > 0) {
+			echo $this->templates->render('register', [
+				'errores' => $errores,
+				'data' => $data // Pasar los datos para mantenerlos en los campos
+			]);
+			return; // Detener la ejecución
+		}
+
+		// Si no hay errores, continuar con el registro (como lo hacías antes)
+		try {
+			// Cifrar la contraseña antes de almacenarla
+			$data['contrasenna'] = password_hash($data['contrasenna'], PASSWORD_BCRYPT);
+
+			// Crear los repositorios para usuario y dirección
+			$repoUser = new RepoUser();
+			$repoDireccion = new RepoDireccion();
+
+			// Crear el objeto Usuario
+			$usuario = new Usuario(
+				$data['nombre'],         // nombre
+				$data['apellido1'],      // apellido1 (opcional)
+				$data['apellido2'],      // apellido2 (opcional)
+				$data['contrasenna'],    // contrasenna (obligatorio)
+				$data['telefono'],       // telefono (opcional)
+				$data['email'],          // email (obligatorio)
+				$data['dni'],            // dni (obligatorio)
+				$data['foto'],           // foto (opcional)
+				$data['monedero'],       // monedero (opcional)
+				$data['carrito']         // carrito (opcional)
+			);
+
+			if (!$repoUser->existeUsuario($data['email'], $data['dni'])) {
+				// Insertar el usuario en la base de datos
+				$repoUser->create($usuario);
+				$usuarioId = $usuario->getId();
+
+				// Si no se obtuvo un ID de usuario, lanzar una excepción
+				if (!$usuarioId) {
+					throw new \PDOException("No se pudo obtener el ID del usuario.");
 				}
 
-				// Validar que la contraseña no esté vacía
-				if (empty($data['contrasenna'])) {
-					$errores[] = "La contraseña es obligatoria.";
-				}
+				// Crear el objeto Dirección y asociarlo al usuario
+				$direccion = new Direccion($data['calle'], $data['numero'], 1);
 
-				// Validar que el DNI no esté vacío
-				if (empty($data['dni'])) {
-					$errores[] = "El DNI es obligatorio.";
-				}
+				// Insertar la dirección en la base de datos
+				$repoDireccion->create($direccion, $usuarioId);
 
-				// Validar que el email no esté vacío
-				if (empty($data['email'])) {
+				// Establecer un mensaje flash en la sesión
+				session_start();
+				$_SESSION['flash_message'] = "Usuario {$data['nombre']} con DNI {$data['dni']} ha sido creado con éxito.";
 
-					$errores[] = "El correo electrónico es obligatorio.";
+				// Redirigir al login
+				header('Location: /login');
+				exit();
 
-				} elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-					$errores[] = "El correo electrónico no es válido.";
-				}
-
-				// Validar que la calle no esté vacía
-				if (empty($data['calle'])) {
-					$errores[] = "La calle es obligatoria.";
-				}
-
-				// Validar que el número no esté vacío
-				if (empty($data['numero'])) {
-
-					$errores[] = "El número es obligatorio.";
-
-				} elseif (!is_numeric($data['numero'])) {
-
-					$errores[] = "El número debe ser un valor numérico.";
-				}
-
-				// Si hay errores, devolverlos
-				if (count($errores) > 0) {
-					// Renderizar la vista con los errores
-					echo $this->templates->render('register', [
-						'errores' => $errores,
-						'data' => $data // Pasar los datos para mantenerlos en los campos
-					]);
-					return; // Detener la ejecución
-				}
-
-				// Cifrar la contraseña antes de almacenarla
-				$data['contrasenna'] = password_hash($data['contrasenna'], PASSWORD_BCRYPT); // si luego no funciona fuera.
-
-				// Crear una instancia de la API para gestionar el registro
-				$apiUser = new ApiUser();
-
-				// Llamar al método de la API para crear el usuario
-				$response = $apiUser->crearUsuario($data);
-
-				// Manejar la respuesta: si es éxito, mostrar la vista de éxito
-				if ($response['status'] === 'success') {
-					// Cambiar el código de estado HTTP
-//					http_response_code(201); // Se creó el usuario correctamente
-
-					// Redirigir a la página de éxito
-					header('Location: /?success=true');
-					exit; // Es importante terminar el script después de la redirección
-				} else {
-					// Si hay un error, devolver el mensaje de error con código 422
-//					http_response_code(422); // Error en los datos, por ejemplo, el correo ya existe
-					echo "Error: " . $response['message'];
-				}
+			} else {
+				echo "El usuario ya existe";
 			}
-		}
 
-		public function index($view) {
-			echo $this->templates->render($view);
+		} catch (\Exception $e) {
+			// Si ocurre un error, devolver un mensaje de error
+			return ['status' => 'error', 'message' => $e->getMessage()];
 		}
 	}
+
+	public function index($view) {
+		echo $this->templates->render($view);
+	}
+}
+
 
 ?>
