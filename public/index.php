@@ -2,6 +2,10 @@
 	require_once './Miautocargador.php';
 	require_once '../vendor/autoload.php';
 
+	use App\Utils\Logger;
+
+	// Iniciar sesión al comienzo del flujo de ejecución de la aplicación
+	Logger::iniciaSesion();
 	// Cargar las rutas
 	$routes = require_once '../routes/routes.php';
 

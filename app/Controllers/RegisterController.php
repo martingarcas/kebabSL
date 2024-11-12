@@ -5,12 +5,12 @@ namespace App\Controllers;
 use App\Api\ApiUser;
 use App\Models\Direccion;
 use App\Models\Usuario;
-use App\Repositorios\Conexion;
-use App\Repositorios\RepoDireccion;
 use App\Repositorios\RepoUser;
-use App\Utils\Validator;
+use App\Repositorios\RepoDireccion;
+use App\Utils\FlashMessage;
+use App\Utils\Logger;
 use League\Plates\Engine;
-use App\Utils\Validacion;  // Incluir la clase Validacion
+use App\Utils\Validator;
 
 class RegisterController {
 
@@ -21,7 +21,7 @@ class RegisterController {
 	}
 
 	public function createUser() {
-		// Crear una instancia de la clase Validacion
+		// Crear una instancia de la clase Validator
 		$validator = new Validator();
 
 		// Array donde almacenar los datos del formulario
@@ -40,36 +40,40 @@ class RegisterController {
 			'carrito'     => $_POST['carrito'] ?? null,
 		];
 
-		// Realizar las validaciones
-		$errores = [];
+		// Definir las reglas de validación
+		$camposRequeridos = [
+			'nombre' 		=> 'Requerido',
+			'contrasenna' 	=> 'Requerido',
+			'dni' 			=> 'Requerido|Dni',
+			'email' 		=> 'Requerido|Email',
+			'calle' 		=> 'Requerido',
+			'numero' 		=> 'Requerido'
+		];
 
-		// Validar cada campo con los métodos de la clase Validacion
-		if (($mensaje = $validator->Requerido('nombre')) !== true) {
-			$errores['nombre'] = $mensaje;
-		}
+		// Validar los campos
+		$errores = $validator->validarCampos($data, $camposRequeridos);
 
-		if (($mensaje = $validator->Requerido('contrasenna')) !== true) {
-			$errores['contrasenna'] = $mensaje;
-		}
+		// Instanciar los repositorios solo cuando se necesiten
+		$repoUser 		= new RepoUser();
+		$repoDireccion 	= new RepoDireccion();
 
-		if (($mensaje = $validator->Requerido('dni')) !== true || ($mensaje = $validator->Dni('dni')) !== true) {
-			$errores['dni'] = $mensaje;
-		}
+		// Verificar si el email ya está registrado, solo si no hay errores previos en el campo
+		 if (empty($errores['email'])) {
+			 if ($validator->validarDuplicado('email', $data['email'], $repoUser)) {
+				 $errores['email'] = 'El correo electrónico ya está registrado.';
+			 }
+		 }
 
-		if (($mensaje = $validator->Requerido('email')) !== true || ($mensaje = $validator->Email('email')) !== true) {
-			$errores['email'] = $mensaje;
-		}
-
-		if (($mensaje = $validator->Requerido('calle')) !== true) {
-			$errores['calle'] = $mensaje;
-		}
-
-		if (($mensaje = $validator->Requerido('numero')) !== true) {
-			$errores['numero'] = $mensaje;
+		 // Verificar si el dni ya está registrado, solo si no hay errores previos en el campo
+        if (empty($errores['dni'])) {
+			if ($validator->validarDuplicado('dni', $data['dni'], $repoUser)) {
+				$errores['dni'] = 'El DNI ya está registrado.';
+			}
 		}
 
 		// Si hay errores, devolverlos
 		if (count($errores) > 0) {
+
 			echo $this->templates->render('register', [
 				'errores' => $errores,
 				'data' => $data // Pasar los datos para mantenerlos en los campos
@@ -77,14 +81,10 @@ class RegisterController {
 			return; // Detener la ejecución
 		}
 
-		// Si no hay errores, continuar con el registro (como lo hacías antes)
+		// Si no hay errores, continuar con el registro
 		try {
 			// Cifrar la contraseña antes de almacenarla
 			$data['contrasenna'] = password_hash($data['contrasenna'], PASSWORD_BCRYPT);
-
-			// Crear los repositorios para usuario y dirección
-			$repoUser = new RepoUser();
-			$repoDireccion = new RepoDireccion();
 
 			// Crear el objeto Usuario
 			$usuario = new Usuario(
@@ -100,44 +100,50 @@ class RegisterController {
 				$data['carrito']         // carrito (opcional)
 			);
 
-			if (!$repoUser->existeUsuario($data['email'], $data['dni'])) {
-				// Insertar el usuario en la base de datos
-				$repoUser->create($usuario);
-				$usuarioId = $usuario->getId();
+			// Insertar el usuario en la base de datos
+			$repoUser->create($usuario);
+			$usuarioId = $usuario->getId();
 
-				// Si no se obtuvo un ID de usuario, lanzar una excepción
-				if (!$usuarioId) {
-					throw new \PDOException("No se pudo obtener el ID del usuario.");
-				}
-
-				// Crear el objeto Dirección y asociarlo al usuario
-				$direccion = new Direccion($data['calle'], $data['numero'], 1);
-
-				// Insertar la dirección en la base de datos
-				$repoDireccion->create($direccion, $usuarioId);
-
-				// Establecer un mensaje flash en la sesión
-				session_start();
-				$_SESSION['flash_message'] = "Usuario {$data['nombre']} con DNI {$data['dni']} ha sido creado con éxito.";
-
-				// Redirigir al login
-				header('Location: /login');
-				exit();
-
-			} else {
-				echo "El usuario ya existe";
+			// Si no se obtuvo un ID de usuario, retornar un error
+			if ($usuarioId === null) {
+				throw new \Exception("No se pudo crear el usuario.");
 			}
 
+			// Crear el objeto Dirección
+			$direccion = new Direccion($data['calle'], $data['numero'], 1);
+			$repoDireccion->create($direccion, $usuarioId);
+
+			// Usamos FlashMessage para el mensaje de éxito
+			FlashMessage::setMessage("Usuario {$data['nombre']} con DNI {$data['dni']} ha sido creado con éxito.");
+
+			// Redirigir al login
+			header('Location: /login');
+			exit();
+
 		} catch (\Exception $e) {
-			// Si ocurre un error, devolver un mensaje de error
-			return ['status' => 'error', 'message' => $e->getMessage()];
+			echo "Error: " . $e->getMessage();
 		}
 	}
 
 	public function index($view) {
-		echo $this->templates->render($view);
+		// Verificar si el usuario está logueado
+		var_dump(Logger::estaLogueado());
+		if (Logger::estaLogueado()) {
+
+			// Si está logueado, obtener el usuario desde la sesión
+			$usuarioEmail = Logger::leerSesion('user');
+
+			if ($usuarioEmail) {
+				$repoUser = new RepoUser();
+				$usuarioDetails = $repoUser->findByEmail($usuarioEmail);
+				echo $this->templates->render($view, ['usuario' => $usuarioDetails]);
+			}
+		} else {
+			// Si no está logueado, mostrar la vista sin los detalles del usuario
+			echo $this->templates->render($view);
+		}
+//		echo $this->templates->render($view);
 	}
 }
-
 
 ?>

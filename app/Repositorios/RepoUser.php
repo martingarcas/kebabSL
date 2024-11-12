@@ -21,6 +21,7 @@
 			$stm = $con->prepare(
 				"INSERT INTO usuario (nombre, email, dni, contrasenna) VALUES (:nombre, :email, :dni, :contrasenna)"
 			);
+
 			$stm->execute([
 				'nombre' 		=> $nombre,
 				'email' 		=> $email,
@@ -41,6 +42,7 @@
 			$stm = $con->prepare(
 				"SELECT * FROM usuario WHERE id = :id"
 			);
+
 			$stm->execute([
 				'id' => $id
 			]);
@@ -69,30 +71,47 @@
 			return null;
 		}
 
-		public function existeUsuario($email, $dni) {
-			// Obtener la conexión a la base de datos
+		// Método para verificar si existe un usuario por un campo genérico
+		public function existePorCampo($campo, $valor) {
+
+			$con = Conexion::getConection();
+			$stm = $con->prepare("SELECT COUNT(*) FROM usuario WHERE $campo = :valor");
+			$stm->execute(['valor' => $valor]);
+
+			return $stm->fetchColumn() > 0;
+		}
+
+		public function findByEmail($email) {
+
 			$con = Conexion::getConection();
 
-			// Preparar la consulta SQL para buscar por email o DNI
-			$stm = $con->prepare(
-				"SELECT COUNT(*) FROM usuario WHERE email = :email OR dni = :dni"
-			);
+			// Preparar la consulta para buscar por el email
+			$stm = $con->prepare("SELECT * FROM usuario WHERE email = :email");
+			$stm->execute(['email' => $email]);
 
-			// Ejecutar la consulta pasando los parámetros de email y dni
-			$stm->execute([
-				'email' => $email,
-				'dni' => $dni
-			]);
+			// Obtener el resultado como un array asociativo
+			$response = $stm->fetch(PDO::FETCH_ASSOC);
 
-			// Obtener el resultado de la consulta (el número de filas encontradas)
-			$result = $stm->fetchColumn();
+			if ($response) {
+				// Crear un objeto Usuario con los datos obtenidos
+				$usuario = new Usuario(
+					$response['nombre'],
+					$response['apellido1'],
+					$response['apellido2'],
+					$response['contrasenna'],
+					$response['telefono'],
+					$response['email'],
+					$response['dni'],
+					$response['foto'],
+					$response['monedero'],
+					$response['carrito']
+				);
 
-			// Si hay al menos una fila, significa que el usuario existe
-			if ($result > 0) {
-				return true;
+				return $usuario;
 			}
 
-			return false;
+			// Si no se encuentra el usuario, devolver null
+			return null;
 		}
 
 

@@ -17,8 +17,16 @@
 			$activa = $direccion->getActiva();
 
 
-			$stm = $con->prepare("INSERT INTO direccion (calle, numero, activa, usuario_id) VALUES (:calle, :numero, :activa, :usuarioId)");
-			$stm->execute(['calle' => $calle, 'numero' => $numero, 'activa' => $activa, 'usuarioId' => $usuarioId]);
+			$stm = $con->prepare(
+				"INSERT INTO direccion (calle, numero, activa, usuario_id) VALUES (:calle, :numero, :activa, :usuarioId)"
+			);
+
+			$stm->execute([
+				'calle' => $calle,
+				'numero' => $numero,
+				'activa' => $activa,
+				'usuarioId' => $usuarioId]
+			);
 
 			return $direccion;
 		}

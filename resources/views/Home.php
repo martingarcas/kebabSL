@@ -1,4 +1,6 @@
-<?php $this->layout('master'); ?>
+<?php use App\Utils\Logger;
+
+$this->layout('master'); ?>
 
 <?php $this->start('head'); ?>
 
@@ -8,10 +10,15 @@
 
 
 <?php $this->start('header') ?>
-<h1 class="title">Welcome!</h1>
-<?php $this->stop() ?>
+<h1 class="title">
+	<?php if (isset($usuario)): ?>
+		Hola, <?= htmlspecialchars($usuario->getNombre()); ?>!
+	<?php else: ?>
+		Hola, Invitado!
+	<?php endif; ?>
 
-<!-- Mostrar el mensaje de éxito si el parámetro 'success' está en la URL -->
+</h1>
+<?php $this->stop() ?>
 
 
 <?php $this->start('seccion-prueba') ?>
