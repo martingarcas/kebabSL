@@ -1,0 +1,44 @@
+use kebabsl;
+select * from usuario
+
+use kebabsl;
+select * from direccion;
+
+delete from usuario;
+
+use kebabsl;
+insert into alergeno values (null, "Altramuz", "resources/img/alergenos/altramuz.png");
+insert into alergeno values (null, "Apio", "resources/img/alergenos/apio.png");
+insert into alergeno values (null, "Cacahuetes", "resources/img/alergenos/cacahuetes.png");
+insert into alergeno values (null, "Crustáceos", "resources/img/alergenos/crustaceos.png");
+insert into alergeno values (null, "Frutos secos", "resources/img/alergenos/frutos_secos.png");
+insert into alergeno values (null, "Gluten", "resources/img/alergenos/gluten.png");
+insert into alergeno values (null, "Huevo", "resources/img/alergenos/huevo.png");
+insert into alergeno values (null, "Lácteos", "resources/img/alergenos/lacteos.png");
+insert into alergeno values (null, "Moluscos", "resources/img/alergenos/moluscos.png");
+insert into alergeno values (null, "Mostaza", "resources/img/alergenos/mostaza.png");
+insert into alergeno values (null, "Pescado", "resources/img/alergenos/pescado.png");
+insert into alergeno values (null, "Sésamo", "resources/img/alergenos/sesamo.png");
+insert into alergeno values (null, "Soja", "resources/img/alergenos/soja.png");
+insert into alergeno values (null, "Sulfitos", "resources/img/alergenos/sulfitos.png");
+
+PASOS:
+
+(PRINCIPAL)
+-DISEÑO DE LA WEB.
+-CERRAR SESIÓN.
+-PERFIL(COMPLETO).
+-CREAR INGREDIENTES
+-CREAR KEBABS.
+-ENLAZAR EN WEB Y BASE DE DATOS, INGREDIENTES-ALERGENOS / USUARIOS-ALERGENOS
+-BOTÓN RECORDAR CONTRASEÑA Y QUE ENVÍE UN EMAIL AL CORREO.
+-COMO CLIENTE TAMBIEN:
+HACER PEDIDOS, CREAR KEBABS PERSONALIZADOS, COMPROBAR LOS ALERGENOS DEL USUARIO Y AVISAR.
+
+
+EJEMPLO CREAR INGREDIENTES:
+FORMULARIO HTML, ACTION A LA MISMA DIRECCION. CREO JAVASCRIPT  Y LO INCLUYO EN LA VISTA DEL FORMULARIO PARA RECOGER CAMPOS DEL 
+FORMULARIO CON AJAX Y HACER VALIDACIONES NECESARIAS.
+UNA VEZ TERMINADO, MANDO CON UN FETCH Y UN JSON COMO RESPUESTA A LA API (PHP)
+EN LA API COMPRUEBO LAS VALIDACIONES CON LA BASE DE DATOS CON LOS DATOS DEL JSON QUE HE RECOGIDO Y LOS INSERTO EN LA BASE DE DATOS. REDIRIGIR.
+

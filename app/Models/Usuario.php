@@ -15,10 +15,11 @@
 		private $foto;
 		private $monedero;
 		private $carrito;
+		private $rol;
 		private $direcciones = [];
 		private $alergenos = [];
 
-		public function __construct($nombre, $apellido1 = null, $apellido2 = null, $contrasenna, $telefono = null, $email, $dni, $foto = null, $monedero = null, $carrito = null) {
+		public function __construct($nombre, $apellido1 = null, $apellido2 = null, $contrasenna, $telefono = null, $email, $dni, $foto = null, $monedero = null, $carrito = null, $rol) {
 
 			$this->nombre 		= $nombre;
 			$this->apellido1 	= $apellido1;
@@ -30,6 +31,7 @@
 			$this->foto 		= $foto;
 			$this->monedero 	= $monedero;
 			$this->carrito 		= $carrito;
+			$this->rol 			= $rol;
 		}
 
 		public function crearUsuario($id, $nombre, $apellido1, $apellido2, $contrasenna, $telefono, $email, $dni, $foto, $monedero, $carrito, $direcciones, $alergenos) {
@@ -157,6 +159,16 @@
 		public function setCarrito($carrito) {
 
 			$this->carrito = $carrito;
+		}
+
+		public function getRol() {
+
+			return $this->rol;
+		}
+
+		public function setRol($rol) {
+
+			$this->rol = $rol;
 		}
 
 		public function getDirecciones() {

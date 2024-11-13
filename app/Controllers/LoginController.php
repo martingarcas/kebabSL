@@ -66,7 +66,7 @@ class LoginController {
 			}
 
 			// Si la autenticación es correcta, iniciar sesión
-			Logger::login($usuario->getEmail());  // Usar el método login para almacenar al usuario en la sesión
+			Logger::login($usuario);  // Usar el método login para almacenar al usuario en la sesión
 		}
 
 		// Si hay errores, devolverlos al formulario

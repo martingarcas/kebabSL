@@ -2,6 +2,8 @@
 
 namespace App\Utils;
 
+use App\Models\Usuario;
+
 class Logger {
 
 	/**
@@ -25,16 +27,23 @@ class Logger {
 	}
 
 	/**
-	 * Función que inicia sesión y asigna valor a 'user' en la sesión.
+	 * Función que inicia sesión y asigna el objeto 'Usuario' completo a la sesión.
 	 *
-	 * @param string $usuario
+	 * @param Usuario $usuario
 	 *
 	 * @return void
 	 */
-	public static function login(string $usuario) : void {
-		self::iniciaSesion();  // Asegura que la sesión esté iniciada
-		$_SESSION['user'] = $usuario;  // Almacena el usuario en la sesión
+	public static function login(Usuario $usuario) : void {
+		self::iniciaSesion();  // Asegúrate de que la sesión esté iniciada
+
+		// Serializa el objeto Usuario antes de guardarlo en la sesión
+		$_SESSION['user'] = serialize($usuario);  // Serializamos el objeto
+
+		// Agrega un var_dump para verificar si el objeto se ha serializado correctamente
+		var_dump($_SESSION['user']);  // Verifica que se trata de una cadena serializada
 	}
+
+
 
 	/**
 	 * Función que cierra sesión, eliminando las variables de sesión.
@@ -79,21 +88,24 @@ class Logger {
 	}
 
 	/**
-	 * Función que obtiene la información del usuario si está logueado.
+	 * Función que obtiene la información del usuario completo si está logueado.
 	 *
-	 * @return array
+	 * @return Usuario|null
 	 */
-	public static function obtenerUsuario() : ?array {
-		self::iniciaSesion();  // Asegúrate de que la sesión está iniciada
-		if (self::estaLogueado()) {
-			// Si está logueado, obtenemos la información del usuario
-			$usuarioEmail = self::leerSesion('user');
-			return ['usuario' => $usuarioEmail];
-		} else {
-			// Si no está logueado, retornar null
-			return null;
+// Logger.php
+
+	public static function obtenerUsuario(): ?Usuario {
+		// Verifica si el usuario está guardado en la sesión
+		if (isset($_SESSION['user'])) {
+			// Deserializa el objeto Usuario desde la sesión
+			return unserialize($_SESSION['user']);
 		}
+
+		// Si no está en la sesión, devuelve null
+		return null;
 	}
+
+
 }
 
 ?>

@@ -17,6 +17,7 @@ class RegisterController {
 	protected $templates;
 
 	public function __construct() {
+		// Inicializar el motor de plantillas
 		$this->templates = new Engine('../resources/views');
 	}
 
@@ -38,34 +39,35 @@ class RegisterController {
 			'foto'        => $_POST['foto'] ?? null,
 			'monedero'    => $_POST['monedero'] ?? null,
 			'carrito'     => $_POST['carrito'] ?? null,
+			'rol' 		  => 'usuario',
 		];
 
 		// Definir las reglas de validación
 		$camposRequeridos = [
-			'nombre' 		=> 'Requerido',
-			'contrasenna' 	=> 'Requerido',
-			'dni' 			=> 'Requerido|Dni',
-			'email' 		=> 'Requerido|Email',
-			'calle' 		=> 'Requerido',
-			'numero' 		=> 'Requerido'
+			'nombre'      => 'Requerido',
+			'contrasenna' => 'Requerido',
+			'dni'         => 'Requerido|Dni',
+			'email'       => 'Requerido|Email',
+			'calle'       => 'Requerido',
+			'numero'      => 'Requerido'
 		];
 
 		// Validar los campos
 		$errores = $validator->validarCampos($data, $camposRequeridos);
 
 		// Instanciar los repositorios solo cuando se necesiten
-		$repoUser 		= new RepoUser();
-		$repoDireccion 	= new RepoDireccion();
+		$repoUser = new RepoUser();
+		$repoDireccion = new RepoDireccion();
 
 		// Verificar si el email ya está registrado, solo si no hay errores previos en el campo
-		 if (empty($errores['email'])) {
-			 if ($validator->validarDuplicado('email', $data['email'], $repoUser)) {
-				 $errores['email'] = 'El correo electrónico ya está registrado.';
-			 }
-		 }
+		if (empty($errores['email'])) {
+			if ($validator->validarDuplicado('email', $data['email'], $repoUser)) {
+				$errores['email'] = 'El correo electrónico ya está registrado.';
+			}
+		}
 
-		 // Verificar si el dni ya está registrado, solo si no hay errores previos en el campo
-        if (empty($errores['dni'])) {
+		// Verificar si el dni ya está registrado, solo si no hay errores previos en el campo
+		if (empty($errores['dni'])) {
 			if ($validator->validarDuplicado('dni', $data['dni'], $repoUser)) {
 				$errores['dni'] = 'El DNI ya está registrado.';
 			}
@@ -73,7 +75,6 @@ class RegisterController {
 
 		// Si hay errores, devolverlos
 		if (count($errores) > 0) {
-
 			echo $this->templates->render('register', [
 				'errores' => $errores,
 				'data' => $data // Pasar los datos para mantenerlos en los campos
@@ -97,7 +98,8 @@ class RegisterController {
 				$data['dni'],            // dni (obligatorio)
 				$data['foto'],           // foto (opcional)
 				$data['monedero'],       // monedero (opcional)
-				$data['carrito']         // carrito (opcional)
+				$data['carrito'],        // carrito (opcional)
+				$data['rol']         	// carrito (opcional)
 			);
 
 			// Insertar el usuario en la base de datos
@@ -126,24 +128,7 @@ class RegisterController {
 	}
 
 	public function index($view) {
-		// Verificar si el usuario está logueado
-		var_dump(Logger::estaLogueado());
-		if (Logger::estaLogueado()) {
-
-			// Si está logueado, obtener el usuario desde la sesión
-			$usuarioEmail = Logger::leerSesion('user');
-
-			if ($usuarioEmail) {
-				$repoUser = new RepoUser();
-				$usuarioDetails = $repoUser->findByEmail($usuarioEmail);
-				echo $this->templates->render($view, ['usuario' => $usuarioDetails]);
-			}
-		} else {
-			// Si no está logueado, mostrar la vista sin los detalles del usuario
-			echo $this->templates->render($view);
-		}
-//		echo $this->templates->render($view);
+		// Renderizamos la vista de registro sin hacer comprobaciones de sesión
+		echo $this->templates->render($view);
 	}
 }
-
-?>

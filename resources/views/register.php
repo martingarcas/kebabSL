@@ -6,14 +6,6 @@
 <?php $this->stop() ?>
 
 <?php $this->start('header') ?>
-<h1 class="title">
-	<?php if (isset($usuario)): ?>
-		Hola, <?= htmlspecialchars($usuario->getNombre()); ?>!
-	<?php else: ?>
-		Hola, Invitado!
-	<?php endif; ?>
-
-</h1>
 <?php $this->stop() ?>
 
 <?php $this->start('formulario') ?>

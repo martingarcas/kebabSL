@@ -16,17 +16,19 @@
 			$email 			= $user->getEmail();
 			$contrasenna 	= $user->getContrasenna();
 			$dni 			= $user->getDni();
+			$rol 			= $user->getRol();
 
 
 			$stm = $con->prepare(
-				"INSERT INTO usuario (nombre, email, dni, contrasenna) VALUES (:nombre, :email, :dni, :contrasenna)"
+				"INSERT INTO usuario (nombre, email, dni, contrasenna, rol) VALUES (:nombre, :email, :dni, :contrasenna, :rol)"
 			);
 
 			$stm->execute([
 				'nombre' 		=> $nombre,
 				'email' 		=> $email,
 				'dni' 			=> $dni,
-				'contrasenna' 	=> $contrasenna
+				'contrasenna' 	=> $contrasenna,
+				'rol' 			=> $rol
 			]);
 
 			// Obtener el ID del usuario recién insertado
@@ -62,7 +64,8 @@
 					$data['dni'],
 					$data['foto'],
 					$data['monedero'],
-					$data['carrito']
+					$data['carrito'],
+					$data['rol']
 				);
 
 				return $usuario;
@@ -104,7 +107,8 @@
 					$response['dni'],
 					$response['foto'],
 					$response['monedero'],
-					$response['carrito']
+					$response['carrito'],
+					$response['rol']
 				);
 
 				return $usuario;
