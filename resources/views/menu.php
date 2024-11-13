@@ -5,57 +5,72 @@ use App\Utils\Logger;
 $usuario = Logger::obtenerUsuario();
 ?>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-	<a class="navbar-brand" href="/">KEBAB S.L.</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-
-	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		<ul class="navbar-nav mr-auto">
-			<!-- Otros enlaces del menú comunes -->
-
-			<!-- Mostrar diferentes enlaces dependiendo de si el usuario está logueado y si es administrador -->
-			<?php if ($usuario): ?>
-				<li class="nav-item active">
-					<a class="nav-link" href="/logout">CERRAR SESIÓN</a>
-				</li>
-				<li class="nav-item active">
-					<a class="nav-link" href="/profile">MI PERFIL</a>
-				</li>
-				<li class="nav-item active">
-					<a class="nav-link" href="#">Hola, <?= htmlspecialchars($usuario->getNombre()); ?>!</a> <!-- Mostrar el nombre del usuario -->
-				</li>
-
-				<!-- Verificar si el usuario es administrador -->
-				<?php if ($usuario->getRol() === 'administrador'): ?>
-					<!-- Mostrar menú para administradores -->
-					<li class="nav-item active">
-						<a class="nav-link" href="/admin/dashboard">DASHBOARD ADMIN</a>
+<header class="header">
+	<div class="wrap">
+		<h2 class="logo"><a href="/">KEBAB S.L.</a></h2>
+		<a id="menu-icon">&#9776; Menu</a> <!-- Icono del menú hamburguesa -->
+		<nav class="navbar">
+			<ul class="menu">
+				<!-- Menú para usuarios logueados -->
+				<?php if ($usuario !== null && $usuario->getRol() === 'cliente'): ?>
+					<li><a href="/">CARTA</a></li>
+					<li><a href="/">CARRITO</a></li>
+					<li><a href="/">CONTACTO</a></li>
+					<!-- Foto del usuario con submenú desplegable -->
+					<li class="user-menu">
+						<a href="#" class="user-link">
+							<img src="<?= htmlspecialchars($usuario->getFoto()); ?>" alt="Foto de <?= htmlspecialchars($usuario->getNombre()); ?>" class="user-photo">
+						</a>
+						<ul class="submenu">
+							<li><a href="/profile">MI PERFIL</a></li>
+							<li><a href="/logout">CERRAR SESIÓN</a></li>
+						</ul>
 					</li>
-					<li class="nav-item active">
-						<a class="nav-link" href="/admin/gestionar-usuarios">GESTIONAR USUARIOS</a>
+				<?php elseif ($usuario !== null && $usuario->getRol() === 'administrador'): ?>
+					<!-- Menú para administradores -->
+					<li><a href="/">KEBABS</a></li>
+					<li><a href="/">INGREDIENTES</a></li>
+					<li><a href="/">GRÁFICOS-ESTADOS</a></li>
+					<li class="user-menu">
+						<a href="#" class="user-link">
+							<img src="<?= htmlspecialchars($usuario->getFoto()); ?>" alt="Foto de <?= htmlspecialchars($usuario->getNombre()); ?>" class="user-photo">
+						</a>
+						<ul class="submenu">
+							<li><a href="/profile">MI PERFIL</a></li>
+							<li><a href="/logout">CERRAR SESIÓN</a></li>
+						</ul>
 					</li>
-					<li class="nav-item active">
-						<a class="nav-link" href="/admin/gestionar-productos">GESTIONAR PRODUCTOS</a>
-					</li>
+				<?php else: ?>
+					<!-- Menú para usuarios no logueados -->
+					<li><a href="/login">INICIAR SESIÓN</a></li>
+					<li><a href="/register">REGÍSTRARSE</a></li>
+					<li><a href="/">CARTA</a></li>
+					<li><a href="/">CARRITO</a></li>
+					<li><a href="/">CONTACTO</a></li>
 				<?php endif; ?>
-
-			<?php else: ?>
-				<!-- Menú para usuarios no logueados -->
-				<li class="nav-item active">
-					<a class="nav-link" href="/login">INICIAR SESIÓN <span class="sr-only">(current)</span></a>
-				</li>
-				<li class="nav-item active">
-					<a class="nav-link" href="/register">REGÍSTRARSE <span class="sr-only">(current)</span></a>
-				</li>
-			<?php endif; ?>
-		</ul>
-
-		<!-- Formulario de búsqueda -->
-		<form class="form-inline my-2 my-lg-0">
-			<input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search">
-			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
-		</form>
+			</ul>
+		</nav>
 	</div>
-</nav>
+</header>
+
+<!-- Si es necesario un formulario de búsqueda -->
+<div class="content">
+	<h2>Simple Responsive Navigation Menu</h2>
+	<p>Built with CSS.</p>
+</div>
+
+<?php $this->start('scripts'); ?>
+<script>
+	document.addEventListener("DOMContentLoaded", function() {
+		const menuIcon = document.getElementById('menu-icon');
+		const navbar = document.querySelector('.navbar');
+
+// Agregamos un listener para manejar el clic en el menú
+		menuIcon.addEventListener('click', function() {
+			// Alternar la clase 'show' para mostrar/ocultar el menú
+			navbar.classList.toggle('show');
+		});
+	});
+
+</script>
+<?php $this->stop(); ?>

@@ -11,7 +11,7 @@
 <?php $this->start('formulario') ?>
 <!-- Mostrar el mensaje flash, si existe -->
 <?php if (isset($message)): ?>
-	<div class="alert alert-<?= htmlspecialchars($message['type']) ?>" id="flashMessage">
+	<div class="flash-message <?= htmlspecialchars($message['type']) ?>" id="flashMessage">
 		<?= htmlspecialchars($message['message']) ?>
 	</div>
 <?php endif; ?>
@@ -26,13 +26,13 @@
 				<label for="email">Correo Electrónico:</label>
 				<input type="email" name="email" placeholder="tu.email@ejemplo.com">
 				<?php if (isset($errores['email'])): ?>
-					<span class="error"><?= htmlspecialchars($errores['email']) ?></span>
+					<span class="error-form"><?= htmlspecialchars($errores['email']) ?></span>
 				<?php endif; ?>
 
 				<label for="contrasenna">Contraseña:</label>
 				<input type="password" name="contrasenna" placeholder="Introduce tu contraseña">
 				<?php if (isset($errores['contrasenna'])): ?>
-					<span class="error"><?= htmlspecialchars($errores['contrasenna']) ?></span>
+					<span class="error-form"><?= htmlspecialchars($errores['contrasenna']) ?></span>
 				<?php endif; ?>
 			</fieldset>
 
@@ -51,7 +51,7 @@
 <script>
 	// Esperamos 5 segundos antes de ocultar el mensaje
 	setTimeout(function() {
-		var flashMessage = document.getElementById('flashMessage');
+		var flashMessage = document.querySelector('#flashMessage');
 		if (flashMessage) {
 			flashMessage.style.display = 'none';  // Ocultamos el mensaje
 		}

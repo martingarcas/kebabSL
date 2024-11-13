@@ -1,20 +1,17 @@
 <?php
 
-	use App\Controllers\HomeController;
-	use App\Controllers\LoginController;
-	use App\Controllers\PruebaController;
-	use App\Controllers\RegisterController;
+use App\Controllers\HomeController;
+use App\Controllers\AuthController;
 
-	//TODO cambiar a parámetro opcional
-	$routes = [
-		'' 				=> [HomeController::class, 'index', 'home'],
-		'prueba' 		=> [PruebaController::class, 'index', 'prueba'],
-		'register' 		=> [RegisterController::class, 'index', 'register'],
-		'register-post' => [RegisterController::class, 'createUser', 'home'],
-		'login' 		=> [LoginController::class, 'index', 'login'],
-		'login-post' 	=> [LoginController::class, 'loginUser', 'home'],
-	];
+$routes = [
+	'' 				=> [HomeController::class, 'index', 'home'],
+	'login' 		=> [AuthController::class, 'showLoginForm', 'login'],
+	'login-post' 	=> [AuthController::class, 'loginUser', 'home'],
+	'register' 		=> [AuthController::class, 'showRegisterForm', 'register'],
+	'register-post' => [AuthController::class, 'registerUser', 'home'],
+	'logout' 		=> [AuthController::class, 'logoutUser', 'home']
+];
 
-	return $routes;
+return $routes;
 
 ?>

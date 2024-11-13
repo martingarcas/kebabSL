@@ -39,7 +39,7 @@ class RegisterController {
 			'foto'        => $_POST['foto'] ?? null,
 			'monedero'    => $_POST['monedero'] ?? null,
 			'carrito'     => $_POST['carrito'] ?? null,
-			'rol' 		  => 'usuario',
+			'rol' 		  => 'cliente',
 		];
 
 		// Definir las reglas de validación

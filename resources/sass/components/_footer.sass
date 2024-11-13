@@ -1,0 +1,90 @@
+.footer-cnt
+	color: white
+	background-color: #333333
+	padding: 150px 0
+
+	.footer-cnt-inner
+		max-width: 1400px
+		margin: 0 auto
+		padding: 0 30px
+
+		.main-data, .main-data-group
+			display: grid
+			grid-template-columns: repeat(1, 1fr)
+			justify-items: center
+			gap: 50px
+			font-size: 16px
+
+		.main-data-group
+			max-width: 610px
+
+		.main-data-box
+			width: 100%
+
+		.main-data-box-list
+			a:hover
+				text-decoration: underline
+				color: #0056b3
+				transition: 0.2s
+
+		.main-menu-logo
+			width: 200px
+			margin: 0 auto
+
+		.main-data-box-header
+			position: relative
+			margin-bottom: 26px
+			padding:
+				top: 10px
+				bottom: 20px
+			&:after
+				content: ""
+				position: absolute
+				bottom: 0
+				left: 0
+				width: 100%
+				height: 3px
+				background-color: #333333
+				border-radius: 7px
+
+		.main-data-box-list
+			.list-item
+				display: flex
+				position: relative
+				align-items: center
+				margin-bottom: 26px
+				list-style: none
+				//line-height: 200%
+				.list-item-rrss
+					padding: 5px 10px
+					border-radius: 10px
+				.list-item-direction
+					line-height: 150%
+				.position-icon
+					display: flex
+					flex-direction: column
+					align-items: center
+
+		.list-rrss
+			display: flex
+			justify-content: center
+			a:hover
+				background-color: #007bff
+
+@media (min-width: 768px)
+	.footer-cnt
+		padding: 60px 0
+		.footer-cnt-inner
+			.main-data
+				grid-template-columns: repeat(2, 1fr)
+			.main-data-box
+			.impar
+				justify-self: start
+			.par
+				justify-self: end
+
+@media (min-width: 1440px)
+	.footer-cnt
+		.footer-cnt-inner
+			.main-data
+				grid-template-columns: repeat(4, 1fr)

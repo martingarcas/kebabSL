@@ -3,9 +3,9 @@
 namespace App\Controllers;
 
 use League\Plates\Engine;
+use App\Utils\FlashMessage;
 
 class HomeController {
-
 	protected $templates;
 
 	public function __construct() {
@@ -14,7 +14,9 @@ class HomeController {
 	}
 
 	public function index($view) {
-		// Renderizar directamente la vista sin necesidad de verificar la sesión en el controlador
-		echo $this->templates->render($view);
+		// Obtener el mensaje flash si existe
+		$message = FlashMessage::getMessage();
+		// Renderizar la vista pasando el mensaje flash
+		echo $this->templates->render($view, ['message' => $message]);
 	}
 }

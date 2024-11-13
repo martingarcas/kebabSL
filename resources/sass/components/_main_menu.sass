@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito')
+
+/* Base Styles
+
+*
+	box-sizing: border-box
+	margin: 0
+	padding: 0
+
+html
+	font-size: 100%
+	font-family: 'Nunito', Arial, sans-serif
+	font-weight: normal
+	line-height: 1.5
+	-webkit-font-smoothing: antialiased
+
+a
+	color: #d32f2f
+
+	/* Rojo para los enlaces
+	opacity: 1
+	text-decoration: none
+	transition: all 0.2s ease
+
+	&:hover
+		opacity: 0.85
+		text-decoration: underline
+
+.content
+	text-align: center
+	margin-top: 2em
+
+/* Header
+
+.header
+	position: relative
+	width: 100%
+	background: #ff7043
+
+	/* Naranja suave
+	height: 50px
+	line-height: 50px
+	box-shadow: 0 -3px 0 #ff7043 inset
+
+/* Sombra para resaltar el color
+
+.wrap
+	max-width: 960px
+	margin: 0 auto
+
+/* Logo
+
+.logo
+	font-family: inherit
+	font-size: 1.5em
+	margin-left: 1em
+
+	a
+		color: #ffffff
+
+		/* Blanco
+		text-decoration: none
+		opacity: 1
+		transition: all 0.2s ease
+
+		&:hover
+			opacity: 0.85
+
+/* Menú principal (Navbar)
+
+.navbar
+	background-color: #ff7043
+
+	/* Naranja suave
+	position: relative
+	max-height: 1000px
+
+	/* Esto se usa para permitir la animación de transformación
+	opacity: 0
+
+	/* Empieza oculto
+	transform: translateY(-10px)
+
+	/* Empieza ligeramente fuera de la vista
+	transition: transform 0.4s ease, opacity 0.4s ease
+
+	/* Transiciones de transformación y opacidad
+
+	&.show
+		opacity: 1
+
+		/* Se hace visible
+		transform: translateY(0)
+
+/* Se mueve a su posición original
+
+/* Menú
+
+.menu
+	margin: 0
+	padding: 0
+	list-style-type: none
+
+	li
+		list-style-type: none
+		display: block
+
+		a
+			display: block
+			text-decoration: none
+			color: #ffffff
+
+			/* Blanco
+			padding: 0 0.8em
+			transition: all 0.2s ease
+			border-bottom: 1px solid #ff7043
+
+			/* Naranja suave
+
+			&:hover
+				background-color: #d32f2f
+
+			/* Rojo al pasar el ratón
+
+			&.active
+				background-color: #d32f2f
+
+/* Rojo para el enlace activo
+
+/* Estilos para el submenú
+
+.user-menu
+	position: relative
+	display: inline-block
+
+.user-link
+	display: flex
+	align-items: center
+	color: white
+	cursor: pointer
+
+.user-photo
+	width: 30px
+	height: 30px
+	border-radius: 50%
+	margin-right: 10px
+
+/* Submenú
+
+.submenu
+	display: none
+	position: absolute
+	top: 100%
+	left: 0
+	background-color: #333
+	list-style-type: none
+	padding: 0
+	margin: 0
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2)
+	z-index: 100
+
+	li
+		width: 200px
+
+		a
+			display: block
+			padding: 10px
+			color: white
+			text-decoration: none
+			transition: background-color 0.3s ease
+
+			&:hover
+				background-color: #555
+
+/* Mostrar submenú cuando se hace hover
+
+.user-menu:hover .submenu
+	display: block
+
+/* Mobile menu
+
+#menu-icon
+	display: block
+	position: absolute
+	top: 0
+	right: 1em
+	color: #ffffff
+	text-decoration: none
+	font-weight: bold
+	cursor: pointer
+	opacity: 1
+	padding: 0 0.4em
+
+	&:hover
+		opacity: 0.85
+		text-decoration: none
+		border: none
+
+/* Media Query para pantallas más grandes
+@media only screen and (min-width: 768px)
+	.wrap
+		padding-left: 1em
+		padding-right: 1em
+
+	.logo
+		margin-left: 0
+		display: inline-block
+
+	.navbar
+		display: inline-block
+		float: right
+		max-height: none
+		opacity: 1
+		transform: none
+
+	/* Muestra el menú en pantallas grandes
+
+	/* El ícono del menú se oculta en pantallas grandes
+
+	#menu-icon
+		display: none
+
+	/* Para que los enlaces del menú estén en una línea
+
+	.menu li
+		display: inline-block
+		text-align: center
+
+		a
+			border-bottom: 0
+
+			&:hover
+				box-shadow: 0 -3px 0 #ff7043 inset
+
+			/* Sombra de naranja
+
+			&.active
+				box-shadow: 0 -3px 0 #ff7043 inset

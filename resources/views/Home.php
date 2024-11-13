@@ -8,6 +8,13 @@
 
 <?php $this->start('header'); ?>
 
+<!-- Mostrar el mensaje flash, si existe -->
+<?php if (isset($message)): ?>
+	<div class="flash-message <?= htmlspecialchars($message['type']) ?>" id="flashMessage">
+		<?= htmlspecialchars($message['message']) ?>
+	</div>
+<?php endif; ?>
+
 <?php
 // Verificar si el usuario está logueado
 //$usuario = Logger::obtenerUsuario();  // Esto obtiene el usuario desde la sesión
