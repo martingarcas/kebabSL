@@ -17,7 +17,7 @@
 <?php endif; ?>
 
 <div class="form-wrapper">
-	<div class="form-container">
+	<div class="form-container form-login">
 		<form action="/login-post" method="POST" class="formulario__login">
 			<!-- Datos de Inicio de Sesión -->
 			<fieldset>
@@ -49,12 +49,7 @@
 
 <?php $this->start('scripts') ?>
 <script>
-	// Esperamos 5 segundos antes de ocultar el mensaje
-	setTimeout(function() {
-		var flashMessage = document.querySelector('#flashMessage');
-		if (flashMessage) {
-			flashMessage.style.display = 'none';  // Ocultamos el mensaje
-		}
-	}, 5000);  // 5000 milisegundos = 5 segundos
+
+
 </script>
 <?php $this->stop() ?>

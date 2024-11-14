@@ -52,25 +52,3 @@ $usuario = Logger::obtenerUsuario();
 		</nav>
 	</div>
 </header>
-
-<!-- Si es necesario un formulario de búsqueda -->
-<div class="content">
-	<h2>Simple Responsive Navigation Menu</h2>
-	<p>Built with CSS.</p>
-</div>
-
-<?php $this->start('scripts'); ?>
-<script>
-	document.addEventListener("DOMContentLoaded", function() {
-		const menuIcon = document.getElementById('menu-icon');
-		const navbar = document.querySelector('.navbar');
-
-// Agregamos un listener para manejar el clic en el menú
-		menuIcon.addEventListener('click', function() {
-			// Alternar la clase 'show' para mostrar/ocultar el menú
-			navbar.classList.toggle('show');
-		});
-	});
-
-</script>
-<?php $this->stop(); ?>

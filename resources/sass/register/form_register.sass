@@ -3,7 +3,7 @@
 	display: flex
 	justify-content: center
 	align-items: center
-	width: 100%  /* Ocupar todo el ancho de la pantalla */
+	width: 100%
 	padding: 20px
 
 /* Form container */
@@ -13,9 +13,17 @@
 	border-radius: 8px
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1)
 	width: 100%
-	max-width: 500px
+	max-width: 960px
 	text-align: center
 	transition: max-width 0.3s ease, padding 0.3s ease /* Transición suave en el ancho y padding */
+	&.form-login
+		max-width: 460px
+
+	.form-fielsets
+		display: flex
+		justify-content: center
+		flex-wrap: wrap
+		gap: 40px
 
 h2
 	font-size: 1.6rem
@@ -25,6 +33,10 @@ h2
 
 /* Estilos de los fieldset */
 fieldset
+	display: flex
+	flex-direction: column
+	justify-content: center
+	min-width: 360px
 	border: 2px solid #ddd
 	border-radius: 8px
 	padding: 20px
@@ -71,7 +83,7 @@ input
 
 /* Estilos para el botón */
 button
-	width: 100%
+	width: 240px
 	padding: 12px
 	background-color: #007bff
 	border: none
@@ -99,7 +111,7 @@ button
 @media (max-width: 768px)
 	.form-container
 		padding: 20px
-		max-width: 90%  /* Más espacio en pantallas pequeñas */
+		max-width: 640px
 		transition: max-width 0.3s ease, padding 0.3s ease /* Transiciones suaves en max-width y padding */
 
 	h2
@@ -122,8 +134,11 @@ button
 @media (max-width: 480px)
 	.form-container
 		padding: 15px
-		max-width: 100%  /* El formulario ocupará todo el ancho en pantallas muy pequeñas */
+		max-width: 360px  /* El formulario ocupará todo el ancho en pantallas muy pequeñas */
 		transition: max-width 0.3s ease, padding 0.3s ease /* Transiciones suaves en max-width y padding */
+
+	fieldset
+		min-width: 300px
 
 	h2
 		font-size: 1.2rem
@@ -137,3 +152,7 @@ button
 	.error
 		font-size: 0.75em
 		transition: font-size 0.3s ease
+
+@media (max-width: 480px)
+	fieldset
+		min-width: 260px

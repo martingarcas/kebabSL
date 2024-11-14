@@ -14,6 +14,7 @@ class Validator {
 			'apellido2'   => 'El segundo apellido',
 			'email'       => 'El correo electrónico',
 			'dni'         => 'El dni',
+			'localidad'   => 'La localidad',
 			'calle'       => 'La calle',
 			'numero'      => 'El número de calle',
 			'contrasenna' => 'La contraseña',

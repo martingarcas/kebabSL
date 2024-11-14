@@ -14,6 +14,8 @@
     <?= $this->section('footer')?>
 
 	<?= $this->section('scripts')?>
+	<?php require_once 'scripts.php';?>
+
 </body>
 </html>
 

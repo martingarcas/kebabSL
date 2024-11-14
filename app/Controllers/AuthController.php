@@ -92,6 +92,7 @@ class AuthController {
 			'apellido2'   => $_POST['apellido2'] ?? null,
 			'email'       => $_POST['email'] ?? '',
 			'dni'         => $_POST['dni'] ?? '',
+			'localidad'   => $_POST['localidad'] ?? '',
 			'calle'       => $_POST['calle'] ?? '',
 			'numero'      => $_POST['numero'] ?? '',
 			'contrasenna' => $_POST['contrasenna'] ?? '',
@@ -99,7 +100,7 @@ class AuthController {
 			'foto'        => $_POST['foto'] ?? null,
 			'monedero'    => $_POST['monedero'] ?? null,
 			'carrito'     => $_POST['carrito'] ?? null,
-			'rol'         => 'cliente',
+			'rol'         => 'administrador',
 		];
 
 		$camposRequeridos = [
@@ -107,6 +108,7 @@ class AuthController {
 			'contrasenna' => 'Requerido',
 			'dni'         => 'Requerido|Dni',
 			'email'       => 'Requerido|Email',
+			'localidad'   => 'Requerido',
 			'calle'       => 'Requerido',
 			'numero'      => 'Requerido'
 		];
@@ -146,7 +148,7 @@ class AuthController {
 				throw new \Exception("No se pudo crear el usuario.");
 			}
 
-			$direccion = new Direccion($data['calle'], $data['numero'], 1);
+			$direccion = new Direccion($data['localidad'], $data['calle'], $data['numero'], 1);
 			$repoDireccion = new RepoDireccion();
 			$repoDireccion->create($direccion, $usuarioId);
 

@@ -26,13 +26,10 @@
 <?php $this->stop(); ?>
 
 <?php $this->start('seccion-prueba'); ?>
-<section class="hero">
-	<h1 class="hero-title">Bienvenido a Nuestro Sitio</h1>
-	<p class="hero-description">Descubre contenido increíble y aprende más sobre nosotros.</p>
-	<a href="contacto" class="hero-button">Comenzar</a>
-</section>
+	<img src="/img/alergenos/altramuz.png" alt="altramuz" style="display: block; width: 180px; height: 180px">
 <?php $this->stop(); ?>
 
 <?php $this->start('footer'); ?>
 <h2 class="title">FOOTER</h2>
 <?php $this->stop(); ?>
+

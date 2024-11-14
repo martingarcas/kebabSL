@@ -12,21 +12,23 @@
 
 			$con = Conexion::getConection();
 
-			$calle 	= $direccion->getCalle();
-			$numero = $direccion->getNumero();
-			$activa = $direccion->getActiva();
+			$localidad 	= $direccion->getLocalidad();
+			$calle 		= $direccion->getCalle();
+			$numero 	= $direccion->getNumero();
+			$activa 	= $direccion->getActiva();
 
 
 			$stm = $con->prepare(
-				"INSERT INTO direccion (calle, numero, activa, usuario_id) VALUES (:calle, :numero, :activa, :usuarioId)"
+				"INSERT INTO direccion (localidad, calle, numero, activa, usuario_id) VALUES (:localidad, :calle, :numero, :activa, :usuarioId)"
 			);
 
 			$stm->execute([
-				'calle' => $calle,
-				'numero' => $numero,
-				'activa' => $activa,
-				'usuarioId' => $usuarioId]
-			);
+				'localidad' => $localidad,
+				'calle' 	=> $calle,
+				'numero' 	=> $numero,
+				'activa' 	=> $activa,
+				'usuarioId' => $usuarioId
+			]);
 
 			return $direccion;
 		}

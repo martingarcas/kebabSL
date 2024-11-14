@@ -41,3 +41,10 @@ FORMULARIO CON AJAX Y HACER VALIDACIONES NECESARIAS.
 UNA VEZ TERMINADO, MANDO CON UN FETCH Y UN JSON COMO RESPUESTA A LA API (PHP)
 EN LA API COMPRUEBO LAS VALIDACIONES CON LA BASE DE DATOS CON LOS DATOS DEL JSON QUE HE RECOGIDO Y LOS INSERTO EN LA BASE DE DATOS. REDIRIGIR.
 
+mailhog sql en docker plataforma - phpmailer install
+1-docker-compose.yml (sirve para usar ficheros de configuración/se usa ya más que xml) =>
+defino servicios  (lo que podemos hacer con docker run lo hacemos aqui, el concepto de servicio está por encima del contenedor)
+servicio app es mi aplicación, una carpeta para el front y otra para el back, serían dos contenedores
+
+cmd en public como administrador:
+mklink /D "img" "..\resources\img"
