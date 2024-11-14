@@ -86,3 +86,172 @@
 <?php $this->start('footer') ?>
 <h2 class="title">FOOTER</h2>
 <?php $this->stop() ?>
+
+<?php $this->start('scripts'); ?>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const formulario = document.querySelector('.formulario__register');
+		const campos = formulario.querySelectorAll('input');
+		const submitButton = formulario.querySelector('button[type="submit"]');
+		let camposValidados = new Set();  // Usamos un Set para almacenar los campos validados correctamente
+
+		// Añadimos el evento 'change' en lugar de 'input' o 'keyup'
+		campos.forEach(campo => {
+			campo.addEventListener('change', () => {
+				validarCampo(campo);
+				actualizarEstadoFormulario();
+			});
+		});
+
+		// Función para validar un solo campo
+		async function validarCampo(campo) {
+			try {
+				const formData = new FormData();
+				formData.append('action', 'validate');
+				formData.append(campo.name, campo.value);
+				const response = await fetch('/apiRegister', { method: 'POST', body: formData });
+				const data = await response.json();
+
+				// Limpiar cualquier error previo
+				limpiarErrores(campo);
+
+				if (data.errores && data.errores[campo.name]) {
+					mostrarError(campo, data.errores[campo.name]);
+					camposValidados.delete(campo.name); // Si hay error, eliminamos el campo del Set
+				} else {
+					camposValidados.add(campo.name); // Si no hay error, lo agregamos al Set
+				}
+
+				actualizarEstadoFormulario(); // Actualizamos el estado del formulario tras validar un campo
+			} catch (error) {
+				console.error('Error al validar el campo:', error);
+			}
+		}
+
+		// Función para limpiar los errores de un campo
+		function limpiarErrores(campo) {
+			const errorElement = campo.nextElementSibling;
+			if (errorElement && errorElement.classList.contains('error-form')) {
+				errorElement.remove();
+			}
+		}
+
+		// Función para mostrar un mensaje de error debajo del campo
+		function mostrarError(campo, mensajeError) {
+			const newErrorElement = document.createElement('span');
+			newErrorElement.classList.add('error-form');
+			newErrorElement.textContent = mensajeError;
+			campo.parentNode.insertBefore(newErrorElement, campo.nextSibling);
+		}
+
+		// Función para actualizar el estado del formulario (habilitar o deshabilitar el botón de submit)
+		function actualizarEstadoFormulario() {
+			let formIsValid = true;
+
+			// Verificamos si todos los campos han sido validados correctamente
+			campos.forEach(campo => {
+				if (!campo.value || !camposValidados.has(campo.name) || campo.nextElementSibling?.classList.contains('error-form')) {
+					formIsValid = false;
+				}
+			});
+
+			submitButton.disabled = !formIsValid;
+		}
+
+		// Función para manejar el envío del formulario
+		// Función para manejar el envío del formulario
+		formulario.addEventListener('submit', async (event) => {
+			event.preventDefault();
+
+			if (await validarFormulario()) {
+				const formData = new FormData(formulario);
+				formData.append('action', 'register');
+
+				try {
+					const response = await fetch('/apiRegister', { method: 'POST', body: formData });
+
+					// Verificamos si la respuesta es exitosa antes de intentar convertirla a JSON
+					if (!response.ok) {
+						throw new Error('Error en la respuesta del servidor. Código de estado: ' + response.status);
+					}
+
+					// Intentamos obtener la respuesta como texto primero
+					const responseText = await response.text();
+
+					if (!responseText) {
+						throw new Error('La respuesta del servidor está vacía.');
+					}
+
+					// Depuración: Verificar el contenido de la respuesta antes de convertirla en JSON
+					console.log('Respuesta del servidor como texto:', responseText);
+
+					// Intentamos convertir la respuesta a JSON
+					let data;
+					try {
+						data = JSON.parse(responseText);
+					} catch (error) {
+						throw new Error('La respuesta no es un JSON válido.');
+					}
+
+					console.log('Respuesta del servidor como JSON:', data);
+
+					// Verificamos si la respuesta contiene un mensaje de éxito
+					if (data.success) {
+						// Si hay una URL de redirección, redirigimos al usuario
+						if (data.redirect_url) {
+							// Guardamos el mensaje en sessionStorage antes de redirigir
+							sessionStorage.setItem('flash_message', JSON.stringify({
+								message: data.message,
+								type: 'success'  // O el tipo que consideres
+							}));
+							window.location.href = data.redirect_url;  // Redirige al usuario a la URL proporcionada
+						} else {
+							alert(data.message);  // Muestra el mensaje de éxito si no hay URL de redirección
+						}
+						formulario.reset();  // Limpiamos el formulario
+					} else if (data.errores) {
+						// Si hay errores, los mostramos
+						mostrarErrores(data.errores);
+					} else {
+						alert('Hubo un error al registrar el usuario.');
+					}
+				} catch (error) {
+					console.error('Error al registrar el usuario:', error);
+					alert('Hubo un problema al procesar la respuesta del servidor. Intenta nuevamente.');
+				}
+			} else {
+				alert('Por favor, corrige los errores antes de enviar el formulario.');
+			}
+		});
+
+
+
+		// Función para validar todos los campos antes de enviar
+		async function validarFormulario() {
+			// Ejecutamos la validación de cada campo y esperamos que todas las validaciones terminen
+			const validaciones = Array.from(campos).map(campo => validarCampo(campo));
+			await Promise.all(validaciones);
+			return camposValidados.size === campos.length;
+		}
+
+		// Función para mostrar todos los errores al enviar
+		function mostrarErrores(errores) {
+			for (const campo in errores) {
+				const input = formulario.querySelector(`[name="${campo}"]`);
+				if (input) {
+					mostrarError(input, errores[campo]);
+				}
+			}
+		}
+
+		// Habilitar el botón de submit al principio
+		actualizarEstadoFormulario();
+	});
+
+
+
+
+</script>
+
+<?php $this->stop(); ?>

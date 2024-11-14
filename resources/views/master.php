@@ -13,8 +13,8 @@
     <?= $this->section('seccion-prueba')?>
     <?= $this->section('footer')?>
 
-	<?= $this->section('scripts')?>
 	<?php require_once 'scripts.php';?>
+	<?= $this->section('scripts')?>
 
 </body>
 </html>
