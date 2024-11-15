@@ -79,6 +79,7 @@ class ApiRegister {
 	 * Método para procesar el registro del usuario (creación de usuario y dirección)
 	 */
 	public function registrarUsuario($data) {
+		http_response_code(500); return json_encode(['success' => false, 'message' => 'Error interno en el servidor', 'redirect_url' => '/register']);
 		$validator = new Validator(); // Instanciamos el validador
 
 		// Validamos los campos requeridos antes de registrar al usuario
@@ -90,13 +91,13 @@ class ApiRegister {
 		}
 
 		// Asignamos los valores a las variables, verificando si están presentes en los datos
-		$nombre = $data['nombre'] ?? '';
-		$apellido1 = $data['apellido1'] ?? null;
-		$apellido2 = $data['apellido2'] ?? null;
-		$telefono = $data['telefono'] ?? null;
-		$foto = $data['foto'] ?? null;
-		$monedero = $data['monedero'] ?? 0; // Valor predeterminado para el monedero
-		$carrito = $data['carrito'] ?? '[]'; // Asignamos un arreglo vacío por defecto
+		$nombre 	= $data['nombre'] ?? '';
+		$apellido1 	= $data['apellido1'] ?? null;
+		$apellido2 	= $data['apellido2'] ?? null;
+		$telefono 	= $data['telefono'] ?? null;
+		$foto 		= $data['foto'] ?? null;
+		$monedero 	= $data['monedero'] ?? 0; // Valor predeterminado para el monedero
+		$carrito 	= $data['carrito'] ?? '[]'; // Asignamos un arreglo vacío por defecto
 
 		// Encriptamos la contraseña
 		$data['contrasenna'] = password_hash($data['contrasenna'], PASSWORD_BCRYPT);
@@ -116,13 +117,23 @@ class ApiRegister {
 
 		if ($usuarioId === null) {
 			http_response_code(500); // Error en la creación del usuario
-			return json_encode(['error' => 'No se pudo crear el usuario.']);
+			return json_encode(['error' => 'Algo ha fallado, inténtelo de nuevo.', 'redirect_url' => '/register']);
 		}
 
 		// Crear la dirección del usuario
 		$direccion = new Direccion($data['localidad'], $data['calle'], $data['numero'], 1);
 		$repoDireccion = new RepoDireccion();
-		$repoDireccion->create($direccion, $usuarioId);
+		$direccionCreada = $repoDireccion->create($direccion, $usuarioId);
+
+		// Verificar si la dirección fue creada correctamente
+		if (!$direccionCreada) {
+			http_response_code(404); // Error en la creación de la dirección
+			return json_encode([
+				'success' => false,
+				'message' => 'Algo ha fallado, inténtelo de nuevo.',
+				'redirect_url' => '/register'
+			]);
+		}
 
 		// Si todo fue exitoso, respondemos con los datos necesarios para la redirección
 		http_response_code(201); // Código HTTP 201 indicando que el recurso fue creado

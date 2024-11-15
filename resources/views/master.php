@@ -11,6 +11,7 @@
     <?= $this->section('listado')?>
     <?= $this->section('formulario')?>
     <?= $this->section('seccion-prueba')?>
+	<?php require_once 'fragments/footer.php';?>
     <?= $this->section('footer')?>
 
 	<?php require_once 'scripts.php';?>

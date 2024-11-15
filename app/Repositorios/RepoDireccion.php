@@ -22,7 +22,7 @@
 				"INSERT INTO direccion (localidad, calle, numero, activa, usuario_id) VALUES (:localidad, :calle, :numero, :activa, :usuarioId)"
 			);
 
-			$stm->execute([
+			$executed = $stm->execute([
 				'localidad' => $localidad,
 				'calle' 	=> $calle,
 				'numero' 	=> $numero,
@@ -30,7 +30,7 @@
 				'usuarioId' => $usuarioId
 			]);
 
-			return $direccion;
+			return $executed;
 		}
 
 	}

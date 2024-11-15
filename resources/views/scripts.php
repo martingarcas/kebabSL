@@ -30,6 +30,29 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 	});
 
+	// Verificamos si hay un mensaje en sessionStorage
+	const flashMessage = sessionStorage.getItem('flash_message');
+	if (flashMessage) {
+		const messageObj = JSON.parse(flashMessage);  // Parseamos el mensaje desde sessionStorage
+
+		// Creamos un elemento div para mostrar el mensaje
+		const flashMessageDiv = document.createElement('div');
+		flashMessageDiv.id = 'flashMessage';
+		flashMessageDiv.classList.add('flash-message', messageObj.type);  // Asignamos la clase con el tipo
+		flashMessageDiv.textContent = messageObj.message;  // Asignamos el mensaje
+
+		// Buscamos el elemento con la clase "form-wrapper"
+		const formWrapper = document.querySelector('.form-wrapper');
+
+		// Insertamos el mensaje flash justo antes de ".form-wrapper"
+		if (formWrapper) {
+			formWrapper.parentNode.insertBefore(flashMessageDiv, formWrapper);
+		}
+
+		// Limpiamos el sessionStorage después de mostrar el mensaje
+		sessionStorage.removeItem('flash_message');
+	}
+
 	setTimeout(function() {
 		var flashMessage = document.querySelector('#flashMessage');
 		if (flashMessage) {

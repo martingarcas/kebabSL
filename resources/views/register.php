@@ -91,9 +91,9 @@
 
 <script>
 	document.addEventListener('DOMContentLoaded', () => {
-		const formulario = document.querySelector('.formulario__register');
-		const campos = formulario.querySelectorAll('input');
-		const submitButton = formulario.querySelector('button[type="submit"]');
+		const formulario 	= document.querySelector('.formulario__register');
+		const campos 		= formulario.querySelectorAll('input');
+		const submitButton 	= formulario.querySelector('button[type="submit"]');
 		let camposValidados = new Set();  // Usamos un Set para almacenar los campos validados correctamente
 
 		// Añadimos el evento 'change' en lugar de 'input' o 'keyup'
@@ -116,11 +116,12 @@
 				// Limpiar cualquier error previo
 				limpiarErrores(campo);
 
+				// Validar y actualizar la validez del campo sin eliminar/agregar del Set
 				if (data.errores && data.errores[campo.name]) {
 					mostrarError(campo, data.errores[campo.name]);
-					camposValidados.delete(campo.name); // Si hay error, eliminamos el campo del Set
+					campo.isValid = false;  // Indicamos que el campo tiene errores
 				} else {
-					camposValidados.add(campo.name); // Si no hay error, lo agregamos al Set
+					campo.isValid = true;  // Indicamos que el campo es válido
 				}
 
 				actualizarEstadoFormulario(); // Actualizamos el estado del formulario tras validar un campo
@@ -151,7 +152,8 @@
 
 			// Verificamos si todos los campos han sido validados correctamente
 			campos.forEach(campo => {
-				if (!campo.value || !camposValidados.has(campo.name) || campo.nextElementSibling?.classList.contains('error-form')) {
+				// Usamos el campo.isValid para saber si el campo es válido o no
+				if (!campo.value || !campo.isValid || campo.nextElementSibling?.classList.contains('error-form')) {
 					formIsValid = false;
 				}
 			});
@@ -159,7 +161,6 @@
 			submitButton.disabled = !formIsValid;
 		}
 
-		// Función para manejar el envío del formulario
 		// Función para manejar el envío del formulario
 		formulario.addEventListener('submit', async (event) => {
 			event.preventDefault();
@@ -206,6 +207,7 @@
 								type: 'success'  // O el tipo que consideres
 							}));
 							window.location.href = data.redirect_url;  // Redirige al usuario a la URL proporcionada
+							return;
 						} else {
 							alert(data.message);  // Muestra el mensaje de éxito si no hay URL de redirección
 						}
@@ -214,11 +216,25 @@
 						// Si hay errores, los mostramos
 						mostrarErrores(data.errores);
 					} else {
-						alert('Hubo un error al registrar el usuario.');
+						// Si la respuesta tiene errores, los mostramos
+						sessionStorage.setItem('flash_message', JSON.stringify({
+							message: data.message || 'Algo ha fallado. Intenta nuevamente.',
+							type: 'error'
+						}));
+
+						// Redirigimos a la URL que indica la API
+						window.location.href = data.redirect_url || '/register';
+						return;
 					}
 				} catch (error) {
-					console.error('Error al registrar el usuario:', error);
-					alert('Hubo un problema al procesar la respuesta del servidor. Intenta nuevamente.');
+					// Guardar el mensaje en sessionStorage
+					sessionStorage.setItem('flash_message', JSON.stringify({
+						message: 'Hubo un problema al registrar el usuario. Intenta nuevamente.',
+						type: 'error'  // También puedes usar 'warning', 'info', 'success', etc.
+					}));
+					// Redirigimos a la URL que indica la API
+					window.location.href = '/register';
+					return;
 				}
 			} else {
 				alert('Por favor, corrige los errores antes de enviar el formulario.');

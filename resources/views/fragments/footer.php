@@ -8,16 +8,16 @@
 
 
 				<div class="main-data-box impar">
-					<header class="main-menu-logo"><img class="main-menu-logo" src="" alt="logocientovolando"></header>
+					<header class="main-menu-logo"><a href="/">KEBAB S.L.</a></header>
 					<ul class="main-data-box-list list-rrss">
 						<li class="list-item">
-							<a class="d-flex list-item-rrss" href="https://wa.me/34633443118" target="_blank"><img class="icon" src="" alt="whatsapp"></a>
+							<a class="d-flex list-item-rrss" href="https://wa.me/" target="_blank"><img class="icon" src="" alt="whatsapp"></a>
 						</li>
 						<li class="list-item">
-							<a class="d-flex list-item-rrss" href="https://www.instagram.com/cientovolandofotografia/?hl=es" target="_blank"><img class="icon" src="" alt="instagram"></a>
+							<a class="d-flex list-item-rrss" href="https://www.instagram.com/" target="_blank"><img class="icon" src="" alt="instagram"></a>
 						</li>
 						<li class="list-item">
-							<a class="d-flex list-item-rrss" href="https://es-es.facebook.com/cientovolandofotografia/" target="_blank"><img class="icon" src="" alt="facebook"></a>
+							<a class="d-flex list-item-rrss" href="https://es-es.facebook.com/" target="_blank"><img class="icon" src="" alt="facebook"></a>
 						</li>
 					</ul>
 				</div>
