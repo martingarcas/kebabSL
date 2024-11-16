@@ -3,11 +3,15 @@ document.addEventListener("DOMContentLoaded", function() {
 	const menuIcon 		= document.getElementById('menu-icon');
 	const navbar 		= document.querySelector('.navbar');
 	const menuExt 		= document.querySelector('.menu');
-	const mediaQuery 	= window.matchMedia('(max-width: 768px)');
+	const mediaQuery 	= window.matchMedia('(min-width: 768px)');
+
+	checkMediaQuery();
 
 	function checkMediaQuery() {
 		if (mediaQuery.matches) {
 			menuExt.style.display = 'block';
+		} else {
+			menuExt.style.display = 'none';
 		}
 	}
 
@@ -20,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		if (!navbar.classList.contains('show')) {
 			menuExt.style.display = 'block';
 			navbar.classList.add('show');
+			document.body.style.overflow = 'hidden';
 
 		} else {
 
@@ -27,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			setTimeout(() => {
 				menuExt.style.display = 'none';
 			}, "500");
+			document.body.style.overflow = '';
 		}
 	});
 

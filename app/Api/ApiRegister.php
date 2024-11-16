@@ -79,15 +79,14 @@ class ApiRegister {
 	 * Método para procesar el registro del usuario (creación de usuario y dirección)
 	 */
 	public function registrarUsuario($data) {
-		http_response_code(500); return json_encode(['success' => false, 'message' => 'Error interno en el servidor', 'redirect_url' => '/register']);
 		$validator = new Validator(); // Instanciamos el validador
 
 		// Validamos los campos requeridos antes de registrar al usuario
-		$validacion = $this->procesarValidacion($data);
+		$validator = $this->procesarValidacion($data);
 		// Si la validación no fue exitosa, devolvemos los errores
-		if (strpos($validacion, '"errores"') !== false) {
+		if (strpos($validator, '"errores"') !== false) {
 			http_response_code(400); // Código HTTP 400 en caso de errores de validación
-			return $validacion;
+			return $validator;
 		}
 
 		// Asignamos los valores a las variables, verificando si están presentes en los datos

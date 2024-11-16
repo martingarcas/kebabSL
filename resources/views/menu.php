@@ -7,7 +7,7 @@ $usuario = Logger::obtenerUsuario();
 
 <header class="header">
 	<div class="wrap">
-		<h2 class="logo"><a href="/">KEBAB S.L.</a></h2>
+		<header class="main-menu-logo"><a href="/"><img class="main-menu-logo" src="/img/logo/kebablogo.png" alt="kebabsl"></a></header>
 		<a id="menu-icon">&#9776; Menu</a> <!-- Icono del menú hamburguesa -->
 		<nav class="navbar">
 			<ul class="menu">
@@ -29,7 +29,7 @@ $usuario = Logger::obtenerUsuario();
 				<?php elseif ($usuario !== null && $usuario->getRol() === 'administrador'): ?>
 					<!-- Menú para administradores -->
 					<li><a href="/">KEBABS</a></li>
-					<li><a href="/">INGREDIENTES</a></li>
+					<li><a href="/ingredientes">INGREDIENTES</a></li>
 					<li><a href="/">GRÁFICOS-ESTADOS</a></li>
 					<li class="user-menu">
 						<a href="#" class="user-link">

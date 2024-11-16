@@ -175,5 +175,13 @@ class AuthController {
 		exit();
 	}
 
+	// Renderizar vista de ingredientes
+	public function showIngredientes() {
+		// Obtener el mensaje flash
+		$message = FlashMessage::getMessage();
+		// Renderizar la vista con el mensaje flash si existe
+		echo $this->templates->render('ingredientes', ['message' => $message]);
+	}
+
 }
 ?>

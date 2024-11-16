@@ -29,7 +29,3 @@
 	<img src="/img/alergenos/altramuz.png" alt="altramuz" style="display: block; width: 180px; height: 180px">
 <?php $this->stop(); ?>
 
-<?php $this->start('footer'); ?>
-<h2 class="title">FOOTER</h2>
-<?php $this->stop(); ?>
-

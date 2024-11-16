@@ -1,23 +1,5 @@
-@import url('https://fonts.googleapis.com/css?family=Nunito')
-
-/* Base Styles
-
-*
-	box-sizing: border-box
-	margin: 0
-	padding: 0
-
-html
-	font-size: 100%
-	font-family: 'Nunito', Arial, sans-serif
-	font-weight: normal
-	line-height: 1.5
-	-webkit-font-smoothing: antialiased
-
 a
-	color: #d32f2f
-
-	/* Rojo para los enlaces
+	color: white
 	opacity: 1
 	text-decoration: none
 	transition: all 0.2s ease
@@ -30,26 +12,30 @@ a
 	text-align: center
 	margin-top: 2em
 
-/* Header
-
+/* Header */
 .header
 	position: relative
 	width: 100%
-	background: #ff7043
-
-	/* Naranja suave
-	height: 50px
-	line-height: 50px
+	height: 100px /* Incrementa la altura de la barra */
+	line-height: 100px /* Alinea el contenido verticalmente */
+	background: #ff7043 /* Naranja suave */
 	box-shadow: 0 -3px 0 #ff7043 inset
 
-/* Sombra para resaltar el color
+.main-menu-logo
+	max-height: 100px
+	height: auto /* Permite que se adapte a la altura sin deformarse */
+	display: block /* Asegura que se renderice correctamente */
+	margin: auto /* Centra el logo vertical y horizontalmente */
 
+/* Sombra para resaltar el color */
 .wrap
 	max-width: 960px
 	margin: 0 auto
+	display: flex
+	align-items: center /* Centra verticalmente los elementos en la barra */
+	justify-content: space-between /* Asegura que el menú y el logo tengan espacio */
 
-/* Logo
-
+/* Logo */
 .logo
 	font-family: inherit
 	font-size: 1.5em
@@ -57,9 +43,7 @@ a
 	margin-bottom: 0
 
 	a
-		color: #ffffff
-
-		/* Blanco
+		color: #ffffff /* Blanco */
 		text-decoration: none
 		opacity: 1
 		transition: all 0.2s ease
@@ -67,37 +51,22 @@ a
 		&:hover
 			opacity: 0.85
 
-/* Menú principal (Navbar)
-
+/* Menú principal (Navbar) */
 .navbar
-	background-color: #ff7043
-
-	/* Naranja suave
+	background-color: #ff7043 /* Naranja suave */
 	position: relative
-	max-height: 1000px
-
-	/* Esto se usa para permitir la animación de transformación
-	opacity: 0
-
-	/* Empieza oculto
-	transform: translateY(-10px)
-
-	/* Empieza ligeramente fuera de la vista
-	transition: transform 0.4s ease, opacity 0.4s ease
-
-	/* Transiciones de transformación y opacidad
+	max-height: 1000px /* Esto se usa para permitir la animación de transformación */
+	opacity: 0 /* Empieza oculto */
+	transform: translateY(-10px) /* Empieza ligeramente fuera de la vista */
+	transition: transform 0.4s ease, opacity 0.4s ease /* Transiciones de transformación y opacidad */
 
 	&.show
-		opacity: 1
+		opacity: 1 /* Se hace visible */
+		transform: translateY(0) /* Se mueve a su posición original */
 
-		/* Se hace visible
-		transform: translateY(0)
-
-/* Se mueve a su posición original
-
-/* Menú
-
+/* Menú */
 .menu
+	display: none
 	margin: 0
 	padding: 0
 	list-style-type: none
@@ -109,27 +78,18 @@ a
 		a
 			display: block
 			text-decoration: none
-			color: #ffffff
-
-			/* Blanco
+			color: #ffffff /* Blanco */
 			padding: 0 0.8em
 			transition: all 0.2s ease
-			border-bottom: 1px solid #ff7043
-
-			/* Naranja suave
+			border-bottom: 1px solid #ff7043 /* Naranja suave */
 
 			&:hover
-				background-color: #d32f2f
-
-			/* Rojo al pasar el ratón
+				background-color: #d32f2f /* Rojo al pasar el ratón */
 
 			&.active
-				background-color: #d32f2f
+				background-color: #d32f2f /* Rojo para el enlace activo */
 
-/* Rojo para el enlace activo
-
-/* Estilos para el submenú
-
+/* Estilos para el submenú */
 .user-menu
 	position: relative
 	display: inline-block
@@ -146,8 +106,7 @@ a
 	border-radius: 50%
 	margin-right: 10px
 
-/* Submenú
-
+/* Submenú */
 .submenu
 	display: none
 	position: absolute
@@ -173,13 +132,10 @@ a
 			&:hover
 				background-color: #555
 
-/* Mostrar submenú cuando se hace hover
-
 .user-menu:hover .submenu
 	display: block
 
-/* Mobile menu
-
+/* Mobile menu */
 #menu-icon
 	display: block
 	position: absolute
@@ -197,7 +153,7 @@ a
 		text-decoration: none
 		border: none
 
-/* Media Query para pantallas más grandes
+/* Media Query para pantallas más grandes */
 @media only screen and (min-width: 768px)
 	.wrap
 		padding-left: 1em
@@ -212,16 +168,10 @@ a
 		float: right
 		max-height: none
 		opacity: 1
-		transform: none
-
-	/* Muestra el menú en pantallas grandes
-
-	/* El ícono del menú se oculta en pantallas grandes
+		transform: none /* Muestra el menú en pantallas grandes */
 
 	#menu-icon
-		display: none
-
-	/* Para que los enlaces del menú estén en una línea
+		display: none /* El ícono del menú se oculta en pantallas grandes */
 
 	.menu li
 		display: inline-block
@@ -231,9 +181,51 @@ a
 			border-bottom: 0
 
 			&:hover
-				box-shadow: 0 -3px 0 #ff7043 inset
-
-			/* Sombra de naranja
+				box-shadow: 0 -3px 0 #ff7043 inset /* Sombra de naranja */
 
 			&.active
 				box-shadow: 0 -3px 0 #ff7043 inset
+
+/* Media Query para pantallas pequeñas (menos de 768px) */
+@media only screen and (max-width: 768px)
+	.main-menu-logo
+		position: absolute
+		top: 0
+		left: 10px /* Ajusta la altura del logo para pantallas pequeñas */
+		margin: 0
+
+	.wrap
+		flex-direction: column /* Cambia a columna para apilar los elementos */
+		justify-content: flex-start /* Alinea el logo y el menú al inicio */
+		align-items: flex-start /* Alinea el contenido a la izquierda */
+
+	.navbar
+		display: block /* Cambia de 'inline-block' a 'block' para que ocupe todo el ancho */
+		width: 100% /* Asegura que el menú ocupe todo el ancho */
+		position: absolute
+		top: 100px /* Ajusta la posición para que quede debajo del logo */
+		left: 0
+		background-color: #ff7043
+		z-index: 10
+
+	.menu
+		width: 100% /* Hace que las opciones del menú ocupen todo el ancho */
+
+	.menu li
+		display: block /* Hace que los enlaces del menú se apilen verticalmente */
+		width: 100% /* Hace que cada enlace ocupe todo el ancho */
+
+	.menu a
+		text-align: left /* Alinea el texto de los enlaces a la izquierda */
+		padding: 0.6em /* Reduce el padding para hacer las casillas más pequeñas */
+		border-bottom: 1px solid #ff7043
+
+		&:hover
+			background-color: #d32f2f
+
+	#menu-icon
+		display: block /* Muestra el ícono del menú en pantallas pequeñas */
+		position: absolute
+		top: 10px
+		right: 10px
+

@@ -43,10 +43,6 @@
 </div>
 <?php $this->stop() ?>
 
-<?php $this->start('footer') ?>
-<h2 class="title">FOOTER</h2>
-<?php $this->stop() ?>
-
 <?php $this->start('scripts') ?>
 
 <?php $this->stop() ?>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Api\ApiIngrediente;
 use App\Api\ApiRegister;
 use App\Controllers\HomeController;
 use App\Controllers\AuthController;
@@ -12,6 +13,8 @@ $routes = [
 	'register-post' => [AuthController::class, 'registerUser', 'home'],
 	'logout' 		=> [AuthController::class, 'logoutUser', 'home'],
 	'apiRegister'   => [ApiRegister::class, 'handleRequest', null],
+	'ingredientes'  => [AuthController::class, 'showIngredientes', null],
+	'apiIngrediente' => [ApiIngrediente::class, 'handleRequest', null],
 ];
 
 return $routes;

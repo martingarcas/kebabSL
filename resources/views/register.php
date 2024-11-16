@@ -83,10 +83,6 @@
 
 <?php $this->stop() ?>
 
-<?php $this->start('footer') ?>
-<h2 class="title">FOOTER</h2>
-<?php $this->stop() ?>
-
 <?php $this->start('scripts'); ?>
 
 <script>
@@ -119,9 +115,9 @@
 				// Validar y actualizar la validez del campo sin eliminar/agregar del Set
 				if (data.errores && data.errores[campo.name]) {
 					mostrarError(campo, data.errores[campo.name]);
-					campo.isValid = false;  // Indicamos que el campo tiene errores
+					camposValidados.delete(campo.name); // Si hay error, eliminamos el campo del Set
 				} else {
-					campo.isValid = true;  // Indicamos que el campo es válido
+					camposValidados.add(campo.name); // Si no hay error, lo agregamos al Set
 				}
 
 				actualizarEstadoFormulario(); // Actualizamos el estado del formulario tras validar un campo
@@ -149,15 +145,12 @@
 		// Función para actualizar el estado del formulario (habilitar o deshabilitar el botón de submit)
 		function actualizarEstadoFormulario() {
 			let formIsValid = true;
-
 			// Verificamos si todos los campos han sido validados correctamente
 			campos.forEach(campo => {
-				// Usamos el campo.isValid para saber si el campo es válido o no
-				if (!campo.value || !campo.isValid || campo.nextElementSibling?.classList.contains('error-form')) {
+				if (!campo.value || !camposValidados.has(campo.name) || campo.nextElementSibling?.classList.contains('error-form')) {
 					formIsValid = false;
 				}
 			});
-
 			submitButton.disabled = !formIsValid;
 		}
 
