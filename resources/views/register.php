@@ -86,6 +86,7 @@
 <?php $this->start('scripts'); ?>
 
 <script>
+
 	document.addEventListener('DOMContentLoaded', () => {
 		const formulario 	= document.querySelector('.formulario__register');
 		const campos 		= formulario.querySelectorAll('input');
@@ -257,9 +258,6 @@
 		// Habilitar el botón de submit al principio
 		actualizarEstadoFormulario();
 	});
-
-
-
 
 </script>
 

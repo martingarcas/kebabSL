@@ -1,6 +1,7 @@
 {
     "require": {
         "league/plates": "^3.5",
-      "ext-json": "*"
+      "ext-json": "*",
+        "phpmailer/phpmailer": "^6.9"
     }
 }

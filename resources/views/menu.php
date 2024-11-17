@@ -15,7 +15,7 @@ $usuario = Logger::obtenerUsuario();
 				<?php if ($usuario !== null && $usuario->getRol() === 'cliente'): ?>
 					<li><a href="/">CARTA</a></li>
 					<li><a href="/">CARRITO</a></li>
-					<li><a href="/">CONTACTO</a></li>
+					<li><a href="/contacto">CONTACTO</a></li>
 					<!-- Foto del usuario con submenú desplegable -->
 					<li class="user-menu">
 						<a href="#" class="user-link">
@@ -46,7 +46,7 @@ $usuario = Logger::obtenerUsuario();
 					<li><a href="/register">REGÍSTRARSE</a></li>
 					<li><a href="/">CARTA</a></li>
 					<li><a href="/">CARRITO</a></li>
-					<li><a href="/">CONTACTO</a></li>
+					<li><a href="/contacto">CONTACTO</a></li>
 				<?php endif; ?>
 			</ul>
 		</nav>

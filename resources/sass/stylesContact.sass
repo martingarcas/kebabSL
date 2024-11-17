@@ -1,0 +1,111 @@
+.contact-cnt
+	padding-top: 40px
+	padding-bottom: 120px
+	.contact-cnt-inner
+		max-width: 1400px
+		margin: 0 auto
+		padding: 50px 0
+		background-color: white
+		//box-shadow: 0 0 10px 0 rgba(0,0,0,.2)
+
+		.contact-description
+			text-align: left
+			padding: 0 50px
+			margin-bottom: 50px
+
+			&.end
+				font-weight: 600
+				&:last-child
+					font-weight: initial
+		// 	padding: 0 50px
+
+		.contact-cnt-header
+			.contact-form-title
+				margin-bottom: 50px
+				text-align: center
+		//font-weight: 600
+
+		.contact-form
+			display: flex
+			flex-direction: column
+			width: 100%
+			margin-bottom: 50px
+			padding: 24px
+
+		.map-responsive
+			//max-height: 750px//736
+			height: 509px
+
+		.contact-form-data
+			background-color: #333
+			padding: 50px
+			//margin-bottom: 60px
+
+			.messageError
+				color: red
+				display: none
+
+			.form-group
+				position: absolute
+				top: 10px
+				left: 0
+
+			.form-control
+				display: block
+				width: 100%
+				margin-bottom: 20px
+				border: none
+				border-bottom: 1px solid white
+				padding: 10px 0 10px 0
+				font-size: 14px
+				transition: 0.2s
+				outline: none
+				background-color: transparent
+				color: white
+				text-decoration: none
+				&:focus
+					border-color: #ff7043
+				&::placeholder
+					color: white
+
+			.form-send-data
+				width: 100%
+				border: 1px solid white
+				transition: 0.4s
+				padding: 10px
+				margin-top: 30px
+				cursor: pointer
+				background-color: #888888
+				font-size: 16px
+				color: #fff
+				border-radius: 6px
+				margin-bottom: 30px
+
+			.form-send-data:hover
+				background-color: #ff7043
+
+@media (min-width: 768px)
+	.contact-cnt
+		.contact-cnt-inner
+			.contact-description
+				text-align: justify
+			.contact-form
+				display: flex
+				flex-direction: row
+				justify-content: space-between
+				padding: 0 50px
+				.contact-form-data
+					width: 580px
+					border-top-left-radius: 6px
+					border-bottom-left-radius: 6px
+				.map-responsive
+					height: initial
+					width: 900px
+					& iframe
+						border-top-right-radius: 6px
+						border-bottom-right-radius: 6px
+
+@media (min-width: 1402px)
+	.contact-cnt
+		.contact-cnt-inner
+			border-radius: 6px
