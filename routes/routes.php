@@ -3,6 +3,7 @@
 use App\Api\ApiContact;
 use App\Api\ApiIngrediente;
 use App\Api\ApiRegister;
+use App\Api\ApiUser;
 use App\Controllers\ContactController;
 use App\Controllers\HomeController;
 use App\Controllers\AuthController;
@@ -19,7 +20,8 @@ $routes = [
 	'apiIngrediente' 	=> [ApiIngrediente::class, 'handleRequest', null],
 	'contacto' 			=> [ContactController::class, 'index', 'contacto'],
 	'apiContact' 		=> [ApiContact::class, 'handleRequest', 'null'],
-	'apiContact' 		=> [ApiContact::class, 'handleRequest', 'null'],
+	'profile' 			=> [AuthController::class, 'showProfile', 'profile'],
+	'apiUser' 			=> [ApiUser::class, 'handleRequest', 'null'],
 ];
 
 return $routes;

@@ -39,21 +39,29 @@ class RepoIngrediente {
 		return $ingrediente;
 	}
 
-	public function assoc_alergenos ($ingrediente_id, $alergenos) {
-
+	public function assoc_alergenos($ingrediente_id, $alergenos) {
 		$con = Conexion::getConection();
 
+		// Verificar que $alergenos sea un array y no esté vacío
+		if (!is_array($alergenos) || empty($alergenos)) {
+			echo "No hay alérgenos para asociar al ingrediente.";
+			return;
+		}
+
 		foreach ($alergenos as $alergeno) {
+			// Asegúrate de que cada $alergeno sea una instancia de Alergeno
+			if ($alergeno instanceof Alergeno) {
+				$stm = $con->prepare(
+					"INSERT INTO ingrediente_has_alergeno (Ingrediente_id, Alergeno_id) VALUES (:ingrediente_id, :alergeno_id)"
+				);
 
-
-			$stm = $con->prepare(
-				"INSERT INTO ingrediente_has_alergeno (Ingrediente_id, Alergeno_id) VALUES (:ingrediente_id, :alergeno_id)"
-			);
-
-			$stm->execute([
-				'ingrediente_id' 		=> $ingrediente_id,
-				'alergeno_id' 			=> ($alergeno instanceof Alergeno) ? $alergeno->getId() : $alergeno,
-			]);
+				$stm->execute([
+					'ingrediente_id' => $ingrediente_id,
+					'alergeno_id' => $alergeno->getId(),
+				]);
+			} else {
+				echo "El alérgeno no es válido.";
+			}
 		}
 	}
 
@@ -76,7 +84,7 @@ class RepoIngrediente {
 				$response['nombre'],
 				$response['foto'],
 				$response['precio'],
-				$response['alergenos']
+				[] // Inicializa los alérgenos como un array vacío
 			);
 
 			$objets[$response['id']] = $ingrediente;
@@ -99,26 +107,20 @@ class RepoIngrediente {
 	}
 
 	public function getAll() {
-
 		$con = Conexion::getConection();
 
-		// Preparar la consulta para buscar por el email
 		$stm = $con->prepare("SELECT * FROM ingrediente");
-
 		$stm->execute();
 
 		$objets = [];
-
-		// Obtener el resultado como un array asociativo
 		while ($response = $stm->fetch(PDO::FETCH_ASSOC)) {
-
-			// Crear un objeto Alérgeno con los datos obtenidos
+			// Crear el objeto Ingrediente
 			$ingrediente = new Ingrediente(
 				$response['id'],
 				$response['nombre'],
 				$response['foto'],
 				$response['precio'],
-				$response['alergenos'] ?? [],
+				[] // Alérgenos se agregarán después
 			);
 
 			$objets[$response['id']] = $ingrediente;
@@ -126,66 +128,68 @@ class RepoIngrediente {
 
 		$ingredientes_keys = array_keys($objets);
 
+		// Obtener los alérgenos asociados
 		$ingrediente_alergenos = $this->__mm__alergenos($ingredientes_keys);
 
-		/**
-		 * @var Ingrediente $ingrediente
-		 */
+		// Asignar los alérgenos a cada ingrediente
 		foreach ($objets as $ingrediente_k => $ingrediente) {
-
-			$ingrediente->setAlergenos($ingrediente_alergenos[$ingrediente_k] ?? null);
+			$ingrediente->setAlergenos($ingrediente_alergenos[$ingrediente_k] ?? []);
 		}
 
-		// Si no se encuentra el alérgeno, devolver null
 		return $objets;
 	}
 
-	protected function __mm__alergenos ($ids) {
 
-		if(!$ids) {
+	protected function __mm__alergenos($ids) {
+		if (empty($ids)) {
 			return [];
 		}
 
 		$con = Conexion::getConection();
 
-		// Preparar la consulta para buscar por el email
-		$stm = $con->prepare("SELECT * FROM ingrediente_has_alergeno where Ingrediente_id IN (:ids)");
+		// Crear los placeholders
+		$placeholders = implode(',', array_fill(0, count($ids), '?'));
+		$stm = $con->prepare("SELECT Ingrediente_id, Alergeno_id FROM ingrediente_has_alergeno WHERE Ingrediente_id IN ($placeholders)");
 
-		$stm->execute(['ids' => implode(',', $ids)]);
+		// Ejecutar la consulta con los IDs de los ingredientes
+		$stm->execute($ids);
 
-		$objets = [];
-
+		$objets = []; // Relacionará ingrediente_id con alérgeno_ids
 		$alergenos_tmp = [];
 
-		// Obtener el resultado como un array asociativo
 		while ($response = $stm->fetch(PDO::FETCH_ASSOC)) {
+			$ingrediente_id = $response['Ingrediente_id'];
+			$alergeno_id = $response['Alergeno_id'];
 
-			$objets[$response['Ingrediente_id']][] = $response['Alergeno_id'];
+			// Asociar los alérgenos con el ingrediente
+			$objets[$ingrediente_id][] = $alergeno_id;
 
-			$alergenos_tmp[$response['Alergeno_id']] = $response['Alergeno_id'];
+			// Guardar los IDs de los alérgenos únicos
+			$alergenos_tmp[$alergeno_id] = $alergeno_id;
+		}
+
+		// Obtener los objetos completos de los alérgenos por sus IDs
+		if (empty($alergenos_tmp)) {
+			return [];
 		}
 
 		$RepoAlergenos = new RepoAlergeno();
+		$alergenos = $RepoAlergenos->getByIds(array_values($alergenos_tmp));
 
-		$alergenos = $RepoAlergenos->getByIds($alergenos_tmp);
-
+		// Asociar los objetos de alérgenos a los ingredientes
 		$_mm_resolve = [];
-
-		foreach ($objets as $ingrediente_id => $ingrediente) {
-
-			foreach ($ingrediente as $alergeno_id) {
-
-				if(!isset($_mm_resolve[$ingrediente_id])){
-					$_mm_resolve[$ingrediente_id] = [];
+		foreach ($objets as $ingrediente_id => $alergeno_ids) {
+			foreach ($alergeno_ids as $alergeno_id) {
+				if (isset($alergenos[$alergeno_id])) {
+					$_mm_resolve[$ingrediente_id][] = $alergenos[$alergeno_id];
 				}
-
-				$_mm_resolve[$ingrediente_id][] = $alergenos[$alergeno_id];
 			}
 		}
 
-		// Si no se encuentra el alérgeno, devolver null
-		return $_mm_resolve;
+		return $_mm_resolve; // Retorna un array con la relación ingrediente_id => [alérgeno_objetos]
 	}
+
+
 }
 
 ?>

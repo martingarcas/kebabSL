@@ -2,13 +2,8 @@
 
 namespace App\Api;
 
-use App\Models\Direccion;
-use App\Models\Usuario;
 use App\Repositorios\RepoAlergeno;
-use App\Repositorios\RepoDireccion;
 use App\Repositorios\RepoIngrediente;
-use App\Repositorios\RepoUser;
-use App\Utils\Validator;
 
 class ApiIngrediente {
 

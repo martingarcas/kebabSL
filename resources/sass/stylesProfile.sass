@@ -1,0 +1,158 @@
+/* Contenedor principal */
+.profile-wrapper
+	display: flex
+	justify-content: center
+	align-items: center
+	min-height: 100vh
+	background-color: #f0f4f8
+	font-family: 'Arial', sans-serif
+
+
+/* Contenedor de la tarjeta del perfil */
+.profile-container
+	width: 90%
+	max-width: 900px
+	padding: 40px
+	background-color: #fff
+	border-radius: 15px
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1)
+	transition: all 0.3s ease
+
+/* Foto de perfil en la parte superior */
+.profile-photo-container
+	display: flex
+	justify-content: center
+	margin-bottom: 30px
+
+
+.profile-photo
+	width: 120px
+	height: 120px
+	border-radius: 50%
+	overflow: hidden
+	border: 6px solid #4c93e8 /* Borde azul */
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) /* Sombra suave */
+	transition: all 0.3s ease
+
+/* Imagen dentro de la foto de perfil */
+.profile-photo img
+	width: 100%
+	height: 100%
+	object-fit: cover
+
+
+/* Título principal */
+h1
+	font-size: 28px
+	color: #333
+	margin-bottom: 20px
+
+
+/* Información básica del perfil */
+.profile-info
+	flex-grow: 1
+
+
+.profile-info h2
+	font-size: 26px
+	font-weight: bold
+	margin-bottom: 10px
+	color: #333
+
+
+.profile-info p
+	font-size: 16px
+	color: #777
+	margin-bottom: 8px
+
+
+/* Cuerpo del perfil */
+.profile-body
+	font-size: 16px
+	color: #333
+	margin-top: 30px
+
+
+.profile-body h3
+	font-size: 22px
+	margin-bottom: 20px
+	color: #4c93e8
+
+
+/* Estilo para los datos del perfil */
+#profile-data p
+	font-size: 16px
+	line-height: 1.6
+	margin: 12px 0
+	color: #555
+
+
+#profile-data strong
+	color: #333
+	font-weight: 600
+
+
+/* Estilo para el mensaje de error */
+#error-message
+	margin-top: 20px
+	color: #ff0000
+	font-weight: bold
+	font-size: 16px
+	text-align: center
+
+
+/* Estilo del spinner (cargando) */
+.spinner
+	margin: 20px auto
+	border: 4px solid #f3f3f3 /* Fondo gris claro */
+	border-top: 4px solid #4c93e8 /* Borde azul */
+	border-radius: 50%
+	width: 40px
+	height: 40px
+	animation: spin 2s linear infinite
+	display: none
+
+
+@keyframes spin
+	0%
+		transform: rotate(0deg)
+	100%
+		transform: rotate(360deg)
+
+
+/* Botones de edición */
+.edit-btn
+	background-color: #4c93e8
+	color: white
+	border: none
+	padding: 5px 10px
+	cursor: pointer
+	margin-left: 10px
+	font-size: 14px
+	border-radius: 5px
+
+.edit-btn:hover
+	background-color: #3578e5
+
+.save-btn, .cancel-btn
+	background-color: #28a745
+	color: white
+	border: none
+	padding: 10px 15px
+	cursor: pointer
+	font-size: 16px
+	border-radius: 5px
+	margin-right: 10px
+
+.save-btn:hover
+	background-color: #218838
+
+.cancel-btn
+	background-color: #dc3545
+
+.cancel-btn:hover
+	background-color: #c82333
+
+/* Input de archivo */
+.file-input
+	display: none

@@ -183,5 +183,13 @@ class AuthController {
 		echo $this->templates->render('ingredientes', ['message' => $message]);
 	}
 
+	// Renderizar vista de login
+	public function showProfile() {
+		// Obtener el mensaje flash
+		$message = FlashMessage::getMessage();
+		// Renderizar la vista con el mensaje flash si existe
+		echo $this->templates->render('profile', ['message' => $message]);
+	}
+
 }
 ?>

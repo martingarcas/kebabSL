@@ -8,16 +8,19 @@ class Ingrediente {
 	private $nombre;
 	private $foto;
 	private $precio;
-	private $alergenos = [];
+	private $alergenos;
 
-	public function __construct($id, $nombre, $foto, $precio, $alergenos) {
-
+	public function __construct($id, $nombre, $foto, $precio, $alergenos = []) {
 		$this->id = $id;
 		$this->nombre = $nombre;
 		$this->foto = $foto;
 		$this->precio = $precio;
-		$this->alergenos[] = $alergenos;
+
+		if (!empty($alergenos)) {
+			$this->setAlergenos($alergenos);
+		}
 	}
+
 
 
 	public function getId() {
@@ -87,19 +90,17 @@ class Ingrediente {
 	}
 
 	public function setAlergenos($alergenos) {
-
-		if(!$alergenos) {
-			return [];
+		if (!is_array($alergenos)) {
+			return;
 		}
 
 		foreach ($alergenos as $alergeno) {
-
-			if (!$this->existeAlergeno($alergeno)) {
-
+			if ($alergeno instanceof Alergeno && !$this->existeAlergeno($alergeno)) {
 				$this->agregarAlergeno($alergeno);
 			}
 		}
 	}
+
 
 	public function existeAlergeno(Alergeno $alergeno) {
 
@@ -114,6 +115,7 @@ class Ingrediente {
 
 			$clave = $alergeno->getId();
 			$this->alergenos[$clave] = $alergeno;
+
 		}
 	}
 

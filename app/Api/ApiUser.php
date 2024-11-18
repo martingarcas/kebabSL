@@ -2,71 +2,105 @@
 
 namespace App\Api;
 
-use App\Models\Direccion;
-use App\Models\Usuario;
-use App\Repositorios\Conexion;
-use App\Repositorios\RepoDireccion;
+use App\Utils\Logger;
 use App\Repositorios\RepoUser;
-use PDOException;
 
 class ApiUser {
 
-	// Método para crear el usuario y la dirección
-	public function crearUsuario($data) {
+	private $repoUser;
 
-		$pdo = Conexion::getConection();
+	public function __construct() {
+		$this->repoUser = new RepoUser();
+	}
 
-		// Crear los repositorios para usuario y dirección
-		$repoUser 		= new RepoUser($pdo);
-		$repoDireccion 	= new RepoDireccion($pdo);
+	public function handleRequest($data) {
+		header('Content-Type: application/json');
 
-		try {
+		if (!isset($data['action'])) {
+			http_response_code(400);
+			return json_encode(['error' => 'Acción no especificada.']);
+		}
 
-			// Iniciar la transacción
-			$pdo->beginTransaction();
-
-			// Crear el objeto Usuario, pasando solo los datos obligatorios
-			$usuario = new Usuario(
-				$data['nombre'],         // nombre
-				$data['apellido1'],      // apellido1 (opcional)
-				$data['apellido2'],      // apellido2 (opcional)
-				$data['contrasenna'],    // contrasenna (obligatorio)
-				$data['telefono'],       // telefono (opcional)
-				$data['email'],          // email (obligatorio)
-				$data['dni'],            // dni (obligatorio)
-				$data['foto'],           // foto (opcional)
-				$data['monedero'],       // monedero (opcional)
-				$data['carrito']         // carrito (opcional)
-			);
-
-			// Insertar el usuario en la base de datos
-			$repoUser->create($usuario);
-
-			$usuarioId = $usuario->getId();
-
-			// Si no se obtuvo un ID de usuario, lanzar una excepción
-			if (!$usuarioId) {
-				throw new PDOException("No se pudo obtener el ID del usuario.");
-			}
-
-			// Crear el objeto Dirección y asociarlo al usuario
-			$direccion = new Direccion($data['calle'], $data['numero'], $data['activa']);
-
-			// Insertar la dirección en la base de datos
-			$repoDireccion->create($direccion, $usuarioId);
-
-			// Confirmar la transacción
-			$pdo->commit();
-
-			// Si todo sale bien, devolver una respuesta de éxito
-			//devolver un json/encode
-			return ['status' => 'success', 'message' => 'Usuario y dirección creados con éxito'];
-
-		} catch (\Exception $e) {
-			// Si ocurre un error, devolver un mensaje de error
-			$pdo->rollBack();
-			return ['status' => 'error', 'message' => $e->getMessage()];
+		switch ($data['action']) {
+			case 'loadUser':
+				return $this->cargarUsuarioAutenticado();
+			case 'updateUser':
+				return $this->actualizarUsuario($data);
+			default:
+				http_response_code(400);
+				return json_encode(['error' => 'Acción no válida.']);
 		}
 	}
 
+	public function cargarUsuarioAutenticado() {
+		header('Content-Type: application/json');
+
+		// Obtener usuario autenticado usando Logger
+		$usuario = Logger::obtenerUsuario();
+
+		if (!$usuario) {
+			http_response_code(401); // No autorizado
+			return json_encode(['success' => false, 'error' => 'No hay una sesión activa.']);
+		}
+
+		// Responder con los datos del usuario
+		http_response_code(200);
+		return json_encode([
+			'success' => true,
+			'usuario' => [
+				'id'        => $usuario->getId(),
+				'nombre'    => $usuario->getNombre(),
+				'apellido1' => $usuario->getApellido1(),
+				'apellido2' => $usuario->getApellido2(),
+				'email'     => $usuario->getEmail(),
+				'telefono'  => $usuario->getTelefono(),
+				'dni'       => $usuario->getDni(),
+				'monedero'  => $usuario->getMonedero(),
+				'foto'      => $usuario->getFoto(),
+				'rol'       => $usuario->getRol()
+			]
+		]);
+	}
+
+	public function actualizarUsuario($data) {
+		header('Content-Type: application/json');
+
+		// Obtener usuario autenticado usando Logger
+		$usuario = Logger::obtenerUsuario();
+
+		if (!$usuario) {
+			http_response_code(401); // No autorizado
+			return json_encode(['success' => false, 'error' => 'No hay una sesión activa.']);
+		}
+
+		// Actualizar los datos del usuario
+		if (isset($data['nombre'])) {
+			$usuario->setNombre($data['nombre']);
+		}
+		if (isset($data['apellido1'])) {
+			$usuario->setApellido1($data['apellido1']);
+		}
+		if (isset($data['apellido2'])) {
+			$usuario->setApellido2($data['apellido2']);
+		}
+		if (isset($data['email'])) {
+			$usuario->setEmail($data['email']);
+		}
+		if (isset($data['telefono'])) {
+			$usuario->setTelefono($data['telefono']);
+		}
+		if (isset($data['dni'])) {
+			$usuario->setDni($data['dni']);
+		}
+		if (isset($data['monedero'])) {
+			$usuario->setMonedero($data['monedero']);
+		}
+
+		// Guardar cambios en la base de datos
+		$this->repoUser->update($usuario);
+
+		// Responder con éxito
+		http_response_code(200);
+		return json_encode(['success' => true, 'message' => 'Usuario actualizado correctamente.']);
+	}
 }

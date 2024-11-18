@@ -37,31 +37,27 @@ class RepoAlergeno {
 
 
 	public function getByIds($ids) {
-
-		$con = Conexion::getConection();
-
-		// Preparar la consulta para buscar por el email
-		$stm = $con->prepare("SELECT * FROM alergeno WHERE id in (:id)");
-		$stm->execute(['id' => implode(',', $ids)]);
-
-		$objets = [];
-
-		// Obtener el resultado como un array asociativo
-		while ($response = $stm->fetch(PDO::FETCH_ASSOC)) {
-
-			// Crear un objeto Alérgeno con los datos obtenidos
-			$alergeno = new Alergeno(
-				$response['id'],
-				$response['nombre'],
-				$response['foto'],
-			);
-
-			$objets[$response['id']] = $alergeno;
+		if (empty($ids)) {
+			return [];
 		}
 
-		// Si no se encuentra el alérgeno, devolver null
-		return $objets;
+		$con = Conexion::getConection();
+		$placeholders = implode(',', array_fill(0, count($ids), '?'));
+		$stm = $con->prepare("SELECT * FROM alergeno WHERE id IN ($placeholders)");
+		$stm->execute($ids);
+
+		$alergenos = [];
+		while ($response = $stm->fetch(PDO::FETCH_ASSOC)) {
+			$alergenos[$response['id']] = new Alergeno(
+				$response['id'],
+				$response['nombre'],
+				$response['foto']
+			);
+		}
+
+		return $alergenos; // Array asociativo: alérgeno_id => AlergenoObjeto
 	}
+
 
 	public function getAll() {
 

@@ -1,44 +1,71 @@
-body
-    //background-color: rgba(0,0,0,0.84) !important
+.presentation-cnt
+    padding-top: 40px
+    padding-bottom: 40px
+    .presentation-cnt-inner
+        max-width: 1400px
+        margin: 0 auto
+        padding: 0 30px
 
-.hero
-    background-color: #4CAF50 /* Verde */
-    color: white
-    text-align: center
-    padding: 50px 20px
-    border-radius: 8px
+        .presentation-header-cnt
+            margin-bottom: 50px
+            .presentation-header-title
+                position: relative
+                text-align: center
+                margin-bottom: 20px
 
+                .main-title
+            //font-weight: 600
 
-.hero-title
-    font-size: 2.5em
-    margin-bottom: 10px
+            .presentation-header-introduction
+                .presentation-paragraph
+                    margin-bottom: 20px
+                    &:last-child
+                        margin-bottom: 0
 
+        .presentation-cnt-body
+            .presentation-main-body
+                display: flex
+                flex-direction: column
+                gap: 20px 50px
+                margin-bottom: 20px
+                &:last-child
+                    padding-bottom: 50px
+                .info-box
+                    width: 100%
+                .information-main-img-cnt
+                    height: 500px
+                    border-radius: 6px
+                    overflow: hidden
+                    //clip-path: ellipse(200px 220px at 50% 60%)
+                    .main-img
+                        display: block
+                        width: 100%
+                        height: 100%
+                        object-fit: cover
 
-.hero-description
-    font-size: 1.2em
-    margin-bottom: 20px
+                .header-information
+                    text-align: center
+                    font-weight: 700
+                    font-size: 20px
 
+                .information-paragraph
+                    margin-bottom: 20px
+                    &:last-child
+                        margin-bottom: 0
 
-.hero-button
-    background-color: white
-    color: #4CAF50
-    padding: 10px 20px
-    border: none
-    border-radius: 5px
-    text-decoration: none
-    font-weight: bold
-    transition: background-color 0.3s
+@media (min-width: 768px)
+    .presentation-cnt
+        text-align: justify
 
-.hero-button:hover
-    background-color: #e0e0e0 /* Color al pasar el ratón */
-
-.title
-    color: salmon
-
-.success-message
-    background-color: #d4edda
-    border: 1px solid #c3e6cb
-    color: #155724
-    padding: 15px
-    margin-bottom: 20px
-    border-radius: 5px
+@media (min-width: 1024px)
+    .presentation-cnt
+        .presentation-cnt-inner
+            .presentation-cnt-body
+                .presentation-main-body
+                    flex-direction: row
+                    align-items: center
+                    margin-bottom: 120px
+                .information-main-reverse
+                    flex-direction: row-reverse
+                    .info-box
+                        width: 50%
