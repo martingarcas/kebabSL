@@ -3,9 +3,8 @@
 	display: flex
 	flex-wrap: wrap
 	gap: 20px
-	justify-content: space-around
 	padding: 20px
-
+	user-select: none //borrar con el tiempo
 
 .ingrediente-card
 	width: 250px
@@ -15,60 +14,194 @@
 	overflow: hidden
 	transition: transform 0.3s ease, box-shadow 0.3s ease
 	text-align: center
-
+	padding: 24px 0
 
 .ingrediente-card:hover
 	transform: translateY(-10px)
 	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2)
 
-
-.ingrediente-card img
+/* Estilos exclusivos para la imagen del ingrediente */
+.ingrediente-card .ingrediente-img
 	width: 100%
 	height: 150px
 	object-fit: cover
 	border-bottom: 2px solid #f0f0f0
-
 
 .ingrediente-card h3
 	font-size: 1.5rem
 	color: #333
 	margin: 10px 0
 
-
 .ingrediente-card .precio
 	font-size: 1.2rem
 	color: #888
 	margin-bottom: 15px
 
-
-.alergenos-container
+/* Contenedor de alérgenos */
+#alergenos-container
 	display: flex
-	gap: 5px
-	justify-content: center
-	margin-bottom: 10px
+	flex-wrap: wrap
+	gap: 20px
+	padding: 24px
 
-
+/* Imagen del alérgeno más pequeña y cuadrada */
 .alergeno-img
-	width: 30px
-	height: 30px
-	border-radius: 50%
-	object-fit: cover
-	transition: transform 0.3s ease
+	height: 40px  /* Ajustamos la altura a 40px */
+	object-fit: contain  /* Cambiamos a contain para que la imagen no se recorte */
+	border-radius: 4px   /* Bordes redondeados */
+	transition: transform 0.3s ease  /* Transición suave para cualquier cambio de transform */
 
-
+/* Eliminar el hover para no ampliar la imagen */
 .alergeno-img:hover
-	transform: scale(1.2)
+	transform: none
 
+.fieldset-alergenos
+	display: block
+	max-width: 600px
+	border: 2px solid #ddd
+	border-radius: 8px
+	padding: 20px
+	background-color: #fafafa
+	transition: padding .3s ease
+	margin: 0 auto 10px
 
+/* Tooltip */
 .tooltip
-	display: none
+	display: none  /* Ocultamos el tooltip por defecto */
 	position: absolute
-	background-color: rgba(0, 0, 0, 0.7)
+	background-color: rgba(0, 0, 0, 0.8)  /* Fondo oscuro para el tooltip */
 	color: white
 	border-radius: 5px
 	padding: 5px
-	font-size: 12px
-
+	font-size: 14px
+	white-space: nowrap  /* Evitar que el texto se divida en varias líneas */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3)  /* Sombra para darle profundidad */
 
 .alergeno-img:hover + .tooltip
+	display: block  /* Mostramos el tooltip al hacer hover sobre la imagen */
+
+/* Estilos para la posición del tooltip */
+.alergenos-container
+	position: relative
+
+
+/* Estilos para la tarjeta de "Agregar ingrediente" */
+.card-agregar
+	display: flex
+	flex-direction: column
+	align-items: center
+	justify-content: center
+	background-color: #f8f8f8  /* Fondo claro */
+	border-radius: 10px
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1)
+	padding: 20px
+	cursor: pointer
+	transition: transform 0.3s ease, box-shadow 0.3s ease
+
+.card-agregar:hover
+	transform: translateY(-10px)
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2)
+
+.icono-agregar
+	width: 50px
+	height: 50px
+	object-fit: contain
+
+.card-agregar h3
+	margin-top: 10px
+	font-size: 1.2rem
+	color: #333
+
+
+/* Estilos para el formulario */
+.formulario-ingrediente
+
+.formulario-ingrediente h2
+	text-align: center
+	margin-bottom: 20px  /* Separación entre el título y el resto del formulario */
+
+.formulario-ingrediente label
 	display: block
+	font-weight: bold
+	max-width: 400px
+	margin: 0 auto 10px
+	padding-top: 10px
+
+.formulario-ingrediente input[type="text"],
+.formulario-ingrediente input[type="file"]
+	width: 100%
+	padding: 12px  /* Aumentamos el padding para mayor comodidad */
+	margin-bottom: 20px  /* Mayor espacio entre los campos */
+	border-radius: 6px  /* Bordes ligeramente más redondeados */
+	border: 1px solid #ccc
+	max-width: 400px
+
+.formulario-ingrediente button
+	padding: 12px 20px
+	background-color: #28a745
+	color: white
+	border: none
+	border-radius: 5px
+	cursor: pointer
+	font-size: 16px
+	margin-bottom: 15px  /* Espacio entre los botones */
+
+.formulario-ingrediente button[type="button"]
+	background-color: #dc3545
+	margin-top: 10px  /* Agregamos un pequeño margen superior para el botón de cancelar */
+
+
+/* Estilos para la tarjeta de agregar */
+.tarjeta-agregar
+	width: 250px
+	height: 250px
+	background-color: #f0f0f0
+	border-radius: 10px
+	display: flex
+	justify-content: center
+	align-items: center
+	cursor: pointer
+	text-align: center
+	font-size: 24px
+	color: #888
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1)
+
+.tarjeta-agregar:hover
+	background-color: #e0e0e0
+
+.foto-container
+	position: relative
+	width: 200px
+	height: 200px
+	border: 2px dashed #ccc
+	display: flex
+	align-items: center
+	justify-content: center
+	cursor: pointer
+	overflow: hidden
+	margin: 0 auto
+
+	.icono-agregar
+		position: absolute
+		display: block
+		width: 40px
+		height: 40px
+
+#foto-preview
+	display: block
+	width: 100%
+	height: 100%
+
+.foto-preview-img
+	width: 100%
+	height: 100%
+	object-fit: cover
+
+#foto
+	position: absolute
+	top: 0
+	left: 0
+	width: 100%
+	height: 100%
+	opacity: 0
+	cursor: pointer

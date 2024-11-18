@@ -19,6 +19,7 @@ $routes = [
 	'apiIngrediente' 	=> [ApiIngrediente::class, 'handleRequest', null],
 	'contacto' 			=> [ContactController::class, 'index', 'contacto'],
 	'apiContact' 		=> [ApiContact::class, 'handleRequest', 'null'],
+	'apiContact' 		=> [ApiContact::class, 'handleRequest', 'null'],
 ];
 
 return $routes;
