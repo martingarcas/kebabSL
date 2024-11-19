@@ -76,7 +76,7 @@
 			</div>
 
 			<!-- Botón de registro -->
-			<button type="submit">Registrarse</button>
+			<button class="btn"  type="submit">Registrarse</button>
 		</form>
 	</div>
 </div>
