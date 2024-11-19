@@ -130,7 +130,7 @@ class ApiContact {
 
 			//R E C I P I E N T S
 
-			$mail->setFrom('lealrodrigobose@gmail.com', 'Mailer');					//RECEPTOR 			oficina.rehabilitacion@avanzasi.es
+			$mail->setFrom('lealrodrigobose@gmail.com', 'Mailer');					//RECEPTOR
 			$mail->addAddress('lealrodrigobose@gmail.com', 'Martin infor'); 		//Add a recipient
 			//$mail->addAddress('ellen@example.com');               			//Name is optional
 			//$mail->addReplyTo('info@example.com', 'Information');

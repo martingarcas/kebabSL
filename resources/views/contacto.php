@@ -88,6 +88,7 @@
 				console.log('No validado');
 				errorBox.style.display = 'block';
 				return false;
+
 			} else {
 				console.log('Validado');
 				const formData = new FormData(form);
