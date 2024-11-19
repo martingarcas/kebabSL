@@ -13,40 +13,41 @@ $usuario = Logger::obtenerUsuario();
 			<ul class="menu">
 				<!-- Menú para usuarios logueados -->
 				<?php if ($usuario !== null && $usuario->getRol() === 'cliente'): ?>
-					<li><a href="/">CARTA</a></li>
-					<li><a href="/">CARRITO</a></li>
-					<li><a href="/contacto">CONTACTO</a></li>
+					<li><a href="/">Carta</a></li>
+					<li><a href="/">Carrito</a></li>
+					<li><a href="/contacto">Contacto</a></li>
 					<!-- Foto del usuario con submenú desplegable -->
 					<li class="user-menu">
 						<a href="#" class="user-link">
 							<img src="<?= htmlspecialchars($usuario->getFoto()); ?>" alt="Foto de <?= htmlspecialchars($usuario->getNombre()); ?>" class="user-photo">
 						</a>
 						<ul class="submenu">
-							<li><a href="/profile">MI PERFIL</a></li>
-							<li><a href="/logout">CERRAR SESIÓN</a></li>
+							<li><a href="/profile">Mi perfil</a></li>
+							<li><a href="/logout">Cerrar sesión</a></li>
 						</ul>
 					</li>
 				<?php elseif ($usuario !== null && $usuario->getRol() === 'administrador'): ?>
 					<!-- Menú para administradores -->
-					<li><a href="/">KEBABS</a></li>
-					<li><a href="/ingredientes">INGREDIENTES</a></li>
-					<li><a href="/">GRÁFICOS-ESTADOS</a></li>
+					<li><a href="/">Kebabs</a></li>
+					<li><a href="/ingredientes">Ingredientes</a></li>
+					<li><a href="/">Gráficos-estados</a></li>
 					<li class="user-menu">
 						<a href="#" class="user-link">
 							<img src="<?= htmlspecialchars($usuario->getFoto()); ?>" alt="Foto de <?= htmlspecialchars($usuario->getNombre()); ?>" class="user-photo">
 						</a>
 						<ul class="submenu">
-							<li><a href="/profile">MI PERFIL</a></li>
-							<li><a href="/logout">CERRAR SESIÓN</a></li>
+							<li><a href="/profile">Mi perfil</a></li>
+							<li><a href="/logout">Cerrar sesión</a></li>
 						</ul>
 					</li>
 				<?php else: ?>
 					<!-- Menú para usuarios no logueados -->
-					<li><a href="/login">INICIAR SESIÓN</a></li>
-					<li><a href="/register">REGÍSTRARSE</a></li>
-					<li><a href="/">CARTA</a></li>
-					<li><a href="/">CARRITO</a></li>
-					<li><a href="/contacto">CONTACTO</a></li>
+					<li><a href="/">Inicio</a></li>
+					<li><a href="/">Carta</a></li>
+					<li><a href="/">Carrito</a></li>
+					<li><a href="/contacto">Contacto</a></li>
+					<li><a href="/login">Iniciar sesión</a></li>
+					<li><a href="/register">Regístrate</a></li>
 				<?php endif; ?>
 			</ul>
 		</nav>

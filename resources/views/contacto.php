@@ -41,8 +41,9 @@
 				<label class="form-group" for="comment"></label>
 				<textarea class="form-control text" name="comment" cols="30" rows="6" id="comment" placeholder="Tu mensaje"></textarea>
 
-				<label class="form-group" for="politics"></label><span class="form-control">He leído y acepto la política de privacidad.</span>
-				<input class="form-control" type="checkbox" name="politics" id="politics">
+				<input class="form-control checkbox" type="checkbox" name="politics" id="politics">
+				<label class="form-group" for="politics"></label>
+				<span class="form-control privacy">He leído y acepto la política de privacidad.</span>
 
 				<div class="InputError">
 					<span class="messageError ux-error-validate-form"></span>

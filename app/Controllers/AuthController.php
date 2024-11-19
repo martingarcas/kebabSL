@@ -19,16 +19,34 @@ class AuthController {
 	}
 
 	// Renderizar vista de login
-	public function showLoginForm() {
+	public function showLoginForm($view) {
 		// Obtener el mensaje flash
 		$message = FlashMessage::getMessage();
+
+		$usuario = Logger::obtenerUsuario();
+
+		if ($usuario) {
+			http_response_code(403); // Código HTTP 403: Prohibido
+			FlashMessage::setMessage("ACCESO DENEGADO.", 'error');
+			header('Location: /');
+		}
 		// Renderizar la vista con el mensaje flash si existe
-		echo $this->templates->render('login', ['message' => $message]);
+		echo $this->templates->render($view, ['message' => $message]);
 	}
 
 	// Renderizar vista de registro
-	public function showRegisterForm() {
-		echo $this->templates->render('register');
+	public function showRegisterForm($view) {
+		$message = FlashMessage::getMessage();
+
+		$usuario = Logger::obtenerUsuario();
+
+		if ($usuario) {
+			http_response_code(403); // Código HTTP 403: Prohibido
+			FlashMessage::setMessage("ACCESO DENEGADO.", 'error');
+			header('Location: /');
+		}
+
+		echo $this->templates->render($view, ['message' => $message]);
 	}
 
 	// Iniciar sesión del usuario
@@ -39,6 +57,7 @@ class AuthController {
 		}
 
 		$validator = new Validator();
+
 		$data = [
 			'email'       => $_POST['email'] ?? '',
 			'contrasenna' => $_POST['contrasenna'] ?? '',
@@ -66,7 +85,16 @@ class AuthController {
 				exit();
 			}
 
+			// Verifica si "Recuérdame" está marcado
+			if (isset($_POST['recuerdame'])) {
+				setcookie('remember_email', $data['email'], time() + 3600 * 24 * 30, '/'); // Válido por 30 días
+				setcookie('remember_password', $data['contrasenna'], time() + 3600 * 24 * 30, '/');
+			}
+
 			Logger::login($usuario);
+			FlashMessage::setMessage("Inicio de sesión exitoso. ¡Bienvenido!", 'success');
+			header('Location: /');
+			exit();
 		}
 
 		if (count($errores) > 0) {
@@ -76,11 +104,6 @@ class AuthController {
 			]);
 			return;
 		}
-
-		// Login exitoso, redirigir con mensaje de éxito
-		FlashMessage::setMessage("Inicio de sesión exitoso. ¡Bienvenido!", 'success');
-		header('Location: /');
-		exit();
 	}
 
 	// Registrar usuario
@@ -179,6 +202,14 @@ class AuthController {
 	public function showIngredientes() {
 		// Obtener el mensaje flash
 		$message = FlashMessage::getMessage();
+		// Verificar si el usuario está logueado y es administrador
+		$usuario = Logger::obtenerUsuario();
+
+		if (!$usuario || $usuario->getRol() !== 'administrador') {
+			http_response_code(403); // Código HTTP 403: Prohibido
+			FlashMessage::setMessage("ACCESO DENEGADO.", 'error');
+			header('Location: /');
+		}
 		// Renderizar la vista con el mensaje flash si existe
 		echo $this->templates->render('ingredientes', ['message' => $message]);
 	}

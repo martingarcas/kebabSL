@@ -23,16 +23,23 @@
 				<legend>Inicio de Sesión</legend>
 
 				<label for="email">Correo Electrónico:</label>
-				<input type="email" name="email" placeholder="tu.email@ejemplo.com">
+				<input type="email" name="email" placeholder="tu.email@ejemplo.com"
+					   value="<?= isset($_COOKIE['remember_email']) ? htmlspecialchars($_COOKIE['remember_email']) : '' ?>">
 				<?php if (isset($errores['email'])): ?>
 					<span class="error-form"><?= htmlspecialchars($errores['email']) ?></span>
 				<?php endif; ?>
 
 				<label for="contrasenna">Contraseña:</label>
-				<input type="password" name="contrasenna" placeholder="Introduce tu contraseña">
+				<input type="password" name="contrasenna" placeholder="Introduce tu contraseña"
+					   value="<?= isset($_COOKIE['remember_password']) ? htmlspecialchars($_COOKIE['remember_password']) : '' ?>">
 				<?php if (isset($errores['contrasenna'])): ?>
 					<span class="error-form"><?= htmlspecialchars($errores['contrasenna']) ?></span>
 				<?php endif; ?>
+
+				<label for="recuerdame">
+					<input class="remember" type="checkbox" name="recuerdame"
+						<?= isset($_COOKIE['remember_email']) ? 'checked' : '' ?>> Recuérdame
+				</label>
 			</fieldset>
 
 			<!-- Botón de Inicio de Sesión -->
@@ -48,7 +55,6 @@
 <?php $this->stop() ?>
 
 <?php $this->start('scripts') ?>
-
 <script>
 	document.addEventListener('DOMContentLoaded', () => {
 		// Agregar el evento de clic al enlace de "Recuperar Contraseña"

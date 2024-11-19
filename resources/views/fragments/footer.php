@@ -67,11 +67,12 @@
 						<li class="list-item"><a href="/profile">Mi perfil</a></li>
 						<li class="list-item"><a href="/logout">Cerrar sesión</a></li>
 						<?php else: ?>
-						<li class="list-item"><a href="/login">Iniciar Sesión</a></li>
-						<li class="list-item"><a href="/register">Regístrarse</a></li>
+						<li class="list-item"><a href="/">Inicio</a></li>
 						<li class="list-item"><a href="/">Carta</a></li>
 						<li class="list-item"><a href="/">Carrito</a></li>
 						<li class="list-item"><a href="/">Contacto</a></li>
+						<li class="list-item"><a href="/login">Iniciar Sesión</a></li>
+						<li class="list-item"><a href="/register">Regístrate</a></li>
 						<?php endif; ?>
 					</ul>
 
