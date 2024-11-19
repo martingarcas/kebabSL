@@ -27,21 +27,27 @@
 				<form action="/apiIngrediente" method="POST" id="form-agregar-ingrediente" enctype="multipart/form-data">
 					<h2>Agregar Ingrediente</h2>
 
-					<!-- Foto -->
-					<label for="foto">Foto del Ingrediente:</label>
-					<div class="foto-container" id="foto-container">
-						<input type="file" id="foto" name="foto" accept="image/*">
-						<img src="/img/iconos/agregar.png" alt="Agregar imagen" class="icono-agregar">
-						<div id="foto-preview"></div>
-					</div>
+					<fieldset class="header-ingredient">
+						<!-- Foto -->
+<!--						<label for="foto">Foto del Ingrediente:</label>-->
+						<div class="foto-container" id="foto-container">
+							<input type="file" id="foto" name="foto" accept="image/*">
+							<img src="/img/iconos/agregar.png" alt="Agregar imagen" class="icono-agregar">
+							<div id="foto-preview"></div>
+						</div>
 
-					<!-- Nombre -->
-					<label for="nombre">Nombre:</label>
-					<input type="text" id="nombre" name="nombre" required>
+						<div class="inputs-ingredient">
 
-					<!-- Precio -->
-					<label for="precio">Precio:</label>
-					<input type="text" id="precio" name="precio" required>
+							<!-- Nombre -->
+							<label for="nombre">Nombre:</label>
+							<input type="text" id="nombre" name="nombre" required>
+
+							<!-- Precio -->
+							<label for="precio">Precio:</label>
+							<input type="text" id="precio" name="precio" required>
+
+						</div>
+					</fieldset>
 
 					<!-- Alergenos (Checkboxs) -->
 					<fieldset class="fieldset-alergenos">
@@ -84,7 +90,7 @@
 					const cardAgregar = crearCardAgregar();
 					tarjetasContainer.appendChild(cardAgregar);
 
-					ingredientes.forEach(ingrediente => {
+					ingredientes.reverse().forEach(ingrediente => {
 						const card = crearCardIngrediente(ingrediente, alergenos);
 						tarjetasContainer.appendChild(card);
 					});
