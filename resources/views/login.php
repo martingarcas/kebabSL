@@ -5,7 +5,6 @@
 <?php $this->stop() ?>
 
 <?php $this->start('header') ?>
-<h1 class="title">Inicio de sesión</h1>
 <?php $this->stop() ?>
 
 <?php $this->start('formulario') ?>

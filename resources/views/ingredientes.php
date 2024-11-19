@@ -24,7 +24,7 @@
 		<!-- Contenedor del formulario para agregar ingredientes -->
 		<div class="form-container" id="formulario-container" style="display: none;">
 			<div id="formulario-ingrediente" class="formulario-ingrediente">
-				<form action="/apiIngrediente" method="POST" id="form-agregar-ingrediente">
+				<form action="/apiIngrediente" method="POST" id="form-agregar-ingrediente" enctype="multipart/form-data">
 					<h2>Agregar Ingrediente</h2>
 
 					<!-- Foto -->
@@ -65,10 +65,10 @@
 	<script>
 		document.addEventListener('DOMContentLoaded', () => {
 			const tarjetasContainer = document.querySelector('.tarjetas-container');
-			const formularioContainer = document.querySelector('#formulario-container'); // El contenedor del formulario
-			const ingredientesContainer = document.querySelector('#ingredientes-container'); // El contenedor de la lista de ingredientes
-			const formAgregarIngrediente = document.querySelector('.card-agregar'); // La tarjeta de agregar ingrediente
-			const alergenosContainer = document.querySelector('#alergenos-container'); // El contenedor donde se agregarán los checkboxes
+			const formularioContainer = document.querySelector('#formulario-container');
+			const ingredientesContainer = document.querySelector('#ingredientes-container');
+			const formAgregarIngrediente = document.querySelector('.card-agregar');
+			const alergenosContainer = document.querySelector('#alergenos-container');
 
 			async function obtenerIngredientesYAlergenos() {
 				const formData = new FormData();
@@ -76,58 +76,42 @@
 
 				const response = await fetch('/apiIngrediente', { method: 'POST', body: formData });
 				const data = await response.json();
-				console.log(data)
 
 				if (data.success) {
 					const ingredientes = data.ingredientes;
 					const alergenos = data.alergenos;
 
-					// Crear tarjeta para agregar un nuevo ingrediente (siempre la primera)
 					const cardAgregar = crearCardAgregar();
 					tarjetasContainer.appendChild(cardAgregar);
 
-					// Crear tarjetas de ingredientes
 					ingredientes.forEach(ingrediente => {
 						const card = crearCardIngrediente(ingrediente, alergenos);
 						tarjetasContainer.appendChild(card);
 					});
 
-					// Llenar los checkboxes de los alérgenos en el formulario
 					agregarAlergenosCheckBox(alergenos);
 				}
 			}
 
-			// Función para crear los checkboxes de alérgenos
 			function agregarAlergenosCheckBox(alergenos) {
-				alergenosContainer.innerHTML = ''; // Limpiar el contenedor antes de agregar los nuevos checkboxes
-
+				alergenosContainer.innerHTML = '';
 				alergenos.forEach(alergeno => {
-					// Crear el contenedor para cada checkbox
 					const div = document.createElement('div');
 					div.classList.add('alergeno-checkbox');
-
-					// Crear el checkbox
 					const checkbox = document.createElement('input');
 					checkbox.type = 'checkbox';
 					checkbox.id = `alergeno-${alergeno.id}`;
-					checkbox.name = 'alergenos[]'; // Esto es importante para enviar varios valores
+					checkbox.name = 'alergenos[]';
 					checkbox.value = alergeno.id;
-
-					// Crear la etiqueta para el checkbox
 					const label = document.createElement('label');
 					label.setAttribute('for', `alergeno-${alergeno.id}`);
 					label.textContent = alergeno.nombre;
-
-					// Agregar el checkbox y la etiqueta al contenedor
 					div.appendChild(checkbox);
 					div.appendChild(label);
-
-					// Agregar el contenedor al contenedor de alérgenos
 					alergenosContainer.appendChild(div);
 				});
 			}
 
-			// Mostrar vista previa de la imagen seleccionada
 			const fotoInput = document.querySelector('#foto');
 			const fotoContainer = document.querySelector('#foto-container');
 			const fotoPreview = document.querySelector('#foto-preview');
@@ -135,20 +119,14 @@
 			fotoInput.addEventListener('change', (event) => {
 				const file = event.target.files[0];
 				if (file) {
-					// Crear un objeto URL para la imagen
 					const reader = new FileReader();
-
 					reader.onload = function(e) {
-						// Mostrar la imagen seleccionada
 						fotoPreview.innerHTML = `<img src="${e.target.result}" alt="Imagen seleccionada" class="foto-preview-img">`;
 					};
-
-					// Leer el archivo como una URL de imagen
 					reader.readAsDataURL(file);
 				}
 			});
 
-			// Abrir el selector de archivos al hacer clic en la cajita
 			fotoContainer.addEventListener('click', () => {
 				fotoInput.click();
 			});
@@ -156,112 +134,128 @@
 			function crearCardAgregar() {
 				const card = document.createElement('div');
 				card.classList.add('ingrediente-card', 'card-agregar');
-
-				// Imagen de agregar (ícono de '+')
 				const iconoAgregar = document.createElement('img');
 				iconoAgregar.classList.add('icono-agregar');
-				iconoAgregar.src = '/img/iconos/agregar.png';  // Cambia esto por el icono que prefieras
+				iconoAgregar.src = '/img/iconos/agregar.png';
 				iconoAgregar.alt = 'Agregar nuevo ingrediente';
 				card.appendChild(iconoAgregar);
-
-				// Título de la tarjeta
 				const texto = document.createElement('h3');
 				texto.textContent = 'Agregar Ingrediente';
 				card.appendChild(texto);
-
-				// Manejar el evento de click para mostrar el formulario
 				card.addEventListener('click', () => {
-					// Ocultar la lista de ingredientes
 					ingredientesContainer.style.display = 'none';
-					// Mostrar el formulario de agregar ingrediente
 					formularioContainer.style.display = 'block';
-					// Ocultar la tarjeta de agregar ingrediente
 					formAgregarIngrediente.style.display = 'none';
 				});
-
 				return card;
 			}
 
 			function crearCardIngrediente(ingrediente, alergenos) {
 				const card = document.createElement('div');
 				card.classList.add('ingrediente-card');
-
-				// Foto del ingrediente
 				const img = document.createElement('img');
 				img.classList.add('ingrediente-img');
 				img.src = ingrediente.foto;
 				img.alt = ingrediente.nombre;
 				card.appendChild(img);
-
-				// Nombre del ingrediente
 				const nombre = document.createElement('h3');
 				nombre.textContent = ingrediente.nombre;
 				card.appendChild(nombre);
-
-				// Precio del ingrediente
 				const precio = document.createElement('p');
 				precio.classList.add('precio');
 				precio.textContent = `${ingrediente.precio}€`;
 				card.appendChild(precio);
 
-				// Contenedor de alérgenos
 				const alergenosContainer = document.createElement('div');
 				alergenosContainer.classList.add('alergenos-container');
-
-				// Verificar si `ingrediente.alergenos` es un objeto
 				if (typeof ingrediente.alergenos === 'object' && ingrediente.alergenos !== null) {
-					// Recorrer las claves de `ingrediente.alergenos` (que son los IDs)
 					for (const idAlergeno in ingrediente.alergenos) {
 						if (ingrediente.alergenos.hasOwnProperty(idAlergeno)) {
-							// Buscar el alérgeno correspondiente usando el ID
 							const alergeno = alergenos.find(a => a.id.toString() === idAlergeno);
-
 							if (alergeno) {
-								// Crear el elemento de imagen del alérgeno
 								const imgAlergeno = document.createElement('img');
 								imgAlergeno.classList.add('alergeno-img');
 								imgAlergeno.src = alergeno.foto;
 								imgAlergeno.alt = alergeno.nombre;
-
-								// Crear un tooltip con el nombre del alérgeno
 								const tooltip = document.createElement('span');
 								tooltip.classList.add('tooltip');
 								tooltip.textContent = alergeno.nombre;
-
-								// Añadir la imagen y el tooltip al contenedor de alérgenos
 								alergenosContainer.appendChild(imgAlergeno);
 								alergenosContainer.appendChild(tooltip);
 							}
 						}
 					}
 				} else {
-					// Si no hay alérgenos, mostrar un mensaje
 					const noAlergenos = document.createElement('span');
 					noAlergenos.classList.add('no-alergenos');
 					noAlergenos.textContent = 'Sin alérgenos';
 					alergenosContainer.appendChild(noAlergenos);
 				}
 
-				// Añadir el contenedor de alérgenos a la tarjeta
 				card.appendChild(alergenosContainer);
-
 				return card;
 			}
 
-
-			// Manejar el botón "Cancelar" del formulario
 			document.querySelector('#cancelar-formulario').addEventListener('click', () => {
-				// Ocultar el formulario
 				formularioContainer.style.display = 'none';
-				// Volver a mostrar la lista de ingredientes
 				ingredientesContainer.style.display = 'block';
-				// Volver a mostrar la tarjeta de agregar ingrediente
 				formAgregarIngrediente.style.display = 'block';
 			});
 
-			// Obtener los ingredientes y alérgenos al cargar la página
+			const formAgregarIngredienteElement = document.querySelector('#form-agregar-ingrediente');
+			formAgregarIngredienteElement.addEventListener('submit', async (event) => {
+				event.preventDefault();  // Evitar el comportamiento por defecto
+
+				const formData = new FormData(formAgregarIngredienteElement);
+				formData.append('action', 'insert');
+
+				// Añadir los alérgenos seleccionados al FormData
+				const selectedAlergenos = [];
+				document.querySelectorAll('input[name="alergenos[]"]:checked').forEach(checkbox => {
+					selectedAlergenos.push(checkbox.value);  // Añadir el ID del alérgeno
+				});
+				formData.append('alergenos', JSON.stringify(selectedAlergenos));
+
+				try {
+					const response = await fetch('/apiIngrediente', {
+						method: 'POST',
+						body: formData
+					});
+
+					const data = await response.json();
+
+					if (data.success) {
+						// Guardar mensaje de éxito en sessionStorage
+						sessionStorage.setItem('flash_message', JSON.stringify({
+							message: data.message || 'Ingrediente agregado correctamente',
+							type: 'success'
+						}));
+						formAgregarIngredienteElement.reset();
+						obtenerIngredientesYAlergenos();
+						window.location.href = data.redirect_url || '/ingredientes';  // Redirigir a la página de ingredientes
+					} else {
+						// Guardar mensaje de error en sessionStorage
+						sessionStorage.setItem('flash_message', JSON.stringify({
+							message: data.message || 'Hubo un error al agregar el ingrediente',
+							type: 'error'
+						}));
+						window.location.href = '/ingredientes';  // Redirigir a la página de ingredientes
+					}
+				} catch (error) {
+					console.error('Error al enviar la solicitud:', error);
+					// Guardar mensaje de error en sessionStorage en caso de fallo
+					sessionStorage.setItem('flash_message', JSON.stringify({
+						message: 'Hubo un problema al agregar el ingrediente. Intenta nuevamente.',
+						type: 'error'
+					}));
+					window.location.href = '/ingredientes';  // Redirigir a la página de ingredientes
+				}
+			});
+
 			obtenerIngredientesYAlergenos();
 		});
 	</script>
+
+
 
 <?php $this->stop(); ?>

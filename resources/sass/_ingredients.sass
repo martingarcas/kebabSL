@@ -1,6 +1,7 @@
 /* Estilos para las tarjetas de ingredientes */
 .tarjetas-container
 	display: flex
+	justify-content: center
 	flex-wrap: wrap
 	gap: 20px
 	padding: 20px
@@ -51,10 +52,6 @@
 	border-radius: 4px   /* Bordes redondeados */
 	transition: transform 0.3s ease  /* Transición suave para cualquier cambio de transform */
 
-/* Eliminar el hover para no ampliar la imagen */
-.alergeno-img:hover
-	transform: none
-
 .fieldset-alergenos
 	display: block
 	max-width: 600px
@@ -81,7 +78,7 @@
 	transform: translateX(-50%)  /* Asegura que el tooltip esté perfectamente centrado */
 	z-index: 10  /* Aseguramos que el tooltip quede encima de otros elementos */
 
-.alergenos-container:hover .tooltip
+.alergeno-img:hover + .tooltip
 	display: block  /* Mostramos el tooltip al hacer hover sobre la imagen */
 
 /* Estilos para la posición del tooltip */

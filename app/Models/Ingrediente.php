@@ -15,60 +15,52 @@ class Ingrediente {
 		$this->nombre = $nombre;
 		$this->foto = $foto;
 		$this->precio = $precio;
-
-		if (!empty($alergenos)) {
-			$this->setAlergenos($alergenos);
-		}
+		// Asegúrate de que $alergenos siempre sea un array
+		$this->alergenos = is_array($alergenos) ? $alergenos : [];
 	}
 
-
-
+	// Método getter para obtener el id
 	public function getId() {
-
 		return $this->id;
 	}
 
-	public function getNombre() {
+	// Método setter para asignar el id (necesario para asignar el id después de la inserción)
+	public function setId($id) {
+		$this->id = $id;
+	}
 
+	public function getNombre() {
 		return $this->nombre;
 	}
 
 	public function setNombre($nombre) {
-
 		$this->nombre = $nombre;
 	}
 
 	public function getFoto() {
-
 		return $this->foto;
 	}
 
 	public function setFoto($foto) {
-
 		$this->foto = $foto;
 	}
 
 	public function getPrecio() {
-
 		return $this->precio;
 	}
 
 	public function setPrecio($precio) {
-
 		$this->precio = $precio;
 	}
 
 	public function getAlergenos() {
-
 		return $this->alergenos;
 	}
 
 	public function getAlergenosAsArray() {
-
 		$alergenos = [];
 
 		foreach ($this->alergenos as $alergeno) {
-
 			if(!$alergeno) {
 				continue;
 			}
@@ -79,9 +71,7 @@ class Ingrediente {
 			}
 
 			if($alergeno instanceof Alergeno) {
-
 				$alergeno = $alergeno->getAsArray();
-
 				$alergenos[$alergeno['id']] = $alergeno;
 			}
 		}
@@ -101,36 +91,26 @@ class Ingrediente {
 		}
 	}
 
-
 	public function existeAlergeno(Alergeno $alergeno) {
-
 		$clave = $alergeno->getId();
-
 		return isset($this->alergenos[$clave]);
 	}
 
 	public function agregarAlergeno(Alergeno $alergeno) {
-
 		if (!$this->existeAlergeno($alergeno)) {
-
 			$clave = $alergeno->getId();
 			$this->alergenos[$clave] = $alergeno;
-
 		}
 	}
 
 	public function borrarAlergeno(Alergeno $alergeno) {
-
 		if ($this->existeAlergeno($alergeno)) {
-
 			$clave = $alergeno->getId();
 			unset($this->alergenos[$clave]);
 		}
 	}
 
-
 	public function getAsArray() {
-
 		return [
 			'id' => $this->getId(),
 			'nombre' => $this->getNombre(),
@@ -140,5 +120,6 @@ class Ingrediente {
 		];
 	}
 }
+
 
 ?>
