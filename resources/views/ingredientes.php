@@ -67,14 +67,14 @@
 
 		<!-- Contenedor del formulario para editar ingredientes -->
 		<div class="form-container" id="formulario-container-edit" style="display: none;">
-			<div id="formulario-ingrediente" class="formulario-ingrediente">
-				<form action="/apiIngrediente" method="POST" id="form-agregar-ingrediente" enctype="multipart/form-data">
+			<div id="formulario-ingrediente-edit" class="formulario-ingrediente-edit">
+				<form action="/apiIngrediente" method="POST" id="form-edit-ingrediente" enctype="multipart/form-data">
 					<h2>Editar Ingrediente</h2>
 
 					<fieldset class="header-ingredient">
 						<!-- Foto -->
 						<!--						<label for="foto">Foto del Ingrediente:</label>-->
-						<div class="foto-container" id="foto-container">
+						<div class="foto-container" id="foto-container-edit">
 							<input type="file" id="foto" name="foto" accept="image/*">
 							<img src="/img/iconos/agregar.png" alt="Agregar imagen" class="icono-agregar">
 							<div id="foto-preview"></div>
@@ -96,7 +96,7 @@
 					<!-- Alergenos (Checkboxs) -->
 					<fieldset class="fieldset-alergenos">
 						<legend>Alergenos:</legend>
-						<div id="alergenos-container">
+						<div id="alergenos-container-edit">
 							<!-- Aquí se llenarán los checkboxes de alérgenos dinámicamente -->
 						</div>
 					</fieldset>
@@ -107,24 +107,25 @@
 				</form>
 			</div>
 		</div>
+
 	</div>
 
 <?php $this->stop() ?>
 
 <?php $this->start('scripts'); ?>
 
-
-
 	<script>
 
 		document.addEventListener('DOMContentLoaded', () => {
 			// Variables comunes
-			const tarjetasContainer = document.querySelector('.tarjetas-container');
-			const formularioContainer = document.querySelector('#formulario-container');
-			const ingredientesContainer = document.querySelector('#ingredientes-container');
-			const formAgregarIngrediente = document.querySelector('.card-agregar');
-			const alergenosContainer = document.querySelector('#alergenos-container');
-			const spinner = document.getElementById('spinner');
+			const tarjetasContainer 		= document.querySelector('.tarjetas-container');
+			const formularioContainer 		= document.querySelector('#formulario-container');
+			const formularioContainerEdit 	= document.querySelector('#formulario-container-edit');
+			const alergenosContainerEdit 	= document.querySelector('#alergenos-container-edit');
+			const ingredientesContainer 	= document.querySelector('#ingredientes-container');
+			const formAgregarIngrediente 	= document.querySelector('.card-agregar');
+			const alergenosContainer 		= document.querySelector('#alergenos-container');
+			const spinner 					= document.getElementById('spinner');
 
 			// Función para mostrar el spinner
 			function showSpinner() {
@@ -144,6 +145,7 @@
 			/* ------------------------------------------------- */
 
 			async function obtenerIngredientesYAlergenos() {
+
 				const formData = new FormData();
 				formData.append('action', 'show');  // Acción para obtener los ingredientes
 
@@ -158,15 +160,106 @@
 					// Crear y mostrar el botón "Agregar Ingrediente"
 					const cardAgregar = crearCardAgregar();
 					tarjetasContainer.appendChild(cardAgregar);
-
+					let contador = -1;
 					// Crear las tarjetas de ingredientes y mostrarlas
 					ingredientes.reverse().forEach(ingrediente => {
 						const card = crearCardIngrediente(ingrediente, alergenos);
+						card.ingrediente = ++contador;
 						tarjetasContainer.appendChild(card);
 					});
 
 					// Crear los checkboxes para los alérgenos
 					agregarAlergenosCheckBox(alergenos);
+
+					/* ------------------------------------------------- */
+					/*  SECCIÓN 3: EDICIÓN DE UN INGREDIENTE" */
+					/* ------------------------------------------------- */
+					tarjetasContainer.addEventListener('click', function (e) {
+						let card = e.target.closest('#ingrediente-card');
+						let index = card.ingrediente;
+						let ingredienteEdit = ingredientes[index];
+						mostrarEditForm(ingredienteEdit);
+
+					})
+
+					function mostrarEditForm(ingrediente) {
+
+						formularioContainerEdit.id = ingrediente.id;
+
+						// console.log(ingrediente.alergenos)
+
+						ingredientesContainer.style.display 	= 'none';
+						formularioContainerEdit.style.display 	= 'block';
+
+						const fotoInput 	= formularioContainerEdit.querySelector('#foto');
+						const fotoContainer = formularioContainerEdit.querySelector('#foto-container-edit');
+						const fotoPreview 	= formularioContainerEdit.querySelector('#foto-preview');
+						const nombreInput 	= formularioContainerEdit.querySelector('#nombre');
+						const precioInput 	= formularioContainerEdit.querySelector('#precio');
+
+						// Añadir los eventos change para cada campo de entrada
+						fotoPreview.innerHTML = `<img src="${ingrediente.foto}" alt="Imagen seleccionada" class="foto-preview-img">`;
+						fotoInput.addEventListener('change', (event) => {
+							const file = event.target.files[0];
+							if (file) {
+								const reader = new FileReader();
+								reader.onload = function(e) {
+									fotoPreview.innerHTML = `<img src="${e.target.result}" alt="Imagen seleccionada" class="foto-preview-img">`;
+								};
+								reader.readAsDataURL(file);
+							}
+						});
+						// Abrir el selector de imagen al hacer clic en el contenedor de foto
+						fotoContainer.addEventListener('click', () => {
+							fotoInput.click();
+						});
+
+						nombreInput.value = ingrediente.nombre;
+						precioInput.value = ingrediente.precio;
+
+						// Crear los checkboxes para los alérgenos
+						agregarAlergenosEdit(alergenos, ingrediente.alergenos);
+
+						// Función para cancelar el formulario de agregar ingrediente
+						formularioContainerEdit.querySelector('#cancelar-formulario').addEventListener('click', () => {
+							formularioContainerEdit.style.display = 'none';
+							ingredientesContainer.style.display = 'block';
+						});
+
+					}
+
+					// Función para agregar los checkboxes de alérgenos
+					function agregarAlergenosEdit(alergenos, alergenosIngrediente) {
+						// Crear un Set con los ids de los alérgenos asociados al ingrediente
+						const alergenosSet = new Set(Object.keys(alergenosIngrediente));
+						alergenosContainerEdit.innerHTML = '';  // Limpiar el contenedor de alérgenos
+						alergenos.forEach(alergeno => {
+							const div = document.createElement('div');
+							div.classList.add('alergeno-checkbox');
+							const checkbox = document.createElement('input');
+							checkbox.type = 'checkbox';
+							checkbox.id = `alergeno-${alergeno.id}`;
+							checkbox.name = 'alergenos[]';
+							checkbox.value = alergeno.id;
+							// Verificar si el ID del alérgeno está en el Set
+							if (alergenosSet.has(alergeno.id)) {
+								checkbox.checked = true;  // Si está en el Set, marcar el checkbox como seleccionado
+							}
+
+							// for (let key in alergenosIngrediente) {
+							// 	if (alergeno.id === key)
+							// 	checkbox.checked = true;
+							// }
+							// console.log(checkbox.value)
+							const label = document.createElement('label');
+							label.setAttribute('for', `alergeno-${alergeno.id}`);
+							label.textContent = alergeno.nombre;
+							div.appendChild(checkbox);
+							div.appendChild(label);
+							alergenosContainerEdit.appendChild(div);
+						});
+					}
+
 
 					/* -------------------------------------- */
 					/*  SECCIÓN PDF: GENERAR Y DESCARGAR PDF */
@@ -218,6 +311,66 @@
 
 			}
 
+			const formEditarIngrediente = document.querySelector('#form-edit-ingrediente');
+			formEditarIngrediente.addEventListener('submit', async (event) => {
+				event.preventDefault();  // Evitar comportamiento por defecto del formulario
+
+				// Validar campos
+				// validarNombre();
+				// validarPrecio();
+
+				// Verificar si algún campo no es válido
+				// if (!formAgregarIngredienteElement.checkValidity()) {
+				// 	return;  // Si algún campo es inválido, no se envía el formulario
+				// }
+				const formData = new FormData(formEditarIngrediente);
+				formData.append('action', 'delete');
+				formData.append('id', formularioContainerEdit.id);
+
+				try {
+					const response = await fetch('/apiIngrediente', {
+						method: 'POST',
+						body: formData
+					});
+
+					const data = await response.json();
+
+					if (data.success) {
+						console.log(data)
+						// Guardar mensaje de éxito en sessionStorage
+						sessionStorage.setItem('flash_message', JSON.stringify({
+							message: data.message || 'Ingrediente eliminado correctamente',
+							type: 'success'
+						}));
+
+						await obtenerIngredientesYAlergenos();  // Recargar los ingredientes después de agregar uno nuevo
+						window.location.href = data.redirect_url || '/ingredientes';  // Redirigir a la página de ingredientes
+
+					} else {
+						// Guardar mensaje de error en sessionStorage
+						sessionStorage.setItem('flash_message', JSON.stringify({
+							message: data.message || 'Hubo un error al eliminar el ingrediente',
+							type: 'error'
+						}));
+
+						window.location.href = '/ingredientes';  // Redirigir a la página de ingredientes
+					}
+				} catch (error) {
+					console.error('Error al enviar la solicitud:', error);
+					// Guardar mensaje de error en sessionStorage en caso de fallo
+					sessionStorage.setItem('flash_message', JSON.stringify({
+						message: 'Hubo un problema al eliminar el ingrediente. Intenta nuevamente.',
+						type: 'error'
+					}));
+
+					window.location.href = '/ingredientes';  // Redirigir a la página de ingredientes
+				}
+			});
+
+
+			/* -------------------------------------- */
+			/*  SECCIÓN 2: CREACIÓN DE INGREDIENTE */
+			/* -------------------------------------- */
 			// Función para crear el card del botón "Agregar Ingrediente"
 			function crearCardAgregar() {
 				const card = document.createElement('div');
@@ -236,6 +389,7 @@
 					ingredientesContainer.style.display = 'none';
 					formularioContainer.style.display = 'block';
 					formAgregarIngrediente.style.display = 'none';
+					mostrarNewForm();
 				});
 
 				return card;
@@ -245,6 +399,7 @@
 			function crearCardIngrediente(ingrediente, alergenos) {
 				const card = document.createElement('div');
 				card.classList.add('ingrediente-card');
+				card.id = 'ingrediente-card';
 				const img = document.createElement('img');
 				img.classList.add('ingrediente-img');
 				img.src = ingrediente.foto;
@@ -487,7 +642,5 @@
 		});
 
 	</script>
-
-
 
 <?php $this->stop(); ?>

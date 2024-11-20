@@ -28,6 +28,30 @@ class RepoIngrediente {
 		return $ingrediente;
 	}
 
+	public function delete($ingrediente_id) {
+		$con = Conexion::getConection();
+
+		try {
+			// Iniciar transacción
+			$con->beginTransaction();
+
+			// Eliminar asociaciones con alérgenos
+			$stm = $con->prepare("DELETE FROM ingrediente_has_alergeno WHERE Ingrediente_id = :ingrediente_id");
+			$stm->execute(['ingrediente_id' => $ingrediente_id]);
+
+			// Eliminar el ingrediente
+			$stm = $con->prepare("DELETE FROM ingrediente WHERE id = :id");
+			$stm->execute(['id' => $ingrediente_id]);
+
+			// Commit de la transacción
+			$con->commit();
+			return true; // Todo salió bien
+		} catch (\Exception $e) {
+			// En caso de error, hacer rollback
+			$con->rollBack();
+			return false; // Indicar que hubo un error
+		}
+	}
 
 	public function assoc_alergenos($ingrediente_id, $alergenos) {
 		$con = Conexion::getConection();
@@ -58,8 +82,6 @@ class RepoIngrediente {
 			}
 		}
 	}
-
-
 
 	public function getByIds($ids) {
 		$con = Conexion::getConection();
@@ -103,7 +125,6 @@ class RepoIngrediente {
 
 		return $objets;
 	}
-
 
 	public function getAll() {
 		$con = Conexion::getConection();

@@ -15,12 +15,14 @@ class ApiIngrediente {
 
 		if (isset($data['action'])) {
 			switch ($data['action']) {
-				case 'pdf':
-					return $this->generatePdf($data);
 				case 'show':
 					return $this->showIngredients($data);
 				case 'insert':
 					return $this->insertIngredients($data);
+				case 'delete':
+					return $this->deleteIngredients($data);
+				case 'pdf':
+					return $this->generatePdf($data);
 				default:
 					http_response_code(400);
 					return json_encode(['error' => 'Acción no válida.']);
@@ -131,6 +133,38 @@ class ApiIngrediente {
 			http_response_code(400);
 			echo json_encode(['error' => 'No se ha enviado la imagen o los datos correctamente.']);
 			exit;
+		}
+	}
+
+	public function deleteIngredients($data) {
+		// Verificar que el parámetro 'id' ha sido enviado
+		if (!isset($data['id']) || empty($data['id'])) {
+			http_response_code(400); // Código de error: petición incorrecta
+			return json_encode(['error' => 'ID del ingrediente no especificado.']);
+		}
+
+		// Obtener el ID del ingrediente a eliminar
+		$ingrediente_id = $data['id'];
+
+		// Instanciar el repositorio
+		$repoIngrediente = new RepoIngrediente();
+
+		// Llamar al método delete del repositorio
+		$result = $repoIngrediente->delete($ingrediente_id);
+
+		if ($result) {
+			// Si la eliminación fue exitosa, responder con código 200
+			http_response_code(200);
+			return json_encode([
+				'success' => true,
+				'message' => 'Ingrediente eliminado exitosamente.',
+				'redirect_url' => '/ingredientes',
+			]);
+
+		} else {
+			// Si hubo un error, devolver error con código 500 (internal server error)
+			http_response_code(500);
+			return json_encode(['error' => 'Error al eliminar el ingrediente.']);
 		}
 	}
 
