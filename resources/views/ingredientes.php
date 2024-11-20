@@ -64,6 +64,49 @@
 				</form>
 			</div>
 		</div>
+
+		<!-- Contenedor del formulario para editar ingredientes -->
+		<div class="form-container" id="formulario-container-edit" style="display: none;">
+			<div id="formulario-ingrediente" class="formulario-ingrediente">
+				<form action="/apiIngrediente" method="POST" id="form-agregar-ingrediente" enctype="multipart/form-data">
+					<h2>Editar Ingrediente</h2>
+
+					<fieldset class="header-ingredient">
+						<!-- Foto -->
+						<!--						<label for="foto">Foto del Ingrediente:</label>-->
+						<div class="foto-container" id="foto-container">
+							<input type="file" id="foto" name="foto" accept="image/*">
+							<img src="/img/iconos/agregar.png" alt="Agregar imagen" class="icono-agregar">
+							<div id="foto-preview"></div>
+						</div>
+
+						<div class="inputs-ingredient">
+
+							<!-- Nombre -->
+							<label for="nombre">Nombre:</label>
+							<input type="text" id="nombre" name="nombre" required>
+
+							<!-- Precio -->
+							<label for="precio">Precio €</label>
+							<input type="text" id="precio" name="precio" placeholder="€" required>
+
+						</div>
+					</fieldset>
+
+					<!-- Alergenos (Checkboxs) -->
+					<fieldset class="fieldset-alergenos">
+						<legend>Alergenos:</legend>
+						<div id="alergenos-container">
+							<!-- Aquí se llenarán los checkboxes de alérgenos dinámicamente -->
+						</div>
+					</fieldset>
+
+					<button id="editar-ingrediente" class="btn" type="submit" disabled>Guardar Ingrediente</button>
+					<button id="delete-ingrediente" class="btn-delete" type="submit">Borrar Ingrediente</button>
+					<button type="button" id="cancelar-formulario">Cancelar</button>
+				</form>
+			</div>
+		</div>
 	</div>
 
 <?php $this->stop() ?>
@@ -246,6 +289,7 @@
 				}
 
 				card.appendChild(alergenosContainer);
+
 				return card;
 			}
 
