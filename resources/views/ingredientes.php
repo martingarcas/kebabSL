@@ -17,7 +17,9 @@
 		<!-- Contenedor principal de los ingredientes -->
 		<div class="form-container" id="ingredientes-container">
 			<h2>INGREDIENTES</h2>
-
+			<!-- Botón para generar el PDF -->
+			<button id="generar-pdf" class="btn-pdf">Descargar listado de Alérgenos</button>
+			<div class="spinner" id="spinner"></div>
 			<div class="tarjetas-container"></div>
 		</div>
 
@@ -43,8 +45,8 @@
 							<input type="text" id="nombre" name="nombre" required>
 
 							<!-- Precio -->
-							<label for="precio">Precio:</label>
-							<input type="text" id="precio" name="precio" required>
+							<label for="precio">Precio €</label>
+							<input type="text" id="precio" name="precio" placeholder="€" required>
 
 						</div>
 					</fieldset>
@@ -79,6 +81,17 @@
 			const ingredientesContainer = document.querySelector('#ingredientes-container');
 			const formAgregarIngrediente = document.querySelector('.card-agregar');
 			const alergenosContainer = document.querySelector('#alergenos-container');
+			const spinner = document.getElementById('spinner');
+
+			// Función para mostrar el spinner
+			function showSpinner() {
+				spinner.style.display = 'block';
+			}
+
+			// Función para ocultar el spinner
+			function hideSpinner() {
+				spinner.style.display = 'none';
+			}
 
 			// Llamar a la función para obtener los ingredientes y alérgenos
 			obtenerIngredientesYAlergenos();
@@ -111,7 +124,55 @@
 
 					// Crear los checkboxes para los alérgenos
 					agregarAlergenosCheckBox(alergenos);
+
+					/* -------------------------------------- */
+					/*  SECCIÓN PDF: GENERAR Y DESCARGAR PDF */
+					/* -------------------------------------- */
+					const generarPdfButton = document.querySelector('#generar-pdf');
+					generarPdfButton.addEventListener('click', async () => {
+
+						showSpinner();
+						// Crear un objeto FormData para enviar la solicitud
+						const formData = new FormData();
+
+						// Agregar la acción 'pdf' al FormData
+						formData.append('action', 'pdf');
+
+						// Agregar los alérgenos seleccionados al FormData (esto debe estar en formato de array)
+						// Array de objetos con {id, nombre, foto}
+						alergenos.forEach(alergeno => {
+							formData.append('alergenos[]', JSON.stringify(alergeno));
+						});
+
+						try {
+							const responsePdf = await fetch('/apiIngrediente', {
+								method: 'POST',
+								body: formData // Enviar los datos con FormData
+							});
+
+							// Verificar si la respuesta es correcta
+							if (responsePdf.ok) {
+								const blob = await responsePdf.blob();
+								const url = window.URL.createObjectURL(blob);
+								const a = document.createElement('a');
+								a.href = url;
+								a.download = 'alergenos.pdf'; // Nombre del archivo PDF
+								document.body.appendChild(a);
+								a.click();
+								a.remove();
+							} else {
+								alert('Hubo un error al generar el PDF');
+							}
+						} catch (error) {
+							console.error('Error al generar el PDF:', error);
+							alert('Hubo un error al generar el PDF');
+						} finally {
+							hideSpinner();
+						}
+					});
+
 				}
+
 			}
 
 			// Función para crear el card del botón "Agregar Ingrediente"

@@ -2,6 +2,7 @@
     "require": {
         "league/plates": "^3.5",
       "ext-json": "*",
-        "phpmailer/phpmailer": "^6.9"
+        "phpmailer/phpmailer": "^6.9",
+        "dompdf/dompdf": "^3.0"
     }
 }

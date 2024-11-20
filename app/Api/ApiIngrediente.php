@@ -5,14 +5,18 @@ namespace App\Api;
 use App\Models\Ingrediente;
 use App\Repositorios\RepoAlergeno;
 use App\Repositorios\RepoIngrediente;
+use Dompdf\Dompdf;
 
 class ApiIngrediente {
 
 	public function handleRequest($data) {
+
 		header('Content-Type: application/json');
 
 		if (isset($data['action'])) {
 			switch ($data['action']) {
+				case 'pdf':
+					return $this->generatePdf($data);
 				case 'show':
 					return $this->showIngredients($data);
 				case 'insert':
@@ -130,9 +134,117 @@ class ApiIngrediente {
 		}
 	}
 
+	// Método para generar el PDF con los alérgenos
+	public function generatePdf($data) {
+		// Asegurarse de que los alérgenos están presentes
+		if (empty($_POST['alergenos'])) {
+			http_response_code(400);
+			echo json_encode(['error' => 'No se han enviado alérgenos.']);
+			exit;
+		}
 
+		// Decodificar los alérgenos (ya que se enviaron como un array de objetos JSON)
+		$alergenos = [];
+		foreach ($_POST['alergenos'] as $alergenoJson) {
+			$alergenos[] = json_decode($alergenoJson, true);  // Decodificamos cada alérgeno
+		}
 
+		// Instanciar y configurar DOMpdf
+		$dompdf = new Dompdf();
 
+		// Construir el HTML para el PDF con una tabla
+		$html = '<html>
+                <head>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            margin: 20px;
+                        }
+                        h1 {
+                            text-align: center;
+                            color: #333;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 20px;
+                        }
+                        table, th, td {
+                            border: 1px solid black;
+                        }
+                        th, td {
+                            padding: 8px;
+                            text-align: left;
+                        }
+                        th {
+                            background-color: #f2f2f2;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>Listado de Alergenos</h1>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Foto</th>
+                            </tr>
+                        </thead>
+                        <tbody>';
+
+		// Rellenar la tabla con los alérgenos
+		foreach ($alergenos as $alergeno) {
+			// Ruta absoluta de la imagen
+			$imagePath = $_SERVER['DOCUMENT_ROOT'] . $alergeno['foto'];  // Usamos $_SERVER['DOCUMENT_ROOT'] para obtener la ruta absoluta
+
+			// Verificamos si la imagen existe en el servidor
+			if (file_exists($imagePath)) {
+				// Leer el archivo de la imagen y convertirlo a base64
+				$imageData = base64_encode(file_get_contents($imagePath));
+				$imageSrc = 'data:image/jpeg;base64,' . $imageData;  // Asumimos que la imagen es PNG (puedes cambiar el tipo si es necesario)
+			} else {
+				// Si no se encuentra la imagen, usamos una imagen por defecto o dejamos el src vacío
+				$imageSrc = '';  // Aquí puedes poner una URL de imagen por defecto si prefieres
+			}
+
+			// Agregar la fila de la tabla
+			$html .= '<tr>
+                    <td>' . htmlspecialchars($alergeno['nombre']) . '</td>';
+
+			// Verificar si se pudo convertir la imagen a base64
+			if ($imageSrc) {
+				$html .= '<td><img src="' . $imageSrc . '" width="50" height="50" alt="' . htmlspecialchars($alergeno['nombre']) . '"></td>';
+			} else {
+				$html .= '<td>No disponible</td>';
+			}
+
+			$html .= '</tr>';
+		}
+
+		// Cerrar la tabla y el cuerpo del HTML
+		$html .= '   </tbody>
+                </table>
+            </body>
+        </html>';
+
+		// Cargar el HTML en Dompdf
+		$dompdf->loadHtml($html);
+
+		// Configurar el tamaño y orientación del papel
+		$dompdf->setPaper('A4', 'portrait');
+
+		// Renderizar el PDF
+		$dompdf->render();
+
+		// Obtener el contenido binario del PDF
+		$pdfContent = $dompdf->output();
+
+		// Enviar el PDF al navegador
+		header('Content-Type: application/pdf');
+		header('Content-Disposition: attachment; filename="alergenos.pdf"');
+		echo $pdfContent;
+		exit;
+	}
 
 
 }

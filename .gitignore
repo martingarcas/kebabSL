@@ -1,9 +1,15 @@
-# Ignorar la carpeta .idea
+# Ignorar la carpeta .idea (configuración de IDE)
 .idea/
 
-# Ignorar la carpeta vendor
+# Ignorar la carpeta vendor (dependencias de Composer)
 vendor/
 
-# Opcional: Ignorar archivos de Composer si no quieres que estén en el repositorio
+# Ignorar archivos de Composer si no quieres que estén en el repositorio
 composer.lock
 composer.phar
+
+# Ignorar la carpeta 'img' dentro de 'resources'
+/resources/img/
+
+# Ignorar la carpeta 'img' dentro de 'public'
+/public/img/
