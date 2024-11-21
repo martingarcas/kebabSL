@@ -137,7 +137,7 @@
 			}
 
 			// Función para ocultar el spinner
-			function hideSpinner() {
+			function hideSpinner(spinner) {
 				spinner.style.display = 'none';
 			}
 
@@ -307,7 +307,7 @@
 							console.error('Error al generar el PDF:', error);
 							alert('Hubo un error al generar el PDF');
 						} finally {
-							hideSpinner();
+							hideSpinner(spinnerPdf);
 						}
 					});
 
@@ -316,9 +316,14 @@
 			}
 
 			const formEditarIngrediente = document.querySelector('#form-edit-ingrediente');
+			const btnUpdate = document.querySelector('#edit-ingrediente');
+			const btnDelete = document.querySelector('#delete-ingrediente');
 			formEditarIngrediente.addEventListener('change', (event) => {
 				// Verificar si algún campo ha sido modificado
-				checkFormChanges();
+				// checkFormChanges();
+				if (checkFormChanges()) {
+					validarCampos(formEditarIngrediente, btnUpdate);
+				}
 			});
 
 			// Crear un objeto para almacenar los valores originales de cada campo
@@ -387,6 +392,11 @@
 
 				// Activar o desactivar el botón de actualizar
 				btnUpdate.disabled = !hasChanges;
+				if (hasChanges) {
+					return true;
+				} else {
+					return false;
+				}
 			}
 
 			// Función para comparar arrays (alérgenos originales vs actuales)
@@ -395,8 +405,6 @@
 				return arr1.every(value => arr2.includes(value));
 			}
 
-			const btnUpdate = document.querySelector('#edit-ingrediente');
-			const btnDelete = document.querySelector('#delete-ingrediente');
 			formEditarIngrediente.addEventListener('submit', async (event) => {
 				event.preventDefault();  // Evitar comportamiento por defecto del formulario
 				showSpinner(spinnerEdit);
@@ -611,11 +619,14 @@
 			/* -------------------------------------- */
 
 			// Función para manejar la vista previa de la imagen al seleccionar un archivo
+			//FORMULARIO DE AGREGAR INGREDIENTE
+			const formAgregarIngredienteElement = document.querySelector('#form-agregar-ingrediente');
 			const fotoInput = document.querySelector('#foto');
 			const fotoContainer = document.querySelector('#foto-container');
 			const fotoPreview = document.querySelector('#foto-preview');
 			const nombreInput = document.querySelector('#nombre');
 			const precioInput = document.querySelector('#precio');
+			const guardarBoton = formAgregarIngredienteElement.querySelector('#guardar-ingrediente');
 
 			// Función para mostrar un mensaje de error debajo del campo
 			function mostrarError(campo, mensajeError) {
@@ -649,11 +660,9 @@
 				}
 			});
 
-			//FORMULARIO DE AGREGAR INGREDIENTE
-			const formAgregarIngredienteElement = document.querySelector('#form-agregar-ingrediente');
 			// Llamar a la función validarCampos cada vez que se cambie un campo
-			nombreInput.addEventListener('change', () => validarCampos(formAgregarIngredienteElement));
-			precioInput.addEventListener('change', () => validarCampos(formAgregarIngredienteElement));
+			nombreInput.addEventListener('change', () => validarCampos(formAgregarIngredienteElement, guardarBoton));
+			precioInput.addEventListener('change', () => validarCampos(formAgregarIngredienteElement, guardarBoton));
 
 			// Abrir el selector de imagen al hacer clic en el contenedor de foto
 			fotoContainer.addEventListener('click', () => {
@@ -754,7 +763,7 @@
 			}
 
 			// Función para validar todos los campos
-			function validarCampos(formulario) {
+			function validarCampos(formulario, boton) {
 				let esValido = true;
 
 				// Validar nombre y precio
@@ -767,8 +776,7 @@
 				}
 
 				// Habilitar o deshabilitar el botón según la validación
-				const guardarBoton = formulario.querySelector('#guardar-ingrediente');
-				guardarBoton.disabled = !esValido;
+				boton.disabled = !esValido;
 
 				return esValido;
 			}
