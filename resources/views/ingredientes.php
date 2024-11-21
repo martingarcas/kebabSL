@@ -19,7 +19,7 @@
 			<h2>INGREDIENTES</h2>
 			<!-- Botón para generar el PDF -->
 			<button id="generar-pdf" class="btn-pdf">Descargar listado de Alérgenos</button>
-			<div class="spinner" id="spinner"></div>
+			<div class="spinner" id="spinner-pdf"></div>
 			<div class="tarjetas-container"></div>
 		</div>
 
@@ -28,6 +28,7 @@
 			<div id="formulario-ingrediente" class="formulario-ingrediente">
 				<form action="/apiIngrediente" method="POST" id="form-agregar-ingrediente" enctype="multipart/form-data">
 					<h2>Agregar Ingrediente</h2>
+					<div class="spinner" id="spinner-add"></div>
 
 					<fieldset class="header-ingredient">
 						<!-- Foto -->
@@ -70,6 +71,7 @@
 			<div id="formulario-ingrediente-edit" class="formulario-ingrediente-edit">
 				<form action="/apiIngrediente" method="POST" id="form-edit-ingrediente" enctype="multipart/form-data">
 					<h2>Editar Ingrediente</h2>
+					<div class="spinner" id="spinner-edit"></div>
 
 					<fieldset class="header-ingredient">
 						<!-- Foto -->
@@ -125,10 +127,12 @@
 			const ingredientesContainer 	= document.querySelector('#ingredientes-container');
 			const formAgregarIngrediente 	= document.querySelector('.card-agregar');
 			const alergenosContainer 		= document.querySelector('#alergenos-container');
-			const spinner 					= document.getElementById('spinner');
+			const spinnerPdf 				= document.querySelector('#spinner-pdf');
+			const spinnerAdd 				= document.querySelector('#spinner-add');
+			const spinnerEdit 				= document.querySelector('#spinner-edit');
 
 			// Función para mostrar el spinner
-			function showSpinner() {
+			function showSpinner(spinner) {
 				spinner.style.display = 'block';
 			}
 
@@ -232,29 +236,28 @@
 					// Función para agregar los checkboxes de alérgenos
 					function agregarAlergenosEdit(alergenos, alergenosIngrediente) {
 						// Crear un Set con los ids de los alérgenos asociados al ingrediente
-						const alergenosSet = new Set(Object.keys(alergenosIngrediente));
+						const alergenosSet = new Set(Object.keys(alergenosIngrediente).map(key => String(key))); // Asegurarse que las claves sean cadenas
 						alergenosContainerEdit.innerHTML = '';  // Limpiar el contenedor de alérgenos
+
 						alergenos.forEach(alergeno => {
 							const div = document.createElement('div');
 							div.classList.add('alergeno-checkbox');
+
 							const checkbox = document.createElement('input');
 							checkbox.type = 'checkbox';
 							checkbox.id = `alergeno-${alergeno.id}`;
 							checkbox.name = 'alergenos[]';
 							checkbox.value = alergeno.id;
+
 							// Verificar si el ID del alérgeno está en el Set
-							if (alergenosSet.has(alergeno.id)) {
+							if (alergenosSet.has(String(alergeno.id))) {  // Asegurarse de comparar con cadenas
 								checkbox.checked = true;  // Si está en el Set, marcar el checkbox como seleccionado
 							}
 
-							// for (let key in alergenosIngrediente) {
-							// 	if (alergeno.id === key)
-							// 	checkbox.checked = true;
-							// }
-							// console.log(checkbox.value)
 							const label = document.createElement('label');
 							label.setAttribute('for', `alergeno-${alergeno.id}`);
 							label.textContent = alergeno.nombre;
+
 							div.appendChild(checkbox);
 							div.appendChild(label);
 							alergenosContainerEdit.appendChild(div);
@@ -268,7 +271,7 @@
 					const generarPdfButton = document.querySelector('#generar-pdf');
 					generarPdfButton.addEventListener('click', async () => {
 
-						showSpinner();
+						showSpinner(spinnerPdf);
 						// Crear un objeto FormData para enviar la solicitud
 						const formData = new FormData();
 
@@ -396,6 +399,7 @@
 			const btnDelete = document.querySelector('#delete-ingrediente');
 			formEditarIngrediente.addEventListener('submit', async (event) => {
 				event.preventDefault();  // Evitar comportamiento por defecto del formulario
+				showSpinner(spinnerEdit);
 
 				// Obtener el botón que fue presionado
 				const botonPresionado = event.submitter;
@@ -659,6 +663,7 @@
 			// Función para manejar el envío del formulario para agregar un ingrediente
 			formAgregarIngredienteElement.addEventListener('submit', async (event) => {
 				event.preventDefault();  // Evitar comportamiento por defecto del formulario
+				showSpinner(spinnerAdd);
 
 				// Verificar si algún campo no es válido
 				if (!formAgregarIngredienteElement.checkValidity()) {
@@ -698,7 +703,7 @@
 							message: data.message || 'Hubo un error al agregar el ingrediente',
 							type: 'error'
 						}));
-						window.location.href = '/ingredientes';  // Redirigir a la página de ingredientes
+						// window.location.href = '/ingredientes';  // Redirigir a la página de ingredientes
 					}
 				} catch (error) {
 					console.error('Error al enviar la solicitud:', error);

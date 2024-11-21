@@ -65,8 +65,8 @@ class ApiIngrediente {
 	}
 
 	public function insertIngredients($data) {
-		// Verificar que se está haciendo una petición POST y que existe el archivo
-		if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['foto'])) {
+		// Verificar que se está haciendo una petición POST
+		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$nombre = $data['nombre'];
 			$precio = $data['precio'];
 			$alergenos = isset($data['alergenos']) ? json_decode($data['alergenos'], true) : [];
@@ -75,40 +75,42 @@ class ApiIngrediente {
 				$alergenos = [];  // Asegura que siempre sea un array, incluso si no se recibe alérgenos
 			}
 
-			// Procesar la foto
-			$foto = $_FILES['foto'];
-			if ($foto['error'] !== UPLOAD_ERR_OK) {
-				http_response_code(400);
-				return json_encode(['error' => 'Error al subir la imagen.']);
+			// Inicializar la variable para la foto
+			$foto = '';
+
+			// Verificar si se ha subido una foto
+			if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+				// Procesar la foto solo si se ha subido correctamente
+				$foto = $_FILES['foto'];
+				$directorioDestino = $_SERVER['DOCUMENT_ROOT'] . '/img/ingredientes/';
+				$nombreOriginal = basename($foto['name']);
+				$rutaDestino = $directorioDestino . $nombreOriginal;
+
+				// Comprobar si ya existe el archivo
+				if (file_exists($rutaDestino)) {
+					$i = 1;
+					$ext = pathinfo($nombreOriginal, PATHINFO_EXTENSION);
+					$nombreArchivo = pathinfo($nombreOriginal, PATHINFO_FILENAME) . '-' . $i . '.' . $ext;
+					$rutaDestino = $directorioDestino . $nombreArchivo;
+				} else {
+					$nombreArchivo = $nombreOriginal;
+				}
+
+				// Mover el archivo al directorio de destino
+				if (!move_uploaded_file($foto['tmp_name'], $rutaDestino)) {
+					http_response_code(400);
+					return json_encode(['error' => 'Error al guardar la imagen.']);
+				}
+
+				// Ruta relativa a la imagen para almacenar en la base de datos
+				$foto = '/img/ingredientes/' . $nombreArchivo;
 			}
-
-			// Guardar imagen
-			$directorioDestino = $_SERVER['DOCUMENT_ROOT'] . '/img/ingredientes/';
-			$nombreOriginal = basename($foto['name']);
-			$rutaDestino = $directorioDestino . $nombreOriginal;
-
-			if (file_exists($rutaDestino)) {
-				$i = 1;
-				$ext = pathinfo($nombreOriginal, PATHINFO_EXTENSION);
-				$nombreArchivo = pathinfo($nombreOriginal, PATHINFO_FILENAME) . '-' . $i . '.' . $ext;
-				$rutaDestino = $directorioDestino . $nombreArchivo;
-			} else {
-				$nombreArchivo = $nombreOriginal;
-			}
-
-			if (!move_uploaded_file($foto['tmp_name'], $rutaDestino)) {
-				http_response_code(400);
-				return json_encode(['error' => 'Error al guardar la imagen.']);
-			}
-
-			// Ruta relativa a la imagen para almacenar en la base de datos
-			$rutaRelativa = '/img/ingredientes/' . $nombreArchivo;
 
 			// Crear el objeto Ingrediente
 			$ingrediente = new Ingrediente(
 				null,
 				$nombre,
-				$rutaRelativa,
+				$foto,  // Aquí usamos la variable $foto que puede estar vacía o tener la ruta de la imagen
 				$precio,
 				[]
 			);
@@ -229,7 +231,6 @@ class ApiIngrediente {
 			return json_encode(['error' => 'Error al actualizar el ingrediente: ' . $e->getMessage()]);
 		}
 	}
-
 
 	public function deleteIngredients($data) {
 		// Verificar que el parámetro 'id' ha sido enviado
