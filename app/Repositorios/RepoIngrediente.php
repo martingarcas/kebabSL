@@ -28,6 +28,46 @@ class RepoIngrediente {
 		return $ingrediente;
 	}
 
+	public function update(Ingrediente $ingrediente) {
+		$con = Conexion::getConection();
+
+		// Iniciar una transacción
+		$con->beginTransaction();
+
+		try {
+			// 1. Actualizar el ingrediente en la tabla `ingrediente`
+			$stm = $con->prepare("UPDATE ingrediente SET nombre = :nombre, precio = :precio, foto = :foto WHERE id = :id");
+			$stm->execute([
+				'id' => $ingrediente->getId(),
+				'nombre' => $ingrediente->getNombre(),
+				'precio' => $ingrediente->getPrecio(),
+				'foto' => $ingrediente->getFoto()
+			]);
+
+			// 2. Eliminar las relaciones existentes con los alérgenos
+			$deleteStmt = $con->prepare("DELETE FROM ingrediente_has_alergeno WHERE ingrediente_id = :id");
+			$deleteStmt->execute([
+				'id' => $ingrediente->getId()
+			]);
+
+			// 3. Asignar las nuevas relaciones con los alérgenos usando el método assoc_alergenos
+			if (!empty($ingrediente->getAlergenos())) {
+				// Aquí llamamos al método para asociar los alérgenos
+				$this->assoc_alergenos($ingrediente->getId(), $ingrediente->getAlergenos());
+			}
+
+			// 4. Si todo fue exitoso, hacer commit
+			$con->commit();
+
+			return $ingrediente; // Actualización exitosa
+
+		} catch (Exception $e) {
+			// Si hay algún error, hacer rollback
+			$con->rollBack();
+			throw $e; // Lanzamos la excepción para que el controlador o el método superior lo maneje
+		}
+	}
+
 	public function delete($ingrediente_id) {
 		$con = Conexion::getConection();
 

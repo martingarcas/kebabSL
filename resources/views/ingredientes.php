@@ -31,7 +31,7 @@
 
 					<fieldset class="header-ingredient">
 						<!-- Foto -->
-<!--						<label for="foto">Foto del Ingrediente:</label>-->
+						<!--						<label for="foto">Foto del Ingrediente:</label>-->
 						<div class="foto-container" id="foto-container">
 							<input type="file" id="foto" name="foto" accept="image/*">
 							<img src="/img/iconos/agregar.png" alt="Agregar imagen" class="icono-agregar">
@@ -101,7 +101,7 @@
 						</div>
 					</fieldset>
 
-					<button id="editar-ingrediente" class="btn" type="submit" disabled>Guardar Ingrediente</button>
+					<button id="edit-ingrediente" class="btn" type="submit" disabled>Guardar Ingrediente</button>
 					<button id="delete-ingrediente" class="btn-delete" type="submit">Borrar Ingrediente</button>
 					<button type="button" id="cancelar-formulario">Cancelar</button>
 				</form>
@@ -179,6 +179,7 @@
 						let index = card.ingrediente;
 						let ingredienteEdit = ingredientes[index];
 						mostrarEditForm(ingredienteEdit);
+						saveOriginalValues();
 
 					})
 
@@ -312,61 +313,195 @@
 			}
 
 			const formEditarIngrediente = document.querySelector('#form-edit-ingrediente');
+			formEditarIngrediente.addEventListener('change', (event) => {
+				// Verificar si algún campo ha sido modificado
+				checkFormChanges();
+			});
+
+			// Crear un objeto para almacenar los valores originales de cada campo
+			const originalValues = {};
+
+			// Función para guardar los valores iniciales
+			function saveOriginalValues() {
+				const fields = document.querySelectorAll('#form-edit-ingrediente input, #form-edit-ingrediente select');
+
+				fields.forEach(field => {
+					if (field.type === 'checkbox') {
+						// Para checkboxes de alérgenos, almacenamos un array de los seleccionados
+						if (field.name === 'alergenos[]') {
+							if (!originalValues['alergenos[]']) {
+								originalValues['alergenos[]'] = []; // Inicializamos como un array vacío
+							}
+							if (field.checked) {
+								originalValues['alergenos[]'].push(field.value); // Guardamos el valor si está seleccionado
+							}
+						} else {
+							// Otros checkboxes no relacionados con alérgenos
+							originalValues[field.name] = field.checked;
+						}
+					} else {
+						// Para otros campos (input, select, etc.), almacenamos el valor
+						originalValues[field.name] = field.value || ''; // Si no hay valor, guardamos cadena vacía
+					}
+				});
+			}
+
+			// Función para detectar cambios en los campos
+			function checkFormChanges() {
+				let hasChanges = false;
+
+				const fields = document.querySelectorAll('#form-edit-ingrediente input, #form-edit-ingrediente select');
+
+				fields.forEach(field => {
+					let currentValue;
+
+					if (field.type === 'checkbox') {
+						if (field.name === 'alergenos[]') {
+							// Obtenemos los valores actuales de los checkboxes seleccionados
+							const currentChecked = Array.from(document.querySelectorAll('input[name="alergenos[]"]:checked'))
+								.map(checkbox => checkbox.value);
+
+							// Comparamos los arrays (alérgenos originales vs actuales)
+							const originalChecked = originalValues['alergenos[]'] || [];
+							if (!arraysAreEqual(currentChecked, originalChecked)) {
+								hasChanges = true;
+							}
+						} else {
+							// Para otros checkboxes, comparamos el estado checked
+							currentValue = field.checked;
+							if (currentValue !== originalValues[field.name]) {
+								hasChanges = true;
+							}
+						}
+					} else {
+						// Para otros campos (input, select, etc.), comparamos valores
+						currentValue = field.value || '';
+						if (currentValue !== originalValues[field.name]) {
+							hasChanges = true;
+						}
+					}
+				});
+
+				// Activar o desactivar el botón de actualizar
+				btnUpdate.disabled = !hasChanges;
+			}
+
+			// Función para comparar arrays (alérgenos originales vs actuales)
+			function arraysAreEqual(arr1, arr2) {
+				if (arr1.length !== arr2.length) return false;
+				return arr1.every(value => arr2.includes(value));
+			}
+
+			const btnUpdate = document.querySelector('#edit-ingrediente');
+			const btnDelete = document.querySelector('#delete-ingrediente');
 			formEditarIngrediente.addEventListener('submit', async (event) => {
 				event.preventDefault();  // Evitar comportamiento por defecto del formulario
 
-				// Validar campos
+				// Obtener el botón que fue presionado
+				const botonPresionado = event.submitter;
+
+				// Validar campos si es necesario
 				// validarNombre();
 				// validarPrecio();
 
 				// Verificar si algún campo no es válido
 				// if (!formAgregarIngredienteElement.checkValidity()) {
-				// 	return;  // Si algún campo es inválido, no se envía el formulario
+				//   return;  // Si algún campo es inválido, no se envía el formulario
 				// }
+
 				const formData = new FormData(formEditarIngrediente);
-				formData.append('action', 'delete');
-				formData.append('id', formularioContainerEdit.id);
+				formData.append('id', formularioContainerEdit.id);  // Aseguramos que siempre se pase el ID del ingrediente
+				// Añadir los alérgenos seleccionados al FormData si es necesario
+				const selectedAlergenos = [];
+				document.querySelectorAll('input[name="alergenos[]"]:checked').forEach(checkbox => {
+					selectedAlergenos.push(checkbox.value);
+				});
+				formData.append('alergenos', JSON.stringify(selectedAlergenos));
+
+				// Verificar si se ha seleccionado una nueva imagen
+				const imageInput 	= document.querySelector('input[name="foto"]');  // O el selector de tu campo de imagen
+				const existingImage = document.querySelector('.foto-preview-img');  // Asegúrate de que este ID sea el correcto
+
+				if (!imageInput.files.length && existingImage) {
+					// Si no se ha seleccionado una nueva imagen, enviar la imagen anterior
+					formData.append('foto', existingImage.src);
+				}
 
 				try {
-					const response = await fetch('/apiIngrediente', {
-						method: 'POST',
-						body: formData
-					});
+					if (botonPresionado.id === btnDelete.id) {
+						// Si el botón presionado es el de eliminar
+						formData.append('action', 'delete');
 
-					const data = await response.json();
+						const response = await fetch('/apiIngrediente', {
+							method: 'POST',
+							body: formData
+						});
 
-					if (data.success) {
-						console.log(data)
-						// Guardar mensaje de éxito en sessionStorage
-						sessionStorage.setItem('flash_message', JSON.stringify({
-							message: data.message || 'Ingrediente eliminado correctamente',
-							type: 'success'
-						}));
+						const data = await response.json();
 
-						await obtenerIngredientesYAlergenos();  // Recargar los ingredientes después de agregar uno nuevo
-						window.location.href = data.redirect_url || '/ingredientes';  // Redirigir a la página de ingredientes
+						if (data.success) {
+							// console.log(data);
+							// Guardar mensaje de éxito en sessionStorage
+							sessionStorage.setItem('flash_message', JSON.stringify({
+								message: data.message || 'Ingrediente eliminado correctamente',
+								type: 'success'
+							}));
 
-					} else {
-						// Guardar mensaje de error en sessionStorage
-						sessionStorage.setItem('flash_message', JSON.stringify({
-							message: data.message || 'Hubo un error al eliminar el ingrediente',
-							type: 'error'
-						}));
+							await obtenerIngredientesYAlergenos();  // Recargar los ingredientes después de eliminar uno
+							window.location.href = data.redirect_url || '/ingredientes';  // Redirigir a la página de ingredientes
+						} else {
+							// Guardar mensaje de error en sessionStorage
+							sessionStorage.setItem('flash_message', JSON.stringify({
+								message: data.message || 'Hubo un error al eliminar el ingrediente',
+								type: 'error'
+							}));
 
-						window.location.href = '/ingredientes';  // Redirigir a la página de ingredientes
+							window.location.href = '/ingredientes';  // Redirigir a la página de ingredientes
+						}
+
+					} else if (botonPresionado.id === btnUpdate.id) {
+						// Si el botón presionado es el de actualizar
+						formData.append('action', 'update');  // O la acción que corresponde al update
+
+						const response = await fetch('/apiIngrediente', {
+							method: 'POST',
+							body: formData
+						});
+
+						const data = await response.json();
+
+						if (data.success) {
+							// console.log(data);
+							// Guardar mensaje de éxito en sessionStorage
+							sessionStorage.setItem('flash_message', JSON.stringify({
+								message: data.message || 'Ingrediente actualizado correctamente',
+								type: 'success'
+							}));
+
+							await obtenerIngredientesYAlergenos();  // Recargar los ingredientes después de actualizar uno
+							window.location.href = data.redirect_url || '/ingredientes';  // Redirigir a la página de ingredientes
+						} else {
+							// Guardar mensaje de error en sessionStorage
+							sessionStorage.setItem('flash_message', JSON.stringify({
+								message: data.message || 'Hubo un error al actualizar el ingrediente',
+								type: 'error'
+							}));
+
+							window.location.href = '/ingredientes';  // Redirigir a la página de ingredientes
+						}
 					}
+
 				} catch (error) {
 					console.error('Error al enviar la solicitud:', error);
 					// Guardar mensaje de error en sessionStorage en caso de fallo
 					sessionStorage.setItem('flash_message', JSON.stringify({
-						message: 'Hubo un problema al eliminar el ingrediente. Intenta nuevamente.',
+						message: 'Hubo un problema al procesar el ingrediente. Intenta nuevamente.',
 						type: 'error'
 					}));
 
 					window.location.href = '/ingredientes';  // Redirigir a la página de ingredientes
 				}
 			});
-
 
 			/* -------------------------------------- */
 			/*  SECCIÓN 2: CREACIÓN DE INGREDIENTE */
@@ -389,7 +524,6 @@
 					ingredientesContainer.style.display = 'none';
 					formularioContainer.style.display = 'block';
 					formAgregarIngrediente.style.display = 'none';
-					mostrarNewForm();
 				});
 
 				return card;
@@ -479,43 +613,6 @@
 			const nombreInput = document.querySelector('#nombre');
 			const precioInput = document.querySelector('#precio');
 
-			const validarNombre = () => {
-
-				if (nombreInput.value.trim() === '') {
-					limpiarErrores(nombreInput);
-					mostrarError(nombreInput, 'El nombre es obligatorio');
-					return false;  // El nombre no es válido
-				} else {
-					limpiarErrores(nombreInput);
-					return true;  // El nombre es válido
-				}
-			};
-
-			const validarPrecio = () => {
-				const precio = precioInput.value.trim();
-				const regexPrecio = /^[0-9]+(\.[0-9]{1,2})?$/;
-
-				// Si el campo está vacío, muestra únicamente este error
-				if (!precio) {
-					limpiarErrores(precioInput); // Asegurar que no haya otros errores
-					mostrarError(precioInput, 'El precio es obligatorio');
-					return false;  // El precio no es válido
-				}
-
-				// Limpiar el error de campo vacío antes de verificar si es numérico
-				limpiarErrores(precioInput);
-
-				// Verificar si el valor no cumple con el formato numérico
-				if (!regexPrecio.test(precio)) {
-					mostrarError(precioInput, 'El precio debe ser un valor numérico válido');
-					return false;  // El precio no es válido
-				} else {
-					// Si pasa todas las validaciones, asegurarse de limpiar errores
-					limpiarErrores(precioInput);
-					return true;  // El precio es válido
-				}
-			};
-
 			// Función para mostrar un mensaje de error debajo del campo
 			function mostrarError(campo, mensajeError) {
 				const newErrorElement = document.createElement('div');
@@ -548,24 +645,11 @@
 				}
 			});
 
-			// Función para validar los campos y habilitar el botón de guardar
-			function validarCampos() {
-				let guardarBoton = document.querySelector('#guardar-ingrediente')
-				// Verificar si el nombre y el precio son válidos
-				const nombreValido = validarNombre();  // Esta función ya debe devolver true o false
-				const precioValido = validarPrecio();  // Esta función ya debe devolver true o false
-
-				// Habilitar el botón de guardar solo si ambos son válidos
-				if (nombreValido && precioValido) {
-					guardarBoton.disabled = false;
-				} else {
-					guardarBoton.disabled = true;
-				}
-			}
-
+			//FORMULARIO DE AGREGAR INGREDIENTE
+			const formAgregarIngredienteElement = document.querySelector('#form-agregar-ingrediente');
 			// Llamar a la función validarCampos cada vez que se cambie un campo
-			nombreInput.addEventListener('change', validarCampos);
-			precioInput.addEventListener('change', validarCampos);
+			nombreInput.addEventListener('change', () => validarCampos(formAgregarIngredienteElement));
+			precioInput.addEventListener('change', () => validarCampos(formAgregarIngredienteElement));
 
 			// Abrir el selector de imagen al hacer clic en el contenedor de foto
 			fotoContainer.addEventListener('click', () => {
@@ -573,13 +657,8 @@
 			});
 
 			// Función para manejar el envío del formulario para agregar un ingrediente
-			const formAgregarIngredienteElement = document.querySelector('#form-agregar-ingrediente');
 			formAgregarIngredienteElement.addEventListener('submit', async (event) => {
 				event.preventDefault();  // Evitar comportamiento por defecto del formulario
-
-				// Validar campos
-				validarNombre();
-				validarPrecio();
 
 				// Verificar si algún campo no es válido
 				if (!formAgregarIngredienteElement.checkValidity()) {
@@ -611,7 +690,7 @@
 							type: 'success'
 						}));
 						formAgregarIngredienteElement.reset();
-						obtenerIngredientesYAlergenos();  // Recargar los ingredientes después de agregar uno nuevo
+						await obtenerIngredientesYAlergenos();  // Recargar los ingredientes después de agregar uno nuevo
 						window.location.href = data.redirect_url || '/ingredientes';  // Redirigir a la página de ingredientes
 					} else {
 						// Guardar mensaje de error en sessionStorage
@@ -638,6 +717,56 @@
 				ingredientesContainer.style.display = 'block';
 				formAgregarIngrediente.style.display = 'block';
 			});
+
+			// FUNCIONES DE VALIDACIÓN
+			// Función generalizada para validar cualquier campo
+			function validarCampo(campo, regex = null, mensajeError = '') {
+				const valor = campo.value.trim();
+
+				if (valor === '') {
+					limpiarErrores(campo);
+					mostrarError(campo, `${campo.name} es obligatorio`);
+					return false;
+				} else if (regex && !regex.test(valor)) {
+					limpiarErrores(campo);
+					mostrarError(campo, mensajeError);
+					return false;
+				} else {
+					limpiarErrores(campo);
+					return true;
+				}
+			}
+
+			// Función para validar el nombre
+			function validarNombre(campo) {
+				return validarCampo(campo, null, 'El nombre es obligatorio');
+			}
+
+			// Función para validar el precio
+			function validarPrecio(campo) {
+				const regexPrecio = /^[0-9]+(\.[0-9]{1,2})?$/;
+				return validarCampo(campo, regexPrecio, 'El precio debe ser un valor numérico válido');
+			}
+
+			// Función para validar todos los campos
+			function validarCampos(formulario) {
+				let esValido = true;
+
+				// Validar nombre y precio
+				const nombreValido = validarNombre(formulario.querySelector('#nombre'));
+				const precioValido = validarPrecio(formulario.querySelector('#precio'));
+
+				// Verificar si ambos campos son válidos
+				if (!nombreValido || !precioValido) {
+					esValido = false;
+				}
+
+				// Habilitar o deshabilitar el botón según la validación
+				const guardarBoton = formulario.querySelector('#guardar-ingrediente');
+				guardarBoton.disabled = !esValido;
+
+				return esValido;
+			}
 
 		});
 

@@ -19,6 +19,8 @@ class ApiIngrediente {
 					return $this->showIngredients($data);
 				case 'insert':
 					return $this->insertIngredients($data);
+				case 'update':
+					return $this->updateIngredients($data);
 				case 'delete':
 					return $this->deleteIngredients($data);
 				case 'pdf':
@@ -136,6 +138,99 @@ class ApiIngrediente {
 		}
 	}
 
+	public function updateIngredients($data) {
+		// Verificar que se está haciendo una petición POST
+		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+			http_response_code(405); // Código de error: método no permitido
+			return json_encode(['error' => 'Método no permitido.']);
+		}
+
+		// Verificar que el parámetro 'id' está presente
+		if (!isset($data['id']) || empty($data['id'])) {
+			http_response_code(400); // Código de error: petición incorrecta
+			return json_encode(['error' => 'ID del ingrediente no especificado.']);
+		}
+
+		// Verificar que se han enviado los datos necesarios
+		if (!isset($data['nombre']) || !isset($data['precio'])) {
+			http_response_code(400); // Código de error: petición incorrecta
+			return json_encode(['error' => 'Faltan datos obligatorios.']);
+		}
+
+		// Recuperar los valores necesarios
+		$ingrediente_id = $data['id'];
+		$nombre = $data['nombre'];
+		$precio = $data['precio'];
+		$alergenos = isset($data['alergenos']) ? json_decode($data['alergenos'], true) : [];
+
+		// Verificar si alergenos es un array
+		if (!is_array($alergenos)) {
+			$alergenos = [];
+		}
+
+		// Si se recibe una foto, procesarla
+		if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+			$foto = $_FILES['foto'];
+
+			// Guardar la foto en el directorio de imágenes
+			$directorioDestino = $_SERVER['DOCUMENT_ROOT'] . '/img/ingredientes/';
+			$nombreOriginal = basename($foto['name']);
+			$rutaDestino = $directorioDestino . $nombreOriginal;
+
+			// Si ya existe un archivo con el mismo nombre, renombrarlo
+			if (file_exists($rutaDestino)) {
+				$i = 1;
+				$ext = pathinfo($nombreOriginal, PATHINFO_EXTENSION);
+				$nombreArchivo = pathinfo($nombreOriginal, PATHINFO_FILENAME) . '-' . $i . '.' . $ext;
+				$rutaDestino = $directorioDestino . $nombreArchivo;
+			} else {
+				$nombreArchivo = $nombreOriginal;
+			}
+
+			// Mover el archivo al destino
+			if (!move_uploaded_file($foto['tmp_name'], $rutaDestino)) {
+				http_response_code(400);
+				return json_encode(['error' => 'Error al guardar la imagen.']);
+			}
+
+			// Ruta relativa a la imagen
+			$rutaRelativa = '/img/ingredientes/' . $nombreArchivo;
+		} else {
+			// Si no se recibe una foto, mantener la ruta actual o valor por defecto
+			$rutaRelativa = $data['foto'] ?? ''; // Si no se recibe, usar la foto existente o dejar en blanco
+		}
+
+		// Crear el objeto Ingrediente
+		$repoIngrediente = new RepoIngrediente();
+		$ingrediente = new Ingrediente(
+			$ingrediente_id, // El ID ya existe y se pasa para actualizar
+			$nombre,
+			$rutaRelativa,
+			$precio,
+			$alergenos // Los alérgenos nuevos
+		);
+
+		try {
+			// Actualizar el ingrediente
+			$ingredienteActualizado = $repoIngrediente->update($ingrediente);
+
+			// Si todo ha ido bien, enviar la respuesta exitosa
+			http_response_code(200);
+			return json_encode([
+				'success' => true,
+				'message' => 'Ingrediente actualizado exitosamente.',
+				'redirect_url' => '/ingredientes',
+				'ingrediente' => $ingredienteActualizado->getAsArray() // Ingrediente actualizado
+			]);
+
+		} catch (Exception $e) {
+			// Si algo sale mal, enviar la respuesta con error
+			http_response_code(500); // Error de servidor interno
+			return json_encode(['error' => 'Error al actualizar el ingrediente: ' . $e->getMessage()]);
+		}
+	}
+
+
 	public function deleteIngredients($data) {
 		// Verificar que el parámetro 'id' ha sido enviado
 		if (!isset($data['id']) || empty($data['id'])) {
@@ -229,13 +324,13 @@ class ApiIngrediente {
 		// Rellenar la tabla con los alérgenos
 		foreach ($alergenos as $alergeno) {
 			// Ruta absoluta de la imagen
-			$imagePath = $_SERVER['DOCUMENT_ROOT'] . $alergeno['foto'];  // Usamos $_SERVER['DOCUMENT_ROOT'] para obtener la ruta absoluta
+			$imagePath = $_SERVER['DOCUMENT_ROOT'] . $alergeno['foto'];  // Usamos $_SERVER['DOCUMENT_ROOT'] para obtener la ruta absoluta - $_SERVER['DOCUMENT_ROOT'] . '/img/ingredientes/nombre.jpg';
 
 			// Verificamos si la imagen existe en el servidor
 			if (file_exists($imagePath)) {
 				// Leer el archivo de la imagen y convertirlo a base64
 				$imageData = base64_encode(file_get_contents($imagePath));
-				$imageSrc = 'data:image/jpeg;base64,' . $imageData;  // Asumimos que la imagen es PNG (puedes cambiar el tipo si es necesario)
+				$imageSrc = 'data:image/png;base64,' . $imageData;  // Asumimos que la imagen es PNG (puedes cambiar el tipo si es necesario)
 			} else {
 				// Si no se encuentra la imagen, usamos una imagen por defecto o dejamos el src vacío
 				$imageSrc = '';  // Aquí puedes poner una URL de imagen por defecto si prefieres
