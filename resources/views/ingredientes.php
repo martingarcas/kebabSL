@@ -33,10 +33,17 @@
 					<fieldset class="header-ingredient">
 						<!-- Foto -->
 						<!--						<label for="foto">Foto del Ingrediente:</label>-->
-						<div class="foto-container" id="foto-container">
-							<input type="file" id="foto" name="foto" accept="image/*">
-							<img src="/img/iconos/agregar.png" alt="Agregar imagen" class="icono-agregar">
-							<div id="foto-preview"></div>
+						<div class="inputs-ingredient">
+
+							<div class="foto-container" id="foto-container">
+								<input type="file" id="foto" name="foto" accept="image/*">
+								<img src="/img/iconos/agregar.png" alt="Agregar imagen" class="icono-agregar">
+								<div id="foto-preview"></div>
+							</div>
+							<button id="camera-button" title="Tomar una foto">Tomar foto</button>
+							<video id="player" autoplay style="display:none;"></video>
+							<button id="capture-button" style="display:none;">Capturar</button>
+
 						</div>
 
 						<div class="inputs-ingredient">
@@ -624,9 +631,15 @@
 			const fotoInput = document.querySelector('#foto');
 			const fotoContainer = document.querySelector('#foto-container');
 			const fotoPreview = document.querySelector('#foto-preview');
+			const cameraButton = document.querySelector('#camera-button');
+			const captureButton = document.querySelector('#capture-button');
+			const player = document.querySelector('#player');
 			const nombreInput = document.querySelector('#nombre');
 			const precioInput = document.querySelector('#precio');
 			const guardarBoton = formAgregarIngredienteElement.querySelector('#guardar-ingrediente');
+
+			// Variable para almacenar el blob de la foto capturada
+			let capturedBlob = null;
 
 			// Función para mostrar un mensaje de error debajo del campo
 			function mostrarError(campo, mensajeError) {
@@ -660,14 +673,74 @@
 				}
 			});
 
-			// Llamar a la función validarCampos cada vez que se cambie un campo
-			nombreInput.addEventListener('change', () => validarCampos(formAgregarIngredienteElement, guardarBoton));
-			precioInput.addEventListener('change', () => validarCampos(formAgregarIngredienteElement, guardarBoton));
-
 			// Abrir el selector de imagen al hacer clic en el contenedor de foto
 			fotoContainer.addEventListener('click', () => {
 				fotoInput.click();
 			});
+
+			// Función para iniciar la cámara
+			function startCamera() {
+				navigator.mediaDevices
+					.getUserMedia({ video: true })
+					.then((stream) => {
+						player.srcObject = stream;
+
+						// Mostrar el video dentro del contenedor foto-preview
+						fotoPreview.innerHTML = '';
+						fotoPreview.appendChild(player);
+						// Ajustar estilos del video para ocupar el contenedor
+						player.style.display = 'block';
+						player.style.width = '100%';
+						player.style.height = '100%';
+
+						cameraButton.style.display = 'none';
+						captureButton.style.display = 'block';  // Mostrar el botón para capturar
+					})
+					.catch((error) => {
+						console.error('No se puede acceder a la cámara...', error);
+					});
+			}
+
+			// Función para capturar la foto desde la cámara
+			captureButton.addEventListener('click', () => {
+				const imageWidth = player.videoWidth; // Usar dimensiones reales del video
+				const imageHeight = player.videoHeight;
+
+				// Crear un canvas oculto para capturar la imagen
+				const outputCanvas = document.createElement('canvas');
+				outputCanvas.width = imageWidth;
+				outputCanvas.height = imageHeight;
+				const context = outputCanvas.getContext('2d');
+				context.drawImage(player, 0, 0, imageWidth, imageHeight);
+
+				// Convertir la imagen capturada a Blob
+				outputCanvas.toBlob((blob) => {
+					capturedBlob = blob;
+
+					// Crear un objeto URL para mostrar la imagen en la vista previa
+					const url = URL.createObjectURL(blob);
+					fotoPreview.innerHTML = `<img src="${url}" alt="Foto capturada" class="foto-preview-img">`;
+
+					// Mostrar nuevamente el botón de la cámara
+					cameraButton.style.display = 'block';
+					captureButton.style.display = 'none';
+
+					// Detener el video
+					const stream = player.srcObject;
+					const tracks = stream.getTracks();
+					tracks.forEach((track) => track.stop());
+					player.srcObject = null;
+				}, 'image/jpeg'); // Especificar el formato de la imagen
+			});
+
+			// Hacer clic en el botón de cámara para empezar a usarla
+			cameraButton.addEventListener('click', () => {
+				startCamera();  // Iniciar la cámara cuando el usuario haga clic en el botón
+			});
+
+			// Llamar a la función validarCampos cada vez que se cambie un campo
+			nombreInput.addEventListener('change', () => validarCampos(formAgregarIngredienteElement, guardarBoton));
+			precioInput.addEventListener('change', () => validarCampos(formAgregarIngredienteElement, guardarBoton));
 
 			// Función para manejar el envío del formulario para agregar un ingrediente
 			formAgregarIngredienteElement.addEventListener('submit', async (event) => {
@@ -678,7 +751,7 @@
 				if (!formAgregarIngredienteElement.checkValidity()) {
 					return;  // Si algún campo es inválido, no se envía el formulario
 				}
-
+				console.log(formAgregarIngredienteElement)
 				const formData = new FormData(formAgregarIngredienteElement);
 				formData.append('action', 'insert');
 
@@ -688,6 +761,11 @@
 					selectedAlergenos.push(checkbox.value);  // Añadir el ID del alérgeno
 				});
 				formData.append('alergenos', JSON.stringify(selectedAlergenos));
+
+				// Verificar si existe una imagen capturada desde la cámara
+				if (capturedBlob) {
+					formData.append('foto', capturedBlob, `foto-capturada-${Date.now()}.jpg`);
+				}
 
 				try {
 					const response = await fetch('/apiIngrediente', {
