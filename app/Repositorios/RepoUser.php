@@ -118,6 +118,21 @@
 			return null;
 		}
 
+		public function actualizarCampo($idUsuario, $campo, $valor) {
+			// Conexión a la base de datos
+			$con = Conexion::getConection();
+
+			// Preparamos y ejecutamos la consulta
+			$stm = $con->prepare("UPDATE usuario SET $campo = :valor WHERE id = :id");
+
+			// Ejecutamos la consulta
+			$stm->execute([
+				'valor' => $valor,
+				'id'    => $idUsuario,
+			]);
+
+			return $stm->rowCount() > 0; // Retorna true si se actualizó algo
+		}
 
 	}
 

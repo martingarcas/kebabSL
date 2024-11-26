@@ -6,133 +6,225 @@
 	min-height: 100vh
 	background-color: #f0f4f8
 	font-family: 'Arial', sans-serif
+	padding: 24px
 
 
 /* Contenedor de la tarjeta del perfil */
 .profile-container
-	width: 90%
-	max-width: 900px
+	width: 100%
 	padding: 40px
 	background-color: #fff
 	border-radius: 15px
 	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1)
 	transition: all 0.3s ease
 
-/* Foto de perfil en la parte superior */
-.profile-photo-container
+/* Contenedor envoltorio que centra el formulario */
+.form-wrapper
 	display: flex
 	justify-content: center
-	margin-bottom: 30px
-
-
-.profile-photo
-	width: 120px
-	height: 120px
-	border-radius: 50%
-	overflow: hidden
-	border: 6px solid #4c93e8 /* Borde azul */
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) /* Sombra suave */
-	transition: all 0.3s ease
-
-/* Imagen dentro de la foto de perfil */
-.profile-photo img
+	align-items: center
 	width: 100%
-	height: 100%
-	object-fit: cover
+	padding: 20px
 
-
-/* Título principal */
-h1
-	font-size: 28px
-	color: #333
-	margin-bottom: 20px
-
-
-/* Información básica del perfil */
-.profile-info
-	flex-grow: 1
-
-
-.profile-info h2
-	font-size: 26px
-	font-weight: bold
-	margin-bottom: 10px
-	color: #333
-
-
-.profile-info p
-	font-size: 16px
-	color: #777
-	margin-bottom: 8px
-
-
-/* Cuerpo del perfil */
-.profile-body
-	font-size: 16px
-	color: #333
-	margin-top: 30px
-
-
-.profile-body h3
-	font-size: 22px
-	margin-bottom: 20px
-	color: #4c93e8
-
-
-/* Estilo para los datos del perfil */
-#profile-data p
-	font-size: 16px
-	line-height: 1.6
-	margin: 12px 0
-	color: #555
-
-
-#profile-data strong
-	color: #333
-	font-weight: 600
-
-
-/* Estilo para el mensaje de error */
-#error-message
-	margin-top: 20px
-	color: #ff0000
-	font-weight: bold
-	font-size: 16px
+/* Form container */
+.form-user-cnt
+	position: relative
+	background-color: #fff
+	padding: 30px
+	border-radius: 8px
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1)
+	width: 100%
 	text-align: center
+	transition: max-width 0.3s ease, padding 0.3s ease /* Transición suave en el ancho y padding */
+	&.form-login
+		max-width: 460px
 
-/* Botones de edición */
-.edit-btn
-	background-color: #4c93e8
-	color: white
-	border: none
-	padding: 5px 10px
+	.form-fielsets
+		display: flex
+		justify-content: center
+		flex-wrap: wrap
+		gap: 40px
+
+.remember
+	width: auto
+	margin-bottom: 0
 	cursor: pointer
-	margin-left: 10px
-	font-size: 14px
-	border-radius: 5px
 
-.edit-btn:hover
-	background-color: #3578e5
+.recuperar-contrasenna
+	margin-top: 32px
+	a
+		color: #0000e3c7
+		text-decoration: underline
 
-.save-btn, .cancel-btn
-	background-color: #28a745
-	color: white
+h2
+	font-size: 1.6rem
+	margin-bottom: 20px
+	color: #333
+	transition: font-size 0.3s ease /* Transición suave en el tamaño de la fuente */
+
+/* Estilos de los fieldset */
+fieldset
+	display: flex
+	flex-direction: column
+	justify-content: center
+	min-width: 360px
+	border: 2px solid #ddd
+	border-radius: 8px
+	padding: 20px
+	margin-bottom: 20px
+	background-color: #fafafa
+	transition: padding 0.3s ease /* Transición suave en el padding */
+
+	&::last-of-type
+		margin-bottom: 0
+
+/* Estilos de legend */
+legend
+	font-size: 1.2rem
+	font-weight: bold
+	color: #555
+	padding: 0 10px
 	border: none
-	padding: 10px 15px
-	cursor: pointer
-	font-size: 16px
+	margin: 0 auto
+
+/* Estilos de los labels */
+label
+	font-size: 1rem
+	color: #666
+	display: block
+	margin-bottom: 8px
+	transition: font-size 0.3s ease /* Transición suave en el tamaño de fuente de los labels */
+
+/* Estilos de los inputs */
+input
+	width: 100%
+	padding: 10px
+	margin-bottom: 15px
+	border: 1px solid #ddd
 	border-radius: 5px
-	margin-right: 10px
+	font-size: 1rem
+	color: #555
+	transition: padding 0.3s ease, font-size 0.3s ease /* Transiciones suaves en padding y font-size */
 
-.save-btn:hover
-	background-color: #218838
+	&:focus
+		border-color: #0056b3
+		outline: none
 
-.cancel-btn
-	background-color: #dc3545
+	&::placeholder
+		color: #aaa
 
-.cancel-btn:hover
-	background-color: #c82333
+/* Estilos para el botón */
+button
+	max-width: 70px
+	padding: 8px
+	background-color: #007bff
+	border: none
+	border-radius: 5px
+	color: white
+	font-size: .8rem
+	cursor: pointer
+	transition: background-color 0.3s ease, padding 0.3s ease, font-size 0.3s ease /* Transición suave en color de fondo, padding y font-size */
 
-/* Input de archivo */
-.file-input
-	display: none
+	&:hover
+		background-color: #0056b3 !important
+
+	&:focus
+		outline: none
+
+/* Estilo para los mensajes de error */
+.error-form
+	color: red
+	font-size: 0.9em
+	margin-bottom: 10px
+	transition: font-size 0.3s ease /* Transición suave en el tamaño de la fuente de los errores */
+	&:last-child
+		margin-bottom: 0
+
+table
+	min-width: 410px
+	border-collapse: collapse
+	border: 2px solid rgb(140 140 140)
+	font-family: sans-serif
+	font-size: 0.8rem
+	letter-spacing: 1px
+	margin-bottom: 12px
+
+	&:last-child
+		margin-bottom: 0
+
+	input
+		margin-bottom: 0
+		font-size: .8rem
+
+thead
+	background-color: rgb(228 240 245)
+
+	> tr > th
+		transition: background-color .2s
+
+		&:hover
+			background-color: rgb(171, 188, 196)
+
+th
+	border: 1px solid rgb(160 160 160)
+	padding: 8px 10px
+
+td
+	min-width: 180px
+	border: 1px solid rgb(160 160 160)
+	padding: 8px 10px
+
+	&:last-of-type
+		text-align: center
+
+
+
+/* Media Queries para dispositivos móviles */
+@media (max-width: 768px)
+	.form-container
+		padding: 20px
+		max-width: 640px
+		transition: max-width 0.3s ease, padding 0.3s ease /* Transiciones suaves en max-width y padding */
+
+	h2
+		font-size: 1.4rem
+		transition: font-size 0.3s ease /* Transición suave en el tamaño de la fuente */
+
+	input
+		font-size: 1rem
+		padding: 10px  /* Menos padding en inputs y botón en pantallas pequeñas */
+		transition: padding 0.3s ease, font-size 0.3s ease /* Transiciones suaves en padding y font-size */
+
+	label
+		font-size: 0.9rem
+		transition: font-size 0.3s ease /* Transición suave en el tamaño de fuente de los labels */
+
+	.error
+		font-size: 0.8em
+		transition: font-size 0.3s ease /* Transición suave en el tamaño de la fuente de los errores */
+
+@media (max-width: 480px)
+	.form-container
+		padding: 15px
+		max-width: 360px  /* El formulario ocupará todo el ancho en pantallas muy pequeñas */
+		transition: max-width 0.3s ease, padding 0.3s ease /* Transiciones suaves en max-width y padding */
+
+	fieldset
+		min-width: 300px
+
+	h2
+		font-size: 1.2rem
+		transition: font-size 0.3s ease /* Transición suave en el tamaño de la fuente */
+
+	input, button
+		font-size: 0.95rem
+		padding: 8px
+		transition: padding 0.3s ease, font-size 0.3s ease /* Transiciones suaves en padding y font-size */
+
+	.error
+		font-size: 0.75em
+		transition: font-size 0.3s ease
+
+@media (max-width: 480px)
+	fieldset
+		min-width: 260px
