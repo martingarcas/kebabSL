@@ -40,9 +40,9 @@
 								<img src="/img/iconos/agregar.png" alt="Agregar imagen" class="icono-agregar">
 								<div id="foto-preview"></div>
 							</div>
-							<button id="camera-button" title="Tomar una foto">Tomar foto</button>
+							<button type="button" id="camera-button" title="Tomar una foto">Tomar foto</button>
 							<video id="player" autoplay style="display:none;"></video>
-							<button id="capture-button" style="display:none;">Capturar</button>
+							<button type="button" id="capture-button" style="display:none;">Capturar</button>
 
 						</div>
 
@@ -50,11 +50,11 @@
 
 							<!-- Nombre -->
 							<label for="nombre">Nombre:</label>
-							<input type="text" id="nombre" name="nombre" required>
+							<input type="text" id="nombre" name="nombre">
 
 							<!-- Precio -->
 							<label for="precio">Precio €</label>
-							<input type="text" id="precio" name="precio" placeholder="€" required>
+							<input type="text" id="precio" name="precio" placeholder="€">
 
 						</div>
 					</fieldset>
@@ -751,7 +751,7 @@
 				if (!formAgregarIngredienteElement.checkValidity()) {
 					return;  // Si algún campo es inválido, no se envía el formulario
 				}
-				console.log(formAgregarIngredienteElement)
+
 				const formData = new FormData(formAgregarIngredienteElement);
 				formData.append('action', 'insert');
 
