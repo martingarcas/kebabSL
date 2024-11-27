@@ -25,6 +25,10 @@ class Validator {
 		];
 	}
 
+	public function getEtiquetas() {
+		return $this->etiquetas;
+	}
+
 	// Método para obtener el nombre amigable de un campo
 	private function obtenerEtiqueta($campo) {
 		return isset($this->etiquetas[$campo]) ? $this->etiquetas[$campo] : $campo;
@@ -51,6 +55,14 @@ class Validator {
 	// Validación de campo requerido
 	public function Requerido($campo, $data) {
 		if (empty($data[$campo])) {
+			return $this->obtenerEtiqueta($campo) . " es obligatorio/a";
+		}
+		return true;
+	}
+
+	// Validación de campo requerido (para un solo campo y su valor)
+	public function RequeridoCampo($campo, $valor) {
+		if (empty($valor)) {
 			return $this->obtenerEtiqueta($campo) . " es obligatorio/a";
 		}
 		return true;

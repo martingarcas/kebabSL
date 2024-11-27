@@ -4,6 +4,7 @@ namespace App\Api;
 
 use App\Utils\Logger;
 use App\Repositorios\RepoUser;
+use App\Utils\Validator;
 
 class ApiUser {
 
@@ -63,5 +64,97 @@ class ApiUser {
 	}
 
 	public function actualizarUsuario($data) {
+
+		// Obtener el ID del usuario autenticado desde la sesión
+		$usuario = Logger::obtenerUsuario(); // Obtener el objeto Usuario desde la sesión
+		if (!$usuario) {
+			http_response_code(401); // Unauthorized
+			return json_encode(['error' => 'No se ha encontrado un usuario autenticado.']);
+		}
+		$idUsuario = $usuario->getId(); // Obtener el ID del usuario autenticado
+
+		if (!$idUsuario) {
+			return json_encode(['error' => $usuario->getId()]);
+		}
+
+		// Inicializar la clase Validator (asumiendo que ya tienes una instancia lista)
+		$validator = new Validator();
+
+		// Recoger el campo y el valor enviado desde el front
+		$campo = $data['campo'] ?? null;
+		$valor = $data['valor'] ?? null;
+
+		// Verificar si el campo es válido y está en la lista permitida
+		$etiquetasPermitidas = $validator->getEtiquetas();
+		if (!$campo || !array_key_exists($campo, $etiquetasPermitidas)) {
+			http_response_code(400); // Bad Request
+			return json_encode(['error' => 'El campo enviado no es válido.']);
+		}
+
+		// Validaciones genéricas y específicas según el campo
+		$resultado = $validator->RequeridoCampo($campo, $valor);
+		if ($resultado !== true) {
+			http_response_code(422); // Unprocessable Entity
+			return json_encode(['error' => $resultado]);
+		}
+
+		// Validación para 'email'
+		if ($campo === 'email') {
+			// Primero validamos el formato del email
+			$resultado = $validator->Email($campo, $valor);
+			if ($resultado !== true) {
+				http_response_code(422); // Unprocessable Entity
+				return json_encode(['error' => $resultado]);
+			}
+
+			// Verificar si el email ya está en uso (validación de duplicado)
+			$repositorio = new RepoUser(); // Suponiendo que tienes un repositorio de usuarios
+			$existeEmail = $validator->validarDuplicado($campo, $valor, $repositorio);
+			if ($existeEmail) {
+				http_response_code(422); // Unprocessable Entity
+				return json_encode(['error' => 'El correo electrónico ya está registrado.']);
+			}
+		}
+
+		// Validación para 'dni'
+		if ($campo === 'dni') {
+			// Primero validamos el formato del dni
+			$resultado = $validator->Dni($campo, $valor);
+
+			if ($resultado !== true) {
+				http_response_code(422); // Unprocessable Entity
+				return json_encode(['error' => $resultado]);
+			}
+
+			// Verificar si el dni ya está en uso (validación de duplicado)
+			$repositorio 	= new RepoUser(); // Suponiendo que tienes un repositorio de usuarios
+			$existeDni 		= $validator->validarDuplicado($campo, $valor, $repositorio);
+
+			if ($existeDni) {
+				http_response_code(422); // Unprocessable Entity
+				return json_encode(['error' => 'El DNI ya está registrado.']);
+			}
+		}
+
+		// Aquí procederíamos con la actualización del campo en la base de datos
+		$usuarioRepositorio 	= new RepoUser();
+		$actualizacionExitosa 	= $usuarioRepositorio->actualizarCampo($idUsuario, $campo, $valor);
+
+		if ($actualizacionExitosa) {
+			// Respuesta de éxito si todo ha ido bien
+			http_response_code(201); // OK
+			return json_encode([
+				'success' => true,
+				'valorActualizado' => $valor,
+				'message' => $campo . ' actualizado correctamente.'
+			]);
+
+		} else {
+			// Si no se ha actualizado nada
+			http_response_code(500); // Internal Server Error
+			return json_encode(['error' => 'No se pudo actualizar el ' . $campo . '.']);
+//			return json_encode(['error' => $usuario->getId()]);
+		}
+
 	}
 }

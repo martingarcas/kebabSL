@@ -310,6 +310,49 @@
 				}
 			}
 
+			// Realizar una petición para actualizar un campo
+			async function guardarCampo(input, campo) {
+				const valor = input.value.trim(); // Obtener el valor del input
+				const fila = input.closest('tr'); // Obtener la fila asociada
+
+				// Llamar a validarCampo para realizar todas las validaciones locales
+				validarCampo(input);
+
+				// Verificar si hay errores locales (mensaje de error en el input)
+				if (input.nextElementSibling && input.nextElementSibling.textContent !== '') {
+					return; // Si hay errores, detenemos el flujo
+				}
+
+				// Enviar el dato al backend
+				try {
+					const formData = new FormData();
+					formData.append('action', 'updateUser');
+					formData.append('campo', campo); // Enviar el nombre del campo (e.g., 'email', 'dni')
+					formData.append('valor', valor); // Enviar el valor del input
+
+					const response = await fetch('/apiUser', {
+						method: 'POST',
+						body: formData,
+					});
+
+					const data = await response.json();
+
+					console.log(data.success)
+					if (response.ok && data.success) {
+						console.log(`El campo "${campo}" se guardó correctamente.`);
+						// Actualizar la fila con el nuevo valor y restaurar el diseño original
+						fila.querySelector(`#td-${campo}`).textContent = data.valorActualizado || valor;
+						restaurarBotonEditar(fila);
+
+					} else {
+						mostrarError(input, data.error || 'Error desconocido');
+					}
+				} catch (error) {
+					mostrarError(input, 'Error al conectar con el servidor');
+					console.error('Error:', error);
+				}
+			}
+
 			// Renderizar los datos del usuario en la página
 			function renderUserProfile(user) {
 				// Comprobar que las claves existen en el objeto antes de asignar
@@ -358,7 +401,11 @@
 					botonGuardar.textContent = 'Guardar';
 					botonGuardar.className = 'btn-guardar';
 					botonGuardar.style.marginRight = '4px';
-					// botonGuardar.addEventListener('click', () => guardarCambios(fila));
+					botonGuardar.addEventListener('click', () => {
+						const input = fila.querySelector('input'); // Obtener el input de la fila
+						const campo = input.parentNode.id.split('-')[1]; // Identificar el campo por su ID
+						guardarCampo(input, campo); // Llamar a la función guardarCampo con el input y el campo
+					});
 
 					let botonCancelar = document.createElement('button');
 					botonCancelar.textContent = 'Cancelar';
@@ -383,6 +430,21 @@
 				}
 
 				// Restaurar el botón "Editar"
+				let celdaBoton = celdas[celdas.length - 1];
+				celdaBoton.innerHTML = ''; // Limpiar la celda
+				let botonEditar = document.createElement('button');
+				botonEditar.textContent = 'Editar';
+				botonEditar.addEventListener('click', () => editarFila(botonEditar));
+				celdaBoton.appendChild(botonEditar);
+
+				fila.editadaMartin = false; // Marcar la fila como no editada
+			}
+
+			// Función para restaurar el botón "Editar" después de guardar los cambios
+			function restaurarBotonEditar(fila) {
+				let celdas = fila.cells;
+
+				// Restaurar el botón "Editar" en la última celda de la fila
 				let celdaBoton = celdas[celdas.length - 1];
 				celdaBoton.innerHTML = ''; // Limpiar la celda
 				let botonEditar = document.createElement('button');
@@ -444,14 +506,10 @@
 				input.style.borderColor = 'red';  // Cambiar el borde del input a rojo
 				let errorMessage = input.nextElementSibling;
 				if (!errorMessage || !errorMessage.classList.contains('error')) {
-					console.log('entra')
 					errorMessage = document.createElement('div');
 					errorMessage.className = 'error';
 					input.parentNode.appendChild(errorMessage);
 				}
-
-				console.log(errorMessage)
-				console.log(mensaje)
 
 				errorMessage.textContent = mensaje;
 			}

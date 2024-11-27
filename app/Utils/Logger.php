@@ -40,7 +40,7 @@ class Logger {
 		$_SESSION['user'] = serialize($usuario);  // Serializamos el objeto
 
 		// Agrega un var_dump para verificar si el objeto se ha serializado correctamente
-		var_dump($_SESSION['user']);  // Verifica que se trata de una cadena serializada
+//		var_dump($_SESSION['user']);  // Verifica que se trata de una cadena serializada
 	}
 
 

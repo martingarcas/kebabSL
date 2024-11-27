@@ -116,7 +116,7 @@ class ApiRegister {
 		$repoUser->create($usuario);
 		$usuarioId = $usuario->getId();
 
-		if ($usuarioId === null) {
+		if (!$usuarioId) {
 			http_response_code(500); // Error en la creación del usuario
 			return json_encode(['error' => 'Algo ha fallado, inténtelo de nuevo.', 'redirect_url' => '/register']);
 		}
