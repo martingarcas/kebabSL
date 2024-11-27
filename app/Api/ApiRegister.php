@@ -141,6 +141,7 @@ class ApiRegister {
 		return json_encode([
 			'success' => true,
 			'message' => "El usuario {$data['email']} ha sido registrado con éxito.",
+			'id' => $usuario->getId(),
 			'redirect_url' => '/login' // URL a la que se redirige al usuario después del registro
 		]);
 	}

@@ -71,7 +71,8 @@ class ApiUser {
 			http_response_code(401); // Unauthorized
 			return json_encode(['error' => 'No se ha encontrado un usuario autenticado.']);
 		}
-		$idUsuario = $usuario->getId(); // Obtener el ID del usuario autenticado
+		$idUsuario = $data['id']; // Obtener el ID del usuario autenticado
+//		$idUsuario = $usuario->getId(); // Obtener el ID del usuario autenticado
 
 		if (!$idUsuario) {
 			return json_encode(['error' => $usuario->getId()]);

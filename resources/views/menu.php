@@ -3,6 +3,7 @@ use App\Utils\Logger;
 
 // Recupera el objeto Usuario desde la sesión
 $usuario = Logger::obtenerUsuario();
+var_dump($usuario);
 ?>
 
 <header class="header">

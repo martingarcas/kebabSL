@@ -200,6 +200,8 @@
 								message: data.message,
 								type: 'success'  // O el tipo que consideres
 							}));
+							// Además guardamos el ID del usuario en sessionStorage
+							sessionStorage.setItem('user_id', data.id);  // Guardamos el ID
 							window.location.href = data.redirect_url;  // Redirige al usuario a la URL proporcionada
 							return;
 						} else {

@@ -5,7 +5,6 @@
 <?php $this->stop() ?>
 
 <?php $this->start('formulario') ?>
-
 <div class="profile-wrapper">
 		<!-- Aquí se mostrarán los datos cargados -->
 		<div class="form-user-cnt" id="user-data">
@@ -325,8 +324,11 @@
 
 				// Enviar el dato al backend
 				try {
+					// Obtener el ID del usuario desde sessionStorage
+					let userId = sessionStorage.getItem('user_id');
 					const formData = new FormData();
 					formData.append('action', 'updateUser');
+					formData.append('id', userId);
 					formData.append('campo', campo); // Enviar el nombre del campo (e.g., 'email', 'dni')
 					formData.append('valor', valor); // Enviar el valor del input
 
