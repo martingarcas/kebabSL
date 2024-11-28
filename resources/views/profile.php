@@ -1,4 +1,6 @@
-<?php $this->layout('master'); ?>
+<?php use App\Utils\Logger;
+
+$this->layout('master'); ?>
 <?php $this->start('css'); ?>
 
 	<link rel="stylesheet" href="stylesProfile.css">
@@ -53,7 +55,7 @@
 						<tr>
 							<td id="td-nombre">Martín</td>
 							<td>
-								<button>Editar</button>
+								<button class="btn-editar">Editar</button>
 							</td>
 						</tr>
 						</tbody>
@@ -71,7 +73,7 @@
 						<tr>
 							<td id="td-apellido1">García</td>
 							<td>
-								<button>Editar</button>
+								<button class="btn-editar">Editar</button>
 							</td>
 						</tr>
 						</tbody>
@@ -89,7 +91,7 @@
 						<tr>
 							<td id="td-apellido2">Castillo</td>
 							<td>
-								<button>Editar</button>
+								<button class="btn-editar">Editar</button>
 							</td>
 						</tr>
 						</tbody>
@@ -109,7 +111,7 @@
 						<tr>
 							<td id="td-email">martin@gmail.com</td>
 							<td>
-								<button>Editar</button>
+								<button class="btn-editar">Editar</button>
 							</td>
 						</tr>
 						</tbody>
@@ -127,7 +129,7 @@
 						<tr>
 							<td id="td-dni">77383320G</td>
 							<td>
-								<button>Editar</button>
+								<button class="btn-editar">Editar</button>
 							</td>
 						</tr>
 						</tbody>
@@ -145,7 +147,7 @@
 						<tr>
 							<td id="td-telefono">693209523</td>
 							<td>
-								<button>Editar</button>
+								<button class="btn-editar">Editar</button>
 							</td>
 						</tr>
 						</tbody>
@@ -359,10 +361,12 @@
 
 			// Función para habilitar/deshabilitar el botón
 			function toggleSaveButton() {
+				console.log('Archivos en input:', fotoInput.files.length);
+				console.log('Vista previa de foto:', fotoPreview.innerHTML);
 				if (fotoInput.files.length > 0 || fotoPreview.innerHTML !== '') {
-					savePhotoButton.disabled = false; // Habilitar si hay archivo o vista previa
+					savePhotoButton.disabled = false;
 				} else {
-					savePhotoButton.disabled = true; // Deshabilitar si no hay nada
+					savePhotoButton.disabled = true;
 				}
 			}
 
@@ -436,7 +440,7 @@
 			});
 
 			// Asignar eventos a botones de edición de fila
-			document.querySelectorAll('button').forEach(button => {
+			document.querySelectorAll('.btn-editar').forEach(button => {
 				button.addEventListener('click', function (event) {
 					editarFila(event.target);
 				});
@@ -470,6 +474,7 @@
 				try {
 					const formData = new FormData();
 					formData.append('action', 'loadUser');
+					formData.append('timestamp', new Date().getTime());  // Añadir un parámetro único para evitar caché
 
 					const response = await fetch('/apiUser', {
 						method: 'POST',
@@ -497,6 +502,7 @@
 
 				// Llamar a validarCampo para realizar todas las validaciones locales
 				validarCampo(input);
+				// console.log(validarCampo(input))
 
 				// Verificar si hay errores locales (mensaje de error en el input)
 				if (input.nextElementSibling && input.nextElementSibling.textContent !== '') {
@@ -514,14 +520,20 @@
 				// Si hay una imagen seleccionada desde el input de foto
 				const fotoInput = document.querySelector('#foto');
 				if (fotoInput.files.length > 0) {
-					const fotoFile = fotoInput.files[0];
-					formData.append('foto', fotoFile); // Agregar la foto al FormData
+					const fotoFile = fotoInput.files[0]; // Aquí obtienes el archivo real
+					console.log('Archivo foto:', fotoFile); // Verifica el archivo cargado
+					formData.append('foto', fotoFile); // Agregar el archivo foto al FormData
 				}
 
 				// Si hay una imagen capturada desde la cámara
 				if (capturedBlob) {
 					formData.append('foto', capturedBlob); // Agregar la foto capturada al FormData
 				}
+
+				// Verificar que el FormData esté construyéndose correctamente
+				formData.forEach((value, key) => {
+					console.log(key, value);  // Mostrar las claves y valores del FormData
+				});
 
 				// Enviar el dato al backend con la foto si está disponible
 				try {
@@ -535,16 +547,21 @@
 					if (response.ok && data.success) {
 						console.log(`El campo "${campo}" se guardó correctamente.`);
 						// Actualizar la fila con el nuevo valor y restaurar el diseño original
-						fila.querySelector(`#td-${campo}`).textContent = data.valorActualizado || valor;
-						restaurarBotonEditar(fila);
+						if (campo !== 'foto' && data.valorActualizado) {
+							fila.querySelector(`#td-${campo}`).textContent = data.valorActualizado || valor;
+							restaurarBotonEditar(fila);
+						}
 
 						// Si la foto se actualizó, mostrarla en la tabla
-						if (data.fotoActualizada) {
+						if (data.fotoUrl) {
 							// Asumimos que la respuesta tiene una URL para la foto actualizada
-							const fotoUrl = data.fotoActualizada;
-							const fotoCell = fila.querySelector('#td-foto');
-							fotoCell.innerHTML = `<img src="${fotoUrl}" alt="Foto de usuario" class="foto-preview-img">`;
+							const fotoActualizada = data.fotoUrl;
+							// Inserta la imagen en el contenedor de previsualización
+							fotoPreview.innerHTML = `<img src="${fotoActualizada}" alt="Foto de usuario" class="foto-preview-img">`;
 						}
+
+						// Volver a cargar los datos completos del perfil
+						fetchUserData();
 
 					} else {
 						mostrarError(input, data.error || 'Error desconocido');
@@ -565,11 +582,13 @@
 				document.getElementById('td-dni').textContent = user.dni || '-';
 				document.getElementById('td-telefono').textContent = user.telefono || '-';
 
-				// Verificar si hay una foto y actualizar la celda correspondiente
-				const fotoCell = document.getElementById('td-foto');
+				// Verificar si hay una foto y actualizar el contenedor de previsualización
 				if (user.foto) {
-					// Si el usuario tiene foto, mostrarla
-					fotoCell.innerHTML = `<img src="${user.foto}" alt="Foto de usuario" class="foto-preview-img">`;
+					// Si el usuario tiene foto, mostrarla en el contenedor de previsualización
+					fotoPreview.innerHTML = `<img src="${user.foto}" alt="Foto de usuario" class="foto-preview-img">`;
+				} else {
+					// Si no tiene foto, podrías agregar una imagen predeterminada o dejar el contenedor vacío
+					fotoPreview.innerHTML = '<img src="/img/perfil/default-avatar.png" alt="Foto de usuario" class="foto-preview-img">';
 				}
 			}
 

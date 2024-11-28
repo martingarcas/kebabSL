@@ -141,7 +141,7 @@ button
 		margin-bottom: 0
 
 table
-	min-width: 410px
+	max-width: 410px
 	border-collapse: collapse
 	border: 2px solid rgb(140 140 140)
 	font-family: sans-serif
@@ -202,6 +202,15 @@ td
 	.error
 		font-size: 0.8em
 		transition: font-size 0.3s ease /* Transición suave en el tamaño de la fuente de los errores */
+
+@media (max-width: 600px)
+	th
+		display: flex
+		flex-direction: column
+
+	tr
+		display: flex
+		flex-direction: column
 
 @media (max-width: 480px)
 	.form-container

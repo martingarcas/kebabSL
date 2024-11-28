@@ -3,7 +3,7 @@ use App\Utils\Logger;
 
 // Recupera el objeto Usuario desde la sesión
 $usuario = Logger::obtenerUsuario();
-var_dump($usuario);
+//var_dump($usuario);
 ?>
 
 <header class="header">
@@ -33,8 +33,12 @@ var_dump($usuario);
 					<li><a href="/ingredientes">Ingredientes</a></li>
 					<li><a href="/">Gráficos-estados</a></li>
 					<li class="user-menu">
-						<a href="#" class="user-link">
-							<img src="<?= htmlspecialchars($usuario->getFoto()); ?>" alt="Foto de <?= htmlspecialchars($usuario->getNombre()); ?>" class="user-photo">
+						<a href="#" class="user-link photo">
+							<?php if (!$usuario->getFoto()): ?>
+								<img src="/img/perfil/default-avatar.png" alt="Foto de <?= htmlspecialchars($usuario->getNombre()); ?>" class="user-photo">
+							<?php else: ?>
+								<img src="<?= htmlspecialchars($usuario->getFoto()); ?>" alt="Foto de <?= htmlspecialchars($usuario->getNombre()); ?>" class="user-photo">
+							<?php endif; ?>
 						</a>
 						<ul class="submenu">
 							<li><a href="/profile">Mi perfil</a></li>
