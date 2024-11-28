@@ -218,6 +218,7 @@ class AuthController {
 	public function showProfile() {
 		// Obtener el mensaje flash
 		$message = FlashMessage::getMessage();
+		$usuario = Logger::obtenerUsuario();
 		// Renderizar la vista con el mensaje flash si existe
 		echo $this->templates->render('profile', ['message' => $message]);
 	}

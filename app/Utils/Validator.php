@@ -76,6 +76,14 @@ class Validator {
 		return true;
 	}
 
+	// Validación de email
+	public function validarEmail($campo, $valor) {
+		if (!filter_var($valor, FILTER_VALIDATE_EMAIL)) {
+			return $this->obtenerEtiqueta($campo) . " debe ser un email válido";
+		}
+		return true;
+	}
+
 	// Validación de DNI
 	public function Dni($campo, $data) {
 		$letras = "TRWAGMYFPDXBNJZSQVHLCKE";
@@ -91,6 +99,29 @@ class Validator {
 			return $this->obtenerEtiqueta($campo) . " no es un DNI válido";
 		}
 	}
+
+	// Validación de DNI
+	public function validarDni($campo, $valor) {
+		$letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+
+		// Validamos el formato general del DNI
+		if (preg_match("/^[0-9]{8}[a-zA-Z]{1}$/", $valor) !== 1) {
+			return $this->obtenerEtiqueta($campo) . " no es un DNI válido";
+		}
+
+		// Extraemos número y letra
+		$numero = substr($valor, 0, 8);
+		$letra = strtoupper(substr($valor, 8, 1));
+
+		// Verificamos la letra correspondiente
+		if ($letras[$numero % 23] !== $letra) {
+			return $this->obtenerEtiqueta($campo) . " tiene una letra no válida";
+		}
+
+		// DNI válido
+		return true;
+	}
+
 
 	// Método para validar duplicados, debe delegar la validación al repositorio
 	public function validarDuplicado($campo, $valor, $repositorio) {

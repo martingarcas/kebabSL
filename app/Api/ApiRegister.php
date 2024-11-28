@@ -113,8 +113,10 @@ class ApiRegister {
 
 		// Guardar el usuario en la base de datos
 		$repoUser = new RepoUser();
-		$repoUser->create($usuario);
-		$usuarioId = $usuario->getId();
+		$usuarioRegistrado 	= $repoUser->create($usuario);
+//		$repoUser->create($usuario);
+		$usuarioId 	= $usuarioRegistrado->getId();
+//		$usuarioId 	= $usuario->getId();
 
 		if (!$usuarioId) {
 			http_response_code(500); // Error en la creación del usuario
@@ -141,7 +143,7 @@ class ApiRegister {
 		return json_encode([
 			'success' => true,
 			'message' => "El usuario {$data['email']} ha sido registrado con éxito.",
-			'id' => $usuario->getId(),
+//			'id' => $usuario->getId(),
 			'redirect_url' => '/login' // URL a la que se redirige al usuario después del registro
 		]);
 	}

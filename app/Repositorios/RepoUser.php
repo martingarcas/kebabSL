@@ -98,6 +98,7 @@
 			if ($response) {
 				// Crear un objeto Usuario con los datos obtenidos
 				$usuario = new Usuario(
+					$response['id'],
 					$response['nombre'],
 					$response['apellido1'],
 					$response['apellido2'],

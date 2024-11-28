@@ -71,11 +71,55 @@ class ApiUser {
 			http_response_code(401); // Unauthorized
 			return json_encode(['error' => 'No se ha encontrado un usuario autenticado.']);
 		}
-		$idUsuario = $data['id']; // Obtener el ID del usuario autenticado
-//		$idUsuario = $usuario->getId(); // Obtener el ID del usuario autenticado
+//		$idUsuario = $data['id']; // Obtener el ID del usuario autenticado
+		$idUsuario = $usuario->getId(); // Obtener el ID del usuario autenticado
 
 		if (!$idUsuario) {
 			return json_encode(['error' => $usuario->getId()]);
+		}
+
+		// Verificar si se ha subido una foto
+		if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+			// Procesar la foto solo si se ha subido correctamente
+			$foto = $_FILES['foto'];
+			$directorioDestino = $_SERVER['DOCUMENT_ROOT'] . '/img/perfil/'; // Asegúrate de que la carpeta 'perfil' exista
+			$nombreOriginal = basename($foto['name']);
+			$rutaDestino = $directorioDestino . $nombreOriginal;
+
+			// Comprobar si ya existe el archivo
+			if (file_exists($rutaDestino)) {
+				$i = 1;
+				$ext = pathinfo($nombreOriginal, PATHINFO_EXTENSION);
+				$nombreArchivo = pathinfo($nombreOriginal, PATHINFO_FILENAME) . '-' . $i . '.' . $ext;
+				$rutaDestino = $directorioDestino . $nombreArchivo;
+			} else {
+				$nombreArchivo = $nombreOriginal;
+			}
+
+			// Mover el archivo al directorio de destino
+			if (!move_uploaded_file($foto['tmp_name'], $rutaDestino)) {
+				http_response_code(400);
+				return json_encode(['error' => 'Error al guardar la imagen.']);
+			}
+
+			// Ruta relativa a la imagen para almacenar en la base de datos
+			$fotoUrl = '/img/perfil/' . $nombreArchivo;
+
+			// Actualizar la base de datos con la nueva URL de la foto
+			$usuarioRepositorio = new RepoUser();
+			$actualizacionExitosa = $usuarioRepositorio->actualizarCampo($idUsuario, 'foto', $fotoUrl);
+
+			if ($actualizacionExitosa) {
+				http_response_code(201); // OK
+				return json_encode([
+					'success' => true,
+					'message' => 'Foto de perfil actualizada correctamente.',
+					'fotoUrl' => $fotoUrl
+				]);
+			} else {
+				http_response_code(500); // Internal Server Error
+				return json_encode(['error' => 'No se pudo actualizar la foto de perfil.']);
+			}
 		}
 
 		// Inicializar la clase Validator (asumiendo que ya tienes una instancia lista)
@@ -102,7 +146,7 @@ class ApiUser {
 		// Validación para 'email'
 		if ($campo === 'email') {
 			// Primero validamos el formato del email
-			$resultado = $validator->Email($campo, $valor);
+			$resultado = $validator->validarEmail($campo, $valor);
 			if ($resultado !== true) {
 				http_response_code(422); // Unprocessable Entity
 				return json_encode(['error' => $resultado]);
@@ -120,7 +164,7 @@ class ApiUser {
 		// Validación para 'dni'
 		if ($campo === 'dni') {
 			// Primero validamos el formato del dni
-			$resultado = $validator->Dni($campo, $valor);
+			$resultado = $validator->validarDni($campo, $valor);
 
 			if ($resultado !== true) {
 				http_response_code(422); // Unprocessable Entity

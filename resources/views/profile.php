@@ -6,185 +6,338 @@
 
 <?php $this->start('formulario') ?>
 <div class="profile-wrapper">
-		<!-- Aquí se mostrarán los datos cargados -->
-		<div class="form-user-cnt" id="user-data">
-			<div class="form-user-inner" id="form-user-inner">
+	<!-- Aquí se mostrarán los datos cargados -->
+	<div class="form-user-cnt" id="user-data">
+		<div class="form-user-inner" id="form-user-inner">
+			<fieldset class="header-ingredient">
+				<div class="section-box">
+					<!-- Foto -->
+					<table id="table-section">
+						<thead id="button-section">
+						<tr>
+							<th id="button2" scope="col">Foto</th>
+							<th id="button2" scope="col">Acciones</th>
+						</tr>
+						</thead>
+						<tbody id="body-table">
+						<tr>
+							<td id="td-foto">
+								<div class="foto-container" id="foto-container">
+									<input type="file" id="foto" name="foto" accept="image/*">
+									<img src="/img/iconos/agregar.png" alt="Agregar imagen" class="icono-agregar">
+									<div id="foto-preview"></div>
+								</div>
+							</td>
+							<td>
+								<button type="button" id="camera-button" title="Tomar una foto">Tomar foto</button>
+								<video id="player" autoplay style="display:none;"></video>
+								<button type="button" id="capture-button" style="display:none;">Capturar</button>
+								<!-- Botón Guardar -->
+								<button class="btn" type="button" id="save-photo" disabled>Guardar</button>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
 
-				<fieldset class="header-ingredient">
+				<div class="section-box">
+					<!-- Nombre -->
+					<table id="table-section">
+						<thead id="button-section">
+						<tr>
+							<th id="button2" scope="col">Nombre</th>
+							<th id="button2" scope="col">Acciones</th>
+						</tr>
+						</thead>
+						<tbody id="body-table">
+						<tr>
+							<td id="td-nombre">Martín</td>
+							<td>
+								<button>Editar</button>
+							</td>
+						</tr>
+						</tbody>
+					</table>
 
-					<div class="section-box">
-						<div class="foto-container" id="foto-container">
-							<input type="file" id="foto" name="foto" accept="image/*">
-							<img src="/img/iconos/agregar.png" alt="Agregar imagen" class="icono-agregar">
-							<div id="foto-preview"></div>
-						</div>
+					<!-- Apellido1 -->
+					<table id="table-section">
+						<thead id="button-section">
+						<tr>
+							<th id="button2" scope="col">Primer Apellido</th>
+							<th id="button2" scope="col">Acciones</th>
+						</tr>
+						</thead>
+						<tbody id="body-table">
+						<tr>
+							<td id="td-apellido1">García</td>
+							<td>
+								<button>Editar</button>
+							</td>
+						</tr>
+						</tbody>
+					</table>
 
-						<button type="button" id="camera-button" title="Tomar una foto">Tomar foto</button>
-						<video id="player" autoplay style="display:none;"></video>
-						<button type="button" id="capture-button" style="display:none;">Capturar</button>
+					<!-- Apellido2 -->
+					<table id="table-section">
+						<thead id="button-section">
+						<tr>
+							<th id="button2" scope="col">Segundo Apellido</th>
+							<th id="button2" scope="col">Acciones</th>
+						</tr>
+						</thead>
+						<tbody id="body-table">
+						<tr>
+							<td id="td-apellido2">Castillo</td>
+							<td>
+								<button>Editar</button>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
 
-					</div>
+				<div class="section-box">
+					<!-- Email -->
+					<table id="table-section">
+						<thead id="button-section">
+						<tr>
+							<th id="button2" scope="col">Email</th>
+							<th id="button2" scope="col">Acciones</th>
+						</tr>
+						</thead>
+						<tbody id="body-table">
+						<tr>
+							<td id="td-email">martin@gmail.com</td>
+							<td>
+								<button>Editar</button>
+							</td>
+						</tr>
+						</tbody>
+					</table>
 
+					<!-- DNI -->
+					<table id="table-section">
+						<thead id="button-section">
+						<tr>
+							<th id="button2" scope="col">DNI</th>
+							<th id="button2" scope="col">Acciones</th>
+						</tr>
+						</thead>
+						<tbody id="body-table">
+						<tr>
+							<td id="td-dni">77383320G</td>
+							<td>
+								<button>Editar</button>
+							</td>
+						</tr>
+						</tbody>
+					</table>
 
-					<div class="section-box">
-						<!-- Nombre -->
-						<table id="table-section">
-
-							<thead id="button-section">
-
-							<tr>
-								<th id="button2" scope="col">Nombre</th>
-								<th id="button2" scope="col">Acciones</th>
-							</tr>
-
-							</thead>
-
-							<tbody id="body-table">
-
-							<tr>
-								<td id="td-nombre">Martín</td>
-								<td>
-									<button>Editar</button>
-								</td>
-							</tr>
-
-							</tbody>
-
-						</table>
-
-						<!-- Apellido1 -->
-						<table id="table-section">
-
-							<thead id="button-section">
-
-							<tr>
-								<th id="button2" scope="col">Primer Apellido</th>
-								<th id="button2" scope="col">Acciones</th>
-							</tr>
-
-							</thead>
-
-							<tbody id="body-table">
-
-							<tr>
-								<td id="td-apellido1">García</td>
-								<td>
-									<button>Editar</button>
-								</td>
-							</tr>
-
-							</tbody>
-
-						</table>
-
-						<!-- Apellido2 -->
-						<table id="table-section">
-
-							<thead id="button-section">
-
-							<tr>
-								<th id="button2" scope="col">Segundo Apellido</th>
-								<th id="button2" scope="col">Acciones</th>
-							</tr>
-
-							</thead>
-
-							<tbody id="body-table">
-
-							<tr>
-								<td id="td-apellido2">Castillo</td>
-								<td>
-									<button>Editar</button>
-								</td>
-							</tr>
-
-							</tbody>
-
-						</table>
-
-					</div>
-
-					<div class="section-box">
-						<!-- Email -->
-						<table id="table-section">
-
-							<thead id="button-section">
-
-							<tr>
-								<th id="button2" scope="col">Email</th>
-								<th id="button2" scope="col">Acciones</th>
-							</tr>
-
-							</thead>
-
-							<tbody id="body-table">
-
-							<tr>
-								<td id="td-email">martin@gmail.com</td>
-								<td>
-									<button>Editar</button>
-								</td>
-							</tr>
-
-							</tbody>
-
-						</table>
-
-						<!-- DNI -->
-						<table id="table-section">
-
-							<thead id="button-section">
-
-							<tr>
-								<th id="button2" scope="col">DNI</th>
-								<th id="button2" scope="col">Acciones</th>
-							</tr>
-
-							</thead>
-
-							<tbody id="body-table">
-
-							<tr>
-								<td id="td-dni">77383320G</td>
-								<td>
-									<button>Editar</button>
-								</td>
-							</tr>
-
-							</tbody>
-
-						</table>
-
-						<!-- Telefono -->
-						<table id="table-section">
-
-							<thead id="button-section">
-
-							<tr>
-								<th id="button2" scope="col">Teléfono</th>
-								<th id="button2" scope="col">Acciones</th>
-							</tr>
-
-							</thead>
-
-							<tbody id="body-table">
-
-							<tr>
-								<td id="td-telefono">693209523</td>
-								<td>
-									<button>Editar</button>
-								</td>
-							</tr>
-
-							</tbody>
-
-						</table>
-
-					</div>
-				</fieldset>
-			</div>
+					<!-- Teléfono -->
+					<table id="table-section">
+						<thead id="button-section">
+						<tr>
+							<th id="button2" scope="col">Teléfono</th>
+							<th id="button2" scope="col">Acciones</th>
+						</tr>
+						</thead>
+						<tbody id="body-table">
+						<tr>
+							<td id="td-telefono">693209523</td>
+							<td>
+								<button>Editar</button>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</fieldset>
 		</div>
+	</div>
 </div>
+
+<!--<div class="profile-wrapper">-->
+<!--		<!-- Aquí se mostrarán los datos cargados -->-->
+<!--		<div class="form-user-cnt" id="user-data">-->
+<!--			<div class="form-user-inner" id="form-user-inner">-->
+<!---->
+<!--				<fieldset class="header-ingredient">-->
+<!---->
+<!--					<div class="section-box">-->
+<!--						<div class="foto-container" id="foto-container">-->
+<!--							<input type="file" id="foto" name="foto" accept="image/*">-->
+<!--							<img src="/img/iconos/agregar.png" alt="Agregar imagen" class="icono-agregar">-->
+<!--							<div id="foto-preview"></div>-->
+<!--						</div>-->
+<!---->
+<!--						<button type="button" id="camera-button" title="Tomar una foto">Tomar foto</button>-->
+<!--						<video id="player" autoplay style="display:none;"></video>-->
+<!--						<button type="button" id="capture-button" style="display:none;">Capturar</button>-->
+<!--						<!-- Botón Guardar -->-->
+<!--						<button class="btn" type="button" id="save-photo" disabled>Guardar</button>-->
+<!---->
+<!--					</div>-->
+<!---->
+<!---->
+<!--					<div class="section-box">-->
+<!--						<!-- Nombre -->-->
+<!--						<table id="table-section">-->
+<!---->
+<!--							<thead id="button-section">-->
+<!---->
+<!--							<tr>-->
+<!--								<th id="button2" scope="col">Nombre</th>-->
+<!--								<th id="button2" scope="col">Acciones</th>-->
+<!--							</tr>-->
+<!---->
+<!--							</thead>-->
+<!---->
+<!--							<tbody id="body-table">-->
+<!---->
+<!--							<tr>-->
+<!--								<td id="td-nombre">Martín</td>-->
+<!--								<td>-->
+<!--									<button>Editar</button>-->
+<!--								</td>-->
+<!--							</tr>-->
+<!---->
+<!--							</tbody>-->
+<!---->
+<!--						</table>-->
+<!---->
+<!--						<!-- Apellido1 -->-->
+<!--						<table id="table-section">-->
+<!---->
+<!--							<thead id="button-section">-->
+<!---->
+<!--							<tr>-->
+<!--								<th id="button2" scope="col">Primer Apellido</th>-->
+<!--								<th id="button2" scope="col">Acciones</th>-->
+<!--							</tr>-->
+<!---->
+<!--							</thead>-->
+<!---->
+<!--							<tbody id="body-table">-->
+<!---->
+<!--							<tr>-->
+<!--								<td id="td-apellido1">García</td>-->
+<!--								<td>-->
+<!--									<button>Editar</button>-->
+<!--								</td>-->
+<!--							</tr>-->
+<!---->
+<!--							</tbody>-->
+<!---->
+<!--						</table>-->
+<!---->
+<!--						<!-- Apellido2 -->-->
+<!--						<table id="table-section">-->
+<!---->
+<!--							<thead id="button-section">-->
+<!---->
+<!--							<tr>-->
+<!--								<th id="button2" scope="col">Segundo Apellido</th>-->
+<!--								<th id="button2" scope="col">Acciones</th>-->
+<!--							</tr>-->
+<!---->
+<!--							</thead>-->
+<!---->
+<!--							<tbody id="body-table">-->
+<!---->
+<!--							<tr>-->
+<!--								<td id="td-apellido2">Castillo</td>-->
+<!--								<td>-->
+<!--									<button>Editar</button>-->
+<!--								</td>-->
+<!--							</tr>-->
+<!---->
+<!--							</tbody>-->
+<!---->
+<!--						</table>-->
+<!---->
+<!--					</div>-->
+<!---->
+<!--					<div class="section-box">-->
+<!--						<!-- Email -->-->
+<!--						<table id="table-section">-->
+<!---->
+<!--							<thead id="button-section">-->
+<!---->
+<!--							<tr>-->
+<!--								<th id="button2" scope="col">Email</th>-->
+<!--								<th id="button2" scope="col">Acciones</th>-->
+<!--							</tr>-->
+<!---->
+<!--							</thead>-->
+<!---->
+<!--							<tbody id="body-table">-->
+<!---->
+<!--							<tr>-->
+<!--								<td id="td-email">martin@gmail.com</td>-->
+<!--								<td>-->
+<!--									<button>Editar</button>-->
+<!--								</td>-->
+<!--							</tr>-->
+<!---->
+<!--							</tbody>-->
+<!---->
+<!--						</table>-->
+<!---->
+<!--						<!-- DNI -->-->
+<!--						<table id="table-section">-->
+<!---->
+<!--							<thead id="button-section">-->
+<!---->
+<!--							<tr>-->
+<!--								<th id="button2" scope="col">DNI</th>-->
+<!--								<th id="button2" scope="col">Acciones</th>-->
+<!--							</tr>-->
+<!---->
+<!--							</thead>-->
+<!---->
+<!--							<tbody id="body-table">-->
+<!---->
+<!--							<tr>-->
+<!--								<td id="td-dni">77383320G</td>-->
+<!--								<td>-->
+<!--									<button>Editar</button>-->
+<!--								</td>-->
+<!--							</tr>-->
+<!---->
+<!--							</tbody>-->
+<!---->
+<!--						</table>-->
+<!---->
+<!--						<!-- Telefono -->-->
+<!--						<table id="table-section">-->
+<!---->
+<!--							<thead id="button-section">-->
+<!---->
+<!--							<tr>-->
+<!--								<th id="button2" scope="col">Teléfono</th>-->
+<!--								<th id="button2" scope="col">Acciones</th>-->
+<!--							</tr>-->
+<!---->
+<!--							</thead>-->
+<!---->
+<!--							<tbody id="body-table">-->
+<!---->
+<!--							<tr>-->
+<!--								<td id="td-telefono">693209523</td>-->
+<!--								<td>-->
+<!--									<button>Editar</button>-->
+<!--								</td>-->
+<!--							</tr>-->
+<!---->
+<!--							</tbody>-->
+<!---->
+<!--						</table>-->
+<!---->
+<!--					</div>-->
+<!--				</fieldset>-->
+<!--			</div>-->
+<!--		</div>-->
+<!--</div>-->
 
 <?php $this->stop() ?>
 
@@ -193,16 +346,40 @@
 	<script>
 
 		document.addEventListener('DOMContentLoaded', () => {
-			const profileContainer = document.getElementById('profile-data');
-			const fotoInput = document.querySelector('#foto');
-			const fotoContainer = document.querySelector('#foto-container');
-			const fotoPreview = document.querySelector('#foto-preview');
-			const cameraButton = document.querySelector('#camera-button');
-			const captureButton = document.querySelector('#capture-button');
-			const player = document.querySelector('#player');
+			const profileContainer 	= document.getElementById('profile-data');
+			const fotoInput 		= document.querySelector('#foto');
+			const savePhotoButton 	= document.getElementById('save-photo');
+			const fotoContainer 	= document.querySelector('#foto-container');
+			const fotoPreview 		= document.querySelector('#foto-preview');
+			const cameraButton 		= document.querySelector('#camera-button');
+			const captureButton 	= document.querySelector('#capture-button');
+			const player 			= document.querySelector('#player');
+			// Variable para almacenar el blob de la foto capturada
+			let capturedBlob = null;
+
+			// Función para habilitar/deshabilitar el botón
+			function toggleSaveButton() {
+				if (fotoInput.files.length > 0 || fotoPreview.innerHTML !== '') {
+					savePhotoButton.disabled = false; // Habilitar si hay archivo o vista previa
+				} else {
+					savePhotoButton.disabled = true; // Deshabilitar si no hay nada
+				}
+			}
+
+			savePhotoButton.addEventListener('click', function () {
+				let fila 	= savePhotoButton.parentNode.parentNode; // Obtener la fila del botón clicado
+				const input = fila.querySelector('input'); // Obtener el input de la fila
+				const campo = input.parentNode.parentNode.id.split('-')[1]; // Identificar el campo por su ID
+				// console.log(input, campo)
+				guardarCampo(input, campo);
+			});
 
 			// Añadir los eventos change para cada campo de entrada
 			fotoInput.addEventListener('change', (event) => {
+
+				toggleSaveButton(); // Llamar a la función cuando cambia el input
+
+				// Mostrar una vista previa de la imagen seleccionada
 				const file = event.target.files[0];
 				if (file) {
 					const reader = new FileReader();
@@ -220,6 +397,9 @@
 
 			// Función para capturar la foto desde la cámara
 			captureButton.addEventListener('click', () => {
+
+				toggleSaveButton(); // Actualizamos el estado del botón
+
 				const imageWidth = player.videoWidth; // Usar dimensiones reales del video
 				const imageHeight = player.videoHeight;
 
@@ -309,8 +489,9 @@
 				}
 			}
 
-			// Realizar una petición para actualizar un campo
+			// Modificar la función guardarCampo para manejar la foto
 			async function guardarCampo(input, campo) {
+				console.log(input, campo)
 				const valor = input.value.trim(); // Obtener el valor del input
 				const fila = input.closest('tr'); // Obtener la fila asociada
 
@@ -322,16 +503,28 @@
 					return; // Si hay errores, detenemos el flujo
 				}
 
-				// Enviar el dato al backend
-				try {
-					// Obtener el ID del usuario desde sessionStorage
-					let userId = sessionStorage.getItem('user_id');
-					const formData = new FormData();
-					formData.append('action', 'updateUser');
-					formData.append('id', userId);
-					formData.append('campo', campo); // Enviar el nombre del campo (e.g., 'email', 'dni')
-					formData.append('valor', valor); // Enviar el valor del input
+				// Verificar si hay una foto seleccionada o capturada
+				let formData = new FormData();
+				formData.append('action', 'updateUser');
+				formData.append('campo', campo); // Enviar el nombre del campo (e.g., 'email', 'dni')
+				formData.append('valor', valor); // Enviar el valor del input
 
+				// console.log(campo, valor)
+
+				// Si hay una imagen seleccionada desde el input de foto
+				const fotoInput = document.querySelector('#foto');
+				if (fotoInput.files.length > 0) {
+					const fotoFile = fotoInput.files[0];
+					formData.append('foto', fotoFile); // Agregar la foto al FormData
+				}
+
+				// Si hay una imagen capturada desde la cámara
+				if (capturedBlob) {
+					formData.append('foto', capturedBlob); // Agregar la foto capturada al FormData
+				}
+
+				// Enviar el dato al backend con la foto si está disponible
+				try {
 					const response = await fetch('/apiUser', {
 						method: 'POST',
 						body: formData,
@@ -339,12 +532,19 @@
 
 					const data = await response.json();
 
-					console.log(data.success)
 					if (response.ok && data.success) {
 						console.log(`El campo "${campo}" se guardó correctamente.`);
 						// Actualizar la fila con el nuevo valor y restaurar el diseño original
 						fila.querySelector(`#td-${campo}`).textContent = data.valorActualizado || valor;
 						restaurarBotonEditar(fila);
+
+						// Si la foto se actualizó, mostrarla en la tabla
+						if (data.fotoActualizada) {
+							// Asumimos que la respuesta tiene una URL para la foto actualizada
+							const fotoUrl = data.fotoActualizada;
+							const fotoCell = fila.querySelector('#td-foto');
+							fotoCell.innerHTML = `<img src="${fotoUrl}" alt="Foto de usuario" class="foto-preview-img">`;
+						}
 
 					} else {
 						mostrarError(input, data.error || 'Error desconocido');
@@ -364,7 +564,15 @@
 				document.getElementById('td-email').textContent = user.email || '-';
 				document.getElementById('td-dni').textContent = user.dni || '-';
 				document.getElementById('td-telefono').textContent = user.telefono || '-';
+
+				// Verificar si hay una foto y actualizar la celda correspondiente
+				const fotoCell = document.getElementById('td-foto');
+				if (user.foto) {
+					// Si el usuario tiene foto, mostrarla
+					fotoCell.innerHTML = `<img src="${user.foto}" alt="Foto de usuario" class="foto-preview-img">`;
+				}
 			}
+
 
 			// Función para editar la fila y habilitar la validación individual de cada campo
 			function editarFila(button) {
@@ -484,7 +692,7 @@
 					ocultarError(input);
 				}
 			}
-			
+
 			function validarCampo(input) {
 				let campo = input.parentNode.id.split('-')[1];
 

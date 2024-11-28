@@ -19,8 +19,9 @@
 		private $direcciones = [];
 		private $alergenos = [];
 
-		public function __construct($nombre, $apellido1 = null, $apellido2 = null, $contrasenna, $telefono = null, $email, $dni, $foto = null, $monedero = null, $carrito = null, $rol) {
+		public function __construct($id = null, $nombre, $apellido1 = null, $apellido2 = null, $contrasenna, $telefono = null, $email, $dni, $foto = null, $monedero = null, $carrito = null, $rol) {
 
+			$this->id 			= $id;
 			$this->nombre 		= $nombre;
 			$this->apellido1 	= $apellido1;
 			$this->apellido2 	= $apellido2;
