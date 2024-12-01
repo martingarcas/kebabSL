@@ -53,7 +53,7 @@ $this->layout('master'); ?>
 						</thead>
 						<tbody id="body-table">
 						<tr>
-							<td id="td-nombre">Martín</td>
+							<td id="td-nombre"></td>
 							<td>
 								<button class="btn-editar">Editar</button>
 							</td>
@@ -71,7 +71,7 @@ $this->layout('master'); ?>
 						</thead>
 						<tbody id="body-table">
 						<tr>
-							<td id="td-apellido1">García</td>
+							<td id="td-apellido1"></td>
 							<td>
 								<button class="btn-editar">Editar</button>
 							</td>
@@ -89,7 +89,7 @@ $this->layout('master'); ?>
 						</thead>
 						<tbody id="body-table">
 						<tr>
-							<td id="td-apellido2">Castillo</td>
+							<td id="td-apellido2"></td>
 							<td>
 								<button class="btn-editar">Editar</button>
 							</td>
@@ -109,7 +109,7 @@ $this->layout('master'); ?>
 						</thead>
 						<tbody id="body-table">
 						<tr>
-							<td id="td-email">martin@gmail.com</td>
+							<td id="td-email"></td>
 							<td>
 								<button class="btn-editar">Editar</button>
 							</td>
@@ -127,7 +127,7 @@ $this->layout('master'); ?>
 						</thead>
 						<tbody id="body-table">
 						<tr>
-							<td id="td-dni">77383320G</td>
+							<td id="td-dni"></td>
 							<td>
 								<button class="btn-editar">Editar</button>
 							</td>
@@ -145,201 +145,34 @@ $this->layout('master'); ?>
 						</thead>
 						<tbody id="body-table">
 						<tr>
-							<td id="td-telefono">693209523</td>
+							<td id="td-telefono"></td>
 							<td>
 								<button class="btn-editar">Editar</button>
 							</td>
 						</tr>
 						</tbody>
 					</table>
+
 				</div>
+
+				<div class="section-box">
+					<!-- Monedero -->
+					<div id="monedero-section">
+						<h3>Monedero</h3>
+						<p>Saldo actual: <span id="saldo-actual"></span>€</p>
+						<div>
+							<label for="monto-agregar">Agregar dinero:</label>
+							<input type="number" id="monto-agregar" placeholder="Introduce la cantidad" min="0">
+							<button id="guardar-monto">Guardar</button>
+						</div>
+						<p>Saldo total ficticio: <span id="saldo-ficticio"></span>€</p>
+					</div>
+				</div>
+
 			</fieldset>
 		</div>
 	</div>
 </div>
-
-<!--<div class="profile-wrapper">-->
-<!--		<!-- Aquí se mostrarán los datos cargados -->-->
-<!--		<div class="form-user-cnt" id="user-data">-->
-<!--			<div class="form-user-inner" id="form-user-inner">-->
-<!---->
-<!--				<fieldset class="header-ingredient">-->
-<!---->
-<!--					<div class="section-box">-->
-<!--						<div class="foto-container" id="foto-container">-->
-<!--							<input type="file" id="foto" name="foto" accept="image/*">-->
-<!--							<img src="/img/iconos/agregar.png" alt="Agregar imagen" class="icono-agregar">-->
-<!--							<div id="foto-preview"></div>-->
-<!--						</div>-->
-<!---->
-<!--						<button type="button" id="camera-button" title="Tomar una foto">Tomar foto</button>-->
-<!--						<video id="player" autoplay style="display:none;"></video>-->
-<!--						<button type="button" id="capture-button" style="display:none;">Capturar</button>-->
-<!--						<!-- Botón Guardar -->-->
-<!--						<button class="btn" type="button" id="save-photo" disabled>Guardar</button>-->
-<!---->
-<!--					</div>-->
-<!---->
-<!---->
-<!--					<div class="section-box">-->
-<!--						<!-- Nombre -->-->
-<!--						<table id="table-section">-->
-<!---->
-<!--							<thead id="button-section">-->
-<!---->
-<!--							<tr>-->
-<!--								<th id="button2" scope="col">Nombre</th>-->
-<!--								<th id="button2" scope="col">Acciones</th>-->
-<!--							</tr>-->
-<!---->
-<!--							</thead>-->
-<!---->
-<!--							<tbody id="body-table">-->
-<!---->
-<!--							<tr>-->
-<!--								<td id="td-nombre">Martín</td>-->
-<!--								<td>-->
-<!--									<button>Editar</button>-->
-<!--								</td>-->
-<!--							</tr>-->
-<!---->
-<!--							</tbody>-->
-<!---->
-<!--						</table>-->
-<!---->
-<!--						<!-- Apellido1 -->-->
-<!--						<table id="table-section">-->
-<!---->
-<!--							<thead id="button-section">-->
-<!---->
-<!--							<tr>-->
-<!--								<th id="button2" scope="col">Primer Apellido</th>-->
-<!--								<th id="button2" scope="col">Acciones</th>-->
-<!--							</tr>-->
-<!---->
-<!--							</thead>-->
-<!---->
-<!--							<tbody id="body-table">-->
-<!---->
-<!--							<tr>-->
-<!--								<td id="td-apellido1">García</td>-->
-<!--								<td>-->
-<!--									<button>Editar</button>-->
-<!--								</td>-->
-<!--							</tr>-->
-<!---->
-<!--							</tbody>-->
-<!---->
-<!--						</table>-->
-<!---->
-<!--						<!-- Apellido2 -->-->
-<!--						<table id="table-section">-->
-<!---->
-<!--							<thead id="button-section">-->
-<!---->
-<!--							<tr>-->
-<!--								<th id="button2" scope="col">Segundo Apellido</th>-->
-<!--								<th id="button2" scope="col">Acciones</th>-->
-<!--							</tr>-->
-<!---->
-<!--							</thead>-->
-<!---->
-<!--							<tbody id="body-table">-->
-<!---->
-<!--							<tr>-->
-<!--								<td id="td-apellido2">Castillo</td>-->
-<!--								<td>-->
-<!--									<button>Editar</button>-->
-<!--								</td>-->
-<!--							</tr>-->
-<!---->
-<!--							</tbody>-->
-<!---->
-<!--						</table>-->
-<!---->
-<!--					</div>-->
-<!---->
-<!--					<div class="section-box">-->
-<!--						<!-- Email -->-->
-<!--						<table id="table-section">-->
-<!---->
-<!--							<thead id="button-section">-->
-<!---->
-<!--							<tr>-->
-<!--								<th id="button2" scope="col">Email</th>-->
-<!--								<th id="button2" scope="col">Acciones</th>-->
-<!--							</tr>-->
-<!---->
-<!--							</thead>-->
-<!---->
-<!--							<tbody id="body-table">-->
-<!---->
-<!--							<tr>-->
-<!--								<td id="td-email">martin@gmail.com</td>-->
-<!--								<td>-->
-<!--									<button>Editar</button>-->
-<!--								</td>-->
-<!--							</tr>-->
-<!---->
-<!--							</tbody>-->
-<!---->
-<!--						</table>-->
-<!---->
-<!--						<!-- DNI -->-->
-<!--						<table id="table-section">-->
-<!---->
-<!--							<thead id="button-section">-->
-<!---->
-<!--							<tr>-->
-<!--								<th id="button2" scope="col">DNI</th>-->
-<!--								<th id="button2" scope="col">Acciones</th>-->
-<!--							</tr>-->
-<!---->
-<!--							</thead>-->
-<!---->
-<!--							<tbody id="body-table">-->
-<!---->
-<!--							<tr>-->
-<!--								<td id="td-dni">77383320G</td>-->
-<!--								<td>-->
-<!--									<button>Editar</button>-->
-<!--								</td>-->
-<!--							</tr>-->
-<!---->
-<!--							</tbody>-->
-<!---->
-<!--						</table>-->
-<!---->
-<!--						<!-- Telefono -->-->
-<!--						<table id="table-section">-->
-<!---->
-<!--							<thead id="button-section">-->
-<!---->
-<!--							<tr>-->
-<!--								<th id="button2" scope="col">Teléfono</th>-->
-<!--								<th id="button2" scope="col">Acciones</th>-->
-<!--							</tr>-->
-<!---->
-<!--							</thead>-->
-<!---->
-<!--							<tbody id="body-table">-->
-<!---->
-<!--							<tr>-->
-<!--								<td id="td-telefono">693209523</td>-->
-<!--								<td>-->
-<!--									<button>Editar</button>-->
-<!--								</td>-->
-<!--							</tr>-->
-<!---->
-<!--							</tbody>-->
-<!---->
-<!--						</table>-->
-<!---->
-<!--					</div>-->
-<!--				</fieldset>-->
-<!--			</div>-->
-<!--		</div>-->
-<!--</div>-->
 
 <?php $this->stop() ?>
 
@@ -494,18 +327,19 @@ $this->layout('master'); ?>
 				}
 			}
 
-			// Modificar la función guardarCampo para manejar la foto
 			async function guardarCampo(input, campo) {
-				console.log(input, campo)
+				// console.log(input, campo)
+				document
 				const valor = input.value.trim(); // Obtener el valor del input
 				const fila = input.closest('tr'); // Obtener la fila asociada
 
+				// console.log(valor, campo)
+
 				// Llamar a validarCampo para realizar todas las validaciones locales
 				validarCampo(input);
-				// console.log(validarCampo(input))
 
 				// Verificar si hay errores locales (mensaje de error en el input)
-				if (input.nextElementSibling && input.nextElementSibling.textContent !== '') {
+				if (input.nextElementSibling && input.nextElementSibling.textContent !== '' && campo != 'monedero') {
 					return; // Si hay errores, detenemos el flujo
 				}
 
@@ -547,7 +381,7 @@ $this->layout('master'); ?>
 					if (response.ok && data.success) {
 						console.log(`El campo "${campo}" se guardó correctamente.`);
 						// Actualizar la fila con el nuevo valor y restaurar el diseño original
-						if (campo !== 'foto' && data.valorActualizado) {
+						if (campo !== 'monedero' && campo !== 'foto' && data.valorActualizado) {
 							fila.querySelector(`#td-${campo}`).textContent = data.valorActualizado || valor;
 							restaurarBotonEditar(fila);
 						}
@@ -581,6 +415,45 @@ $this->layout('master'); ?>
 				document.getElementById('td-email').textContent = user.email || '-';
 				document.getElementById('td-dni').textContent = user.dni || '-';
 				document.getElementById('td-telefono').textContent = user.telefono || '-';
+
+				// Actualizar el saldo del monedero si está disponible
+				const saldoActualElement = document.getElementById('saldo-actual');
+				const saldoFicticioElement = document.getElementById('saldo-ficticio');
+				let saldoActual = parseFloat(user.monedero) || 0; // Inicializar con el saldo del usuario
+
+				// Mostrar saldo actual
+				saldoActualElement.textContent = saldoActual.toFixed(2);
+
+				// Mostrar saldo ficticio inicial (saldo actual + lo que se agrega)
+				const montoAgregarInput = document.getElementById('monto-agregar');
+				montoAgregarInput.addEventListener('input', () => {
+					const montoAgregar = parseFloat(montoAgregarInput.value) || 0;
+					const saldoFicticio = saldoActual + montoAgregar;
+					saldoFicticioElement.textContent = saldoFicticio.toFixed(2);
+				});
+
+				// Evento para el botón "Guardar"
+				const guardarMontoButton = document.getElementById('guardar-monto');
+
+				guardarMontoButton.addEventListener('click', function() {
+					const montoAgregarInput = document.getElementById('monto-agregar');
+					const montoAgregar = parseFloat(montoAgregarInput.value.trim()) || 0;
+
+					// Verificar que el monto es válido (mayor a 0)
+					if (montoAgregar > 0) {
+						// Actualizar el saldo ficticio (sumar el saldo actual con el monto agregado)
+						const saldoFicticioElement = document.getElementById('saldo-ficticio');
+						const saldoActual = parseFloat(document.getElementById('saldo-actual').textContent) || 0;
+						const saldoFicticio = saldoActual + montoAgregar;
+
+						// Pasar el input y el campo 'monedero' a la función guardarCampo
+						guardarCampo(montoAgregarInput, 'monedero');
+					} else {
+						alert("Por favor, introduce un monto válido.");
+					}
+				});
+
+
 
 				// Verificar si hay una foto y actualizar el contenedor de previsualización
 				if (user.foto) {
@@ -751,6 +624,11 @@ $this->layout('master'); ?>
 					errorMessage.textContent = '';
 				}
 			}
+
+
+			// MONEDERO
+			const guardarMontoButton 	= document.getElementById('guardar-monto');
+
 
 			fetchUserData();
 		});

@@ -43,6 +43,13 @@ class Logger {
 //		var_dump($_SESSION['user']);  // Verifica que se trata de una cadena serializada
 	}
 
+	// Método para actualizar los datos del usuario en la sesión
+	public static function actualizarSesion(Usuario $usuario) : void {
+		self::iniciaSesion();  // Asegurarse de que la sesión esté iniciada
+		$_SESSION['user'] = serialize($usuario);  // Volver a serializar el objeto actualizado
+	}
+
+
 
 
 	/**

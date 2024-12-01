@@ -3,7 +3,7 @@ require_once './Miautocargador.php';
 require_once '../vendor/autoload.php';
 
 use App\Utils\Logger;
-
+session_start(); // Necesario para trabajar con $_SESSION
 // Iniciar sesión al comienzo del flujo de ejecución de la aplicación
 Logger::iniciaSesion();
 
