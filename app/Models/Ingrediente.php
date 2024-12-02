@@ -15,7 +15,7 @@ class Ingrediente {
 		$this->nombre = $nombre;
 		$this->foto = $foto;
 		$this->precio = $precio;
-		// Asegúrate de que $alergenos siempre sea un array
+		// Asegurar que $alergenos siempre sea un array
 		$this->alergenos = is_array($alergenos) ? $alergenos : [];
 	}
 

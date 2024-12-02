@@ -90,8 +90,14 @@ class ApiIngrediente {
 				if (file_exists($rutaDestino)) {
 					$i = 1;
 					$ext = pathinfo($nombreOriginal, PATHINFO_EXTENSION);
-					$nombreArchivo = pathinfo($nombreOriginal, PATHINFO_FILENAME) . '-' . $i . '.' . $ext;
-					$rutaDestino = $directorioDestino . $nombreArchivo;
+					$nombreArchivo = pathinfo($nombreOriginal, PATHINFO_FILENAME); // Obtener el nombre del archivo sin la extensión
+
+					// Generar nuevo nombre con sufijo numérico hasta que el archivo no exista
+					do {
+						$nombreArchivo = pathinfo($nombreOriginal, PATHINFO_FILENAME) . '-' . $i . '.' . $ext;
+						$rutaDestino = $directorioDestino . $nombreArchivo;
+						$i++; // Incrementar el contador
+					} while (file_exists($rutaDestino)); // Comprobar si el nuevo nombre ya existe
 				} else {
 					$nombreArchivo = $nombreOriginal;
 				}
@@ -123,15 +129,15 @@ class ApiIngrediente {
 				$repoIngrediente->assoc_alergenos($ingredienteCreado->getId(), $alergenos);
 			}
 
-			// Asegurarte de que la respuesta sea siempre JSON
+			// Respuesta es siempre JSON
 			http_response_code(200);
 			echo json_encode([
 				'success' => true,
 				'message' => 'Ingrediente creado exitosamente.',
 				'redirect_url' => '/ingredientes', // URL de redirección
-				'ingrediente' => $ingredienteCreado->getAsArray() // Ingrediente recién creado
+				'ingrediente' => $ingredienteCreado->getAsArray() // Ingrediente recién creado como array asociativo
 			]);
-			exit; // Asegúrate de que no se imprima nada más
+			exit;
 		} else {
 			// Si la solicitud no es válida
 			http_response_code(400);
@@ -183,8 +189,14 @@ class ApiIngrediente {
 			if (file_exists($rutaDestino)) {
 				$i = 1;
 				$ext = pathinfo($nombreOriginal, PATHINFO_EXTENSION);
-				$nombreArchivo = pathinfo($nombreOriginal, PATHINFO_FILENAME) . '-' . $i . '.' . $ext;
-				$rutaDestino = $directorioDestino . $nombreArchivo;
+				$nombreArchivo = pathinfo($nombreOriginal, PATHINFO_FILENAME); // Obtener el nombre del archivo sin la extensión
+
+				// Generar nuevo nombre con sufijo numérico hasta que el archivo no exista
+				do {
+					$nombreArchivo = pathinfo($nombreOriginal, PATHINFO_FILENAME) . '-' . $i . '.' . $ext;
+					$rutaDestino = $directorioDestino . $nombreArchivo;
+					$i++; // Incrementar el contador
+				} while (file_exists($rutaDestino)); // Comprobar si el nuevo nombre ya existe
 			} else {
 				$nombreArchivo = $nombreOriginal;
 			}
@@ -276,7 +288,11 @@ class ApiIngrediente {
 		// Decodificar los alérgenos (ya que se enviaron como un array de objetos JSON)
 		$alergenos = [];
 		foreach ($_POST['alergenos'] as $alergenoJson) {
-			$alergenos[] = json_decode($alergenoJson, true);  // Decodificamos cada alérgeno
+			$alergenos[] = json_decode($alergenoJson, true);  // Decodificamos cada alérgeno, true indica que queremos un array asociativo
+//			[
+//				['nombre' => 'Gluten', 'foto' => '/img/gluten.jpg'],
+//				['nombre' => 'Leche', 'foto' => '/img/leche.jpg']
+//			]
 		}
 
 		// Instanciar y configurar DOMpdf

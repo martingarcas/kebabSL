@@ -132,7 +132,7 @@
 				'id'    => $idUsuario,
 			]);
 
-			return $stm->rowCount() > 0; // Retorna true si se actualizó algo
+			return $stm->rowCount() > 0; // Retorna "true" si se actualizó algo
 		}
 
 	}

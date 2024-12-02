@@ -42,16 +42,12 @@ class ApiContact {
 
 		$validateName = preg_match("/^[a-zA-Z-áéíóú]+(([',. -][a-zA-Z-áéíóú ])?[a-zA-Z-áéíóú]*)*$/", $post['name']) ? $post['name'] : false;
 
-		// $validateLastName = preg_match("/^[a-zA-Z-áéíóú]+(([',. -][a-zA-Z-áéíóú ])?[a-zA-Z-áéíóú]*)*$/", $post['lastname']) ? $post['lastname'] : false;
-
 		$validateTlfn = preg_match("/^((?:[1-9][0-9 ().-]{5,28}[0-9])|(?:(00|0)( ){0,1}[1-9][0-9 ().-]{3,26}[0-9])|(?:(\+)( ){0,1}[1-9][0-9 ().-]{4,27}[0-9]))$/",
 			$post['telephone']) ? $post['telephone'] : false;
 
 		$validateComment = trim($post['comment']) ? $post['comment'] : false;
 
 		$validateCheckPolitics = $post['politics'] = true ? $post['politics'] : false;
-
-		/* $validateCheckSuscribe = $post['suscribe'] = true ? $post['suscribe'] : false; */
 
 		$response = [
 			'type' 	=> '',
@@ -74,15 +70,9 @@ class ApiContact {
 		// Si todos los datos son correctos, se hace una última validación y se envía.
 		if (isset($response['type']) && $response['type'] != 'error') {
 
-			/* 	if(!$validateCheckSuscribe) {
-					$validateCheckSuscribe = "No aceptada";
-				}else{
-					$validateCheckSuscribe = "Aceptada";
-				}
-			 */
 			$dataSend = [
-				'name' 		=> trim($validateName),
-				'email' 	=> trim($validateEmail),
+				'name' 		=> $this->test_input($validateName),
+				'email' 	=> $this->test_input($validateEmail),
 				'telephone' => $this->test_input($validateTlfn),
 				'comment' 	=> $this->test_input($validateComment),
 				'politics' 	=> $this->test_input($validateCheckPolitics),
@@ -90,8 +80,6 @@ class ApiContact {
 
 			//send email
 			$this->send_mail($dataSend);
-			//todo: clasecita wapa pequeñita para phpmailer
-
 
 			$response = [
 				'type' => 'success',
@@ -168,9 +156,9 @@ class ApiContact {
 	}
 
 	function test_input($data) {
-		$data = trim($data);
-		$data = stripslashes($data);
-		$data = htmlspecialchars($data);
+		$data = trim($data); //Elimina los espacios en blanco al principio y al final de la cadena de texto.
+		$data = stripslashes($data); //Elimina las barras invertidas (\) de los datos.
+		$data = htmlspecialchars($data); // Convierte caracteres especiales en entidades HTML
 		return $data;
 	}
 

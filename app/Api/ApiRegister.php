@@ -20,8 +20,6 @@ class ApiRegister {
 					return $this->procesarValidacion($data);
 				case 'register':
 					return $this->registrarUsuario($data);
-				case 'loadUser':
-					return $this->cargarUsuarioAutenticado();
 				default:
 					http_response_code(400);
 					return json_encode(['error' => 'Acción no válida.']);
@@ -147,50 +145,5 @@ class ApiRegister {
 			'redirect_url' => '/login' // URL a la que se redirige al usuario después del registro
 		]);
 	}
-
-	/**
-	 * Método para cargar los datos del usuario autenticado.
-	 */
-	public function cargarUsuarioAutenticado() {
-		session_start(); // Aseguramos que la sesión esté iniciada
-
-		header('Content-Type: application/json');
-
-		// Verificar si hay un usuario autenticado
-		if (!isset($_SESSION['user_id'])) {
-			http_response_code(401); // Código HTTP 401: No autorizado
-			return json_encode(['error' => 'No hay una sesión activa.']);
-		}
-
-		$userId = $_SESSION['user_id'];
-
-		// Buscar el usuario en la base de datos
-		$repoUser = new RepoUser();
-		$usuario = $repoUser->findById($userId);
-
-		if (!$usuario) {
-			http_response_code(404); // Código HTTP 404: Usuario no encontrado
-			return json_encode(['error' => 'Usuario no encontrado.']);
-		}
-
-		// Devolver los datos del usuario
-		http_response_code(200); // Código HTTP 200: Éxito
-		return json_encode([
-			'success' => true,
-			'usuario' => [
-				'id'         => $usuario->getId(),
-				'nombre'     => $usuario->getNombre(),
-				'apellido1'  => $usuario->getApellido1(),
-				'apellido2'  => $usuario->getApellido2(),
-				'email'      => $usuario->getEmail(),
-				'telefono'   => $usuario->getTelefono(),
-				'dni'        => $usuario->getDni(),
-				'monedero'   => $usuario->getMonedero(),
-				'foto'       => $usuario->getFoto()
-			]
-		]);
-	}
-
-
 
 }

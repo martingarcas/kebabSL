@@ -101,7 +101,6 @@ class RepoIngrediente {
 		}
 
 		foreach ($alergenos as $alergeno_id) {
-			// Verificar que el alérgeno existe (opcional, depende de tus necesidades)
 			$stm = $con->prepare("SELECT id FROM alergeno WHERE id = :alergeno_id");
 			$stm->execute(['alergeno_id' => $alergeno_id]);
 			$alergeno = $stm->fetch(PDO::FETCH_ASSOC);
@@ -117,7 +116,6 @@ class RepoIngrediente {
 					'alergeno_id' => $alergeno_id
 				]);
 			} else {
-				// Manejar el caso en que el alérgeno no existe (opcional)
 				error_log("El alérgeno con ID $alergeno_id no existe.");
 			}
 		}
@@ -246,6 +244,17 @@ class RepoIngrediente {
 				}
 			}
 		}
+
+//		$objets = [
+//			1 => [10, 11],  // Ingrediente_id = 1 tiene alérgenos con IDs 10 y 11
+//			2 => [10, 12],  // Ingrediente_id = 2 tiene alérgenos con IDs 10 y 12
+//		];
+
+//		$alergenos = [
+//			10 => (objeto Alergeno con id 10),  // Alergeno con ID 10
+//			11 => (objeto Alergeno con id 11),  // Alergeno con ID 11
+//			12 => (objeto Alergeno con id 12),  // Alergeno con ID 12
+//		];
 
 		return $_mm_resolve; // Retorna la relación ingrediente_id => [alérgeno_objetos]
 	}
