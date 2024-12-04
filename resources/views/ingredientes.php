@@ -414,10 +414,10 @@
 
 			formEditarIngrediente.addEventListener('submit', async (event) => {
 
-				let valid;
-
 				event.preventDefault();  // Evitar comportamiento por defecto del formulario
 				showSpinner(spinnerEdit);
+
+				let valid = true;
 
 				// Verificar si los campos "nombre" y "precio" están vacíos
 				const nombre = formEditarIngrediente.querySelector('input[name="nombre"]');
@@ -425,7 +425,6 @@
 
 				if (!nombre.value.trim()) {
 					mostrarError(nombre, 'El nombre es obligatorio.');
-					hideSpinner(spinnerEdit);
 					// Habilitar o deshabilitar el botón según la validación
 					valid = false;
 					// return;  // Si el nombre está vacío, no se envía el formulario
@@ -444,13 +443,9 @@
 
 				// Si algún campo es inválido, no se envía el formulario
 				if (!valid) {
+					hideSpinner(spinnerEdit);
 					btnUpdate.disabled = true;
 					return;
-				}
-
-				// Verificar si algún campo no es válido según la validez del formulario
-				if (!formEditarIngrediente.checkValidity()) {
-					return;  // Si algún campo es inválido, no se envía el formulario
 				}
 
 				// Obtener el botón que fue presionado
@@ -773,10 +768,10 @@
 			// Función para manejar el envío del formulario para agregar un ingrediente
 			formAgregarIngredienteElement.addEventListener('submit', async (event) => {
 
-				let valid;
-
 				event.preventDefault();  // Evitar comportamiento por defecto del formulario
 				showSpinner(spinnerAdd);
+
+				let valid = true;
 
 				// Verificar si los campos "nombre" y "precio" están vacíos
 				const nombre = formAgregarIngredienteElement.querySelector('input[name="nombre"]');
@@ -784,29 +779,24 @@
 
 				if (!nombre.value.trim()) {
 					mostrarError(nombre, 'El nombre es obligatorio.');
-					hideSpinner(spinnerAdd);
+					valid = false;
 					// return;  // Si el nombre está vacío, no se envía el formulario
 				}
 
 				// Validar el campo "precio"
 				if (!precio.value.trim()) {
 					mostrarError(precio, 'El precio es obligatorio.');
-					hideSpinner(spinnerAdd);
 					valid = false;
 				} else if (isNaN(precio.value.trim())) {
-					hideSpinner(spinnerAdd);
 					mostrarError(precio, 'El precio debe ser un número.');
 					valid = false;
 				}
 
 				// Si algún campo es inválido, no se envía el formulario
 				if (!valid) {
+					hideSpinner(spinnerAdd);
+					guardarBoton.disabled = true;
 					return;
-				}
-
-				// Verificar si algún campo no es válido según la validez del formulario
-				if (!formAgregarIngredienteElement.checkValidity()) {
-					return;  // Si algún campo es inválido, no se envía el formulario
 				}
 
 				const formData = new FormData(formAgregarIngredienteElement);

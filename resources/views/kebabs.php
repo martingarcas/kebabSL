@@ -392,9 +392,10 @@
 
 			formEditarKebab.addEventListener('submit', async (event) => {
 
-				let valid;
 				event.preventDefault();  // Evitar comportamiento por defecto del formulario
 				showSpinner(spinnerEdit);
+
+				let valid = true;
 
 				// Verificar si los campos "nombre" y "precio" están vacíos
 				const nombre = formEditarKebab.querySelector('input[name="nombre"]');
@@ -402,36 +403,25 @@
 
 				if (!nombre.value.trim()) {
 					mostrarError(nombre, 'El nombre es obligatorio.');
-					hideSpinner(spinnerEdit);
 					// Habilitar o deshabilitar el botón según la validación
 					valid = false;
 					// return;  // Si el nombre está vacío, no se envía el formulario
-				} else {
-					valid = true;
 				}
 
 				// Validar el campo "precio"
 				if (!precio.value.trim()) {
 					mostrarError(precio, 'El precio es obligatorio.');
-					hideSpinner(spinnerEdit);
 					valid = false;
 				} else if (isNaN(precio.value.trim())) {
-					hideSpinner(spinnerEdit);
 					mostrarError(precio, 'El precio debe ser un número.');
 					valid = false;
-				} else {
-					valid = true;
 				}
 
 				// Si algún campo es inválido, no se envía el formulario
 				if (!valid) {
-					guardarBoton.disabled = true;
+					hideSpinner(spinnerEdit);
+					btnUpdate.disabled = true;
 					return;
-				}
-
-				// Verificar si algún campo no es válido
-				if (!formEditarKebab.checkValidity()) {
-					return;  // Si algún campo es inválido, no se envía el formulario
 				}
 
 				// Obtener el botón que fue presionado
@@ -757,7 +747,7 @@
 			// Función para manejar el envío del formulario para agregar un ingrediente
 			formAgregarKebabElement.addEventListener('submit', async (event) => {
 
-				let valid;
+				let valid = true;
 				event.preventDefault();  // Evitar comportamiento por defecto del formulario
 				showSpinner(spinnerAdd);
 
@@ -767,36 +757,25 @@
 
 				if (!nombre.value.trim()) {
 					mostrarError(nombre, 'El nombre es obligatorio.');
-					hideSpinner(spinnerAdd);
 					// Habilitar o deshabilitar el botón según la validación
 					valid = false;
 					// return;  // Si el nombre está vacío, no se envía el formulario
-				} else {
-					valid = true;
 				}
 
 				// Validar el campo "precio"
 				if (!precio.value.trim()) {
 					mostrarError(precio, 'El precio es obligatorio.');
-					hideSpinner(spinnerAdd);
 					valid = false;
 				} else if (isNaN(precio.value.trim())) {
-					hideSpinner(spinnerAdd);
 					mostrarError(precio, 'El precio debe ser un número.');
 					valid = false;
-				} else {
-					valid = true;
 				}
 
 				// Si algún campo es inválido, no se envía el formulario
 				if (!valid) {
+					hideSpinner(spinnerAdd);
 					guardarBoton.disabled = true;
 					return;
-				}
-
-				// Verificar si algún campo no es válido
-				if (!formAgregarKebabElement.checkValidity()) {
-					return;  // Si algún campo es inválido, no se envía el formulario
 				}
 
 				const formData = new FormData(formAgregarKebabElement);
