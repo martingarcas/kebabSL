@@ -413,6 +413,9 @@
 			}
 
 			formEditarIngrediente.addEventListener('submit', async (event) => {
+
+				let valid;
+
 				event.preventDefault();  // Evitar comportamiento por defecto del formulario
 				showSpinner(spinnerEdit);
 
@@ -769,6 +772,9 @@
 
 			// Función para manejar el envío del formulario para agregar un ingrediente
 			formAgregarIngredienteElement.addEventListener('submit', async (event) => {
+
+				let valid;
+
 				event.preventDefault();  // Evitar comportamiento por defecto del formulario
 				showSpinner(spinnerAdd);
 

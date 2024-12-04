@@ -391,6 +391,8 @@
 			}
 
 			formEditarKebab.addEventListener('submit', async (event) => {
+
+				let valid;
 				event.preventDefault();  // Evitar comportamiento por defecto del formulario
 				showSpinner(spinnerEdit);
 
