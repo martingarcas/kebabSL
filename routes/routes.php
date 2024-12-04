@@ -2,6 +2,7 @@
 
 use App\Api\ApiContact;
 use App\Api\ApiIngrediente;
+use App\Api\ApiKebab;
 use App\Api\ApiRegister;
 use App\Api\ApiUser;
 use App\Controllers\ContactController;
@@ -16,8 +17,10 @@ $routes = [
 	'register-post' 	=> [AuthController::class, 'registerUser', 'home'],
 	'logout' 			=> [AuthController::class, 'logoutUser', 'home'],
 	'apiRegister'   	=> [ApiRegister::class, 'handleRequest', null],
-	'ingredientes'  	=> [AuthController::class, 'showIngredientes', null],
+	'ingredientes'  	=> [AuthController::class, 'showIngredientes', 'ingredientes'],
 	'apiIngrediente' 	=> [ApiIngrediente::class, 'handleRequest', null],
+	'kebabs'  			=> [AuthController::class, 'showKebabs', 'kebabs'],
+	'apiKebab' 			=> [ApiKebab::class, 'handleRequest', null],
 	'contacto' 			=> [ContactController::class, 'index', 'contacto'],
 	'apiContact' 		=> [ApiContact::class, 'handleRequest', 'null'],
 	'profile' 			=> [AuthController::class, 'showProfile', 'profile'],

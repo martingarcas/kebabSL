@@ -35,7 +35,6 @@ class RepoAlergeno {
 		return null;
 	}
 
-
 	public function getByIds($ids) {
 		if (empty($ids)) {
 			return [];
@@ -57,7 +56,6 @@ class RepoAlergeno {
 
 		return $alergenos; // Array asociativo: alérgeno_id => AlergenoObjeto
 	}
-
 
 	public function getAll() {
 

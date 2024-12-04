@@ -1,0 +1,245 @@
+/* Estilos para las tarjetas de kebabs */
+.tarjetas-container
+	display: flex
+	justify-content: center
+	flex-wrap: wrap
+	gap: 20px
+	padding: 20px
+	user-select: none //borrar con el tiempo
+
+.kebab-card
+	width: 250px
+	background-color: #fff
+	border-radius: 10px
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1)
+	overflow: hidden
+	transition: transform 0.3s ease, box-shadow 0.3s ease
+	text-align: center
+	padding: 24px 0
+	cursor: pointer
+
+.kebab-card:hover
+	transform: translateY(-10px)
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2)
+
+/* Estilos exclusivos para la imagen del kebab */
+.kebab-card .kebab-img
+	width: 100%
+	height: 150px
+	object-fit: cover
+	border-bottom: 2px solid #f0f0f0
+
+.kebab-card h3
+	font-size: 1.5rem
+	color: #333
+	margin: 10px 0
+
+.kebab-card .precio
+	font-size: 1.2rem
+	color: #888
+	margin-bottom: 15px
+
+/* Contenedor de ingredientes */
+#ingredientes-container
+	display: flex
+	justify-content: center
+	flex-wrap: wrap
+	gap: 20px
+	padding: 24px
+
+#ingredientes-container-edit
+	display: flex
+	justify-content: center
+	flex-wrap: wrap
+	gap: 20px
+	padding: 24px
+
+/* Imagen del ingrediente más pequeña y cuadrada */
+.ingrediente-img
+	height: 40px  /* Ajustamos la altura a 40px */
+	object-fit: contain  /* Cambiamos a contain para que la imagen no se recorte */
+	border-radius: 4px   /* Bordes redondeados */
+	transition: transform 0.3s ease  /* Transición suave para cualquier cambio de transform */
+
+.fieldset-ingredientes
+	display: block
+	max-width: 900px
+	border: 2px solid #ddd
+	border-radius: 8px
+	padding: 20px
+	background-color: #fafafa
+	transition: padding .3s ease
+	margin: 0 auto 10px
+
+/* Tooltip */
+.tooltip
+	display: none  /* Ocultamos el tooltip por defecto */
+	position: absolute  /* Posición absoluta respecto al contenedor .ingredientes-container */
+	background-color: #ff7043
+	color: white
+	border-radius: 5px
+	padding: 5px
+	font-size: 14px
+	white-space: nowrap  /* Evitar que el texto se divida en varias líneas */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3)  /* Sombra para darle profundidad */
+	top: 0  /* Posicionar el tooltip justo debajo de la imagen */
+	left: 50%  /* Centrar el tooltip respecto a la imagen */
+	transform: translateX(-50%)  /* Asegura que el tooltip esté perfectamente centrado */
+	z-index: 10  /* Aseguramos que el tooltip quede encima de otros elementos */
+
+.ingrediente-img:hover + .tooltip
+	display: block  /* Mostramos el tooltip al hacer hover sobre la imagen */
+
+/* Estilos para la posición del tooltip */
+.ingredientes-container
+	position: relative
+	display: flex
+	justify-content: center
+	flex-wrap: wrap
+	gap: 8px
+	min-width: 40px
+	margin: 0 auto
+
+
+/* Estilos para la tarjeta de "Agregar ingrediente" */
+.card-agregar
+	display: flex
+	flex-direction: column
+	align-items: center
+	justify-content: center
+	background-color: #f8f8f8  /* Fondo claro */
+	border-radius: 10px
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1)
+	padding: 20px
+	cursor: pointer
+	transition: transform 0.3s ease, box-shadow 0.3s ease
+
+.card-agregar:hover
+	transform: translateY(-10px)
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2)
+
+.icono-agregar
+	width: 50px
+	height: 50px
+	object-fit: contain
+
+.card-agregar h3
+	margin-top: 10px
+	font-size: 1.2rem
+	color: #333
+
+
+/* Estilos para el formulario */
+.formulario-kebab h2
+	text-align: center
+	margin-bottom: 20px  /* Separación entre el título y el resto del formulario */
+
+.formulario-kebab label
+	display: block
+	font-weight: bold
+	max-width: 280px
+	margin: 0 auto 10px
+	padding-top: 10px
+
+.formulario-kebab input[type="text"],
+.formulario-kebab input[type="file"]
+	width: 100%
+	padding: 12px  /* Aumentamos el padding para mayor comodidad */
+	margin-bottom: 20px  /* Mayor espacio entre los campos */
+	border-radius: 6px  /* Bordes ligeramente más redondeados */
+	border: 1px solid #ccc
+	max-width: 280px
+
+.formulario-kebab button
+	padding: 12px 20px
+	background-color: #28a745
+	color: white
+	border: none
+	border-radius: 5px
+	cursor: pointer
+	font-size: 16px
+	margin-bottom: 15px  /* Espacio entre los botones */
+
+.formulario-kebab button[type="button"]
+	background-color: #dc3545
+	margin-top: 10px  /* Agregamos un pequeño margen superior para el botón de cancelar */
+
+
+/* Estilos para la tarjeta de agregar */
+.tarjeta-agregar
+	width: 250px
+	height: 250px
+	background-color: #f0f0f0
+	border-radius: 10px
+	display: flex
+	justify-content: center
+	align-items: center
+	cursor: pointer
+	text-align: center
+	font-size: 24px
+	color: #888
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1)
+
+.tarjeta-agregar:hover
+	background-color: #e0e0e0
+
+.header-kebab
+	flex-direction: row
+	flex-wrap: wrap
+	justify-content: space-around
+	gap: 24px
+
+.foto-container
+	position: relative
+	width: 200px
+	height: 200px
+	border: 2px dashed #ccc
+	display: flex
+	align-items: center
+	justify-content: center
+	cursor: pointer
+	overflow: hidden
+
+	.icono-agregar
+		position: absolute
+		display: block
+		width: 40px
+		height: 40px
+
+#foto-preview
+	display: block
+	width: 100%
+	height: 100%
+
+.foto-preview-img
+	width: 100%
+	height: 100%
+	object-fit: cover
+
+#foto
+	position: absolute
+	top: 0
+	left: 0
+	width: 100%
+	height: 100%
+	opacity: 0
+	cursor: pointer
+
+
+#camera-button
+	max-width: 64px
+	margin: 16px auto
+	padding: 5px
+	background-color: #007BFF
+	color: white
+	border: none
+	cursor: pointer
+
+#capture-button
+	max-width: 84px
+	margin: 16px auto
+	padding: 5px
+	background-color: #007BFF
+	color: white
+	border: none
+	cursor: pointer

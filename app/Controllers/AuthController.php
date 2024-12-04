@@ -199,7 +199,7 @@ class AuthController {
 	}
 
 	// Renderizar vista de ingredientes
-	public function showIngredientes() {
+	public function showIngredientes($view) {
 		// Obtener el mensaje flash
 		$message = FlashMessage::getMessage();
 		// Verificar si el usuario está logueado y es administrador
@@ -211,16 +211,32 @@ class AuthController {
 			header('Location: /');
 		}
 		// Renderizar la vista con el mensaje flash si existe
-		echo $this->templates->render('ingredientes', ['message' => $message]);
+		echo $this->templates->render($view, ['message' => $message]);
+	}
+
+	// Renderizar vista de kebabs
+	public function showKebabs($view) {
+		// Obtener el mensaje flash
+		$message = FlashMessage::getMessage();
+		// Verificar si el usuario está logueado y es administrador
+		$usuario = Logger::obtenerUsuario();
+
+		if (!$usuario || $usuario->getRol() !== 'administrador') {
+			http_response_code(403); // Código HTTP 403: Prohibido
+			FlashMessage::setMessage("ACCESO DENEGADO.", 'error');
+			header('Location: /');
+		}
+		// Renderizar la vista con el mensaje flash si existe
+		echo $this->templates->render($view, ['message' => $message]);
 	}
 
 	// Renderizar vista de login
-	public function showProfile() {
+	public function showProfile($view) {
 		// Obtener el mensaje flash
 		$message = FlashMessage::getMessage();
 		$usuario = Logger::obtenerUsuario();
 		// Renderizar la vista con el mensaje flash si existe
-		echo $this->templates->render('profile', ['message' => $message]);
+		echo $this->templates->render($view, ['message' => $message]);
 	}
 
 }

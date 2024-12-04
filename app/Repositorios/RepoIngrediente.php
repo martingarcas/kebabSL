@@ -2,7 +2,6 @@
 
 namespace App\Repositorios;
 
-use App\Models\Alergeno;
 use App\Models\Ingrediente;
 use PDO;
 
@@ -14,9 +13,9 @@ class RepoIngrediente {
 		// Preparar y ejecutar la inserción del ingrediente
 		$stm = $con->prepare("INSERT INTO ingrediente (nombre, foto, precio) VALUES (:nombre, :foto, :precio)");
 		$stm->execute([
-			'nombre' => $ingrediente->getNombre(),
-			'foto' => $ingrediente->getFoto(),
-			'precio' => $ingrediente->getPrecio()
+			'nombre' 	=> $ingrediente->getNombre(),
+			'foto' 		=> $ingrediente->getFoto(),
+			'precio' 	=> $ingrediente->getPrecio()
 		]);
 
 		// Obtener el ID del ingrediente recién insertado
@@ -38,10 +37,10 @@ class RepoIngrediente {
 			// 1. Actualizar el ingrediente en la tabla `ingrediente`
 			$stm = $con->prepare("UPDATE ingrediente SET nombre = :nombre, precio = :precio, foto = :foto WHERE id = :id");
 			$stm->execute([
-				'id' => $ingrediente->getId(),
-				'nombre' => $ingrediente->getNombre(),
-				'precio' => $ingrediente->getPrecio(),
-				'foto' => $ingrediente->getFoto()
+				'id' 		=> $ingrediente->getId(),
+				'nombre' 	=> $ingrediente->getNombre(),
+				'precio' 	=> $ingrediente->getPrecio(),
+				'foto' 		=> $ingrediente->getFoto()
 			]);
 
 			// 2. Eliminar las relaciones existentes con los alérgenos
@@ -122,46 +121,38 @@ class RepoIngrediente {
 	}
 
 	public function getByIds($ids) {
-		$con = Conexion::getConection();
-
-		// Verificar si $ids es un array y contiene valores
-		if (!is_array($ids) || empty($ids)) {
+		if (empty($ids)) {
 			return [];
 		}
 
-		// Convertir los IDs en enteros
-		$ids = array_map('intval', $ids);
-
-		// Preparar la consulta para buscar por los IDs de los ingredientes
-		$stm = $con->prepare("SELECT * FROM ingrediente WHERE id IN (" . implode(',', array_fill(0, count($ids), '?')) . ")");
+		$con = Conexion::getConection();
+		$placeholders = implode(',', array_fill(0, count($ids), '?'));
+		$stm = $con->prepare("SELECT * FROM ingrediente WHERE id IN ($placeholders)");
 		$stm->execute($ids);
 
-		$objets = [];
-
-		// Obtener el resultado como un array asociativo
+		$ingredientes = [];
 		while ($response = $stm->fetch(PDO::FETCH_ASSOC)) {
 			$ingrediente = new Ingrediente(
 				$response['id'],
 				$response['nombre'],
 				$response['foto'],
 				$response['precio'],
-				[] // Inicializa los alérgenos como un array vacío
+				[] // Inicialmente dejamos los alérgenos como un array vacío
 			);
 
-			$objets[$response['id']] = $ingrediente;
+			$ingredientes[$response['id']] = $ingrediente;
 		}
 
-		$ingredientes_keys = array_keys($objets);
-
-		// Obtener los alérgenos asociados a los ingredientes
-		$ingrediente_alergenos = $this->__mm__alergenos($ingredientes_keys);
+		// Obtener los alérgenos asociados para los ingredientes
+		$ingrediente_ids = array_keys($ingredientes);
+		$ingrediente_alergenos = $this->__mm__alergenos($ingrediente_ids);
 
 		// Asignar los alérgenos a cada ingrediente
-		foreach ($objets as $ingrediente_k => $ingrediente) {
-			$ingrediente->setAlergenos($ingrediente_alergenos[$ingrediente_k] ?? []);
+		foreach ($ingredientes as $ingrediente_id => $ingrediente) {
+			$ingrediente->setAlergenos($ingrediente_alergenos[$ingrediente_id] ?? []);
 		}
 
-		return $objets;
+		return $ingredientes;
 	}
 
 	public function getAll() {
@@ -245,7 +236,7 @@ class RepoIngrediente {
 			}
 		}
 
-//		$objets = [
+//		$objets(ingredientes) = [
 //			1 => [10, 11],  // Ingrediente_id = 1 tiene alérgenos con IDs 10 y 11
 //			2 => [10, 12],  // Ingrediente_id = 2 tiene alérgenos con IDs 10 y 12
 //		];
@@ -258,6 +249,7 @@ class RepoIngrediente {
 
 		return $_mm_resolve; // Retorna la relación ingrediente_id => [alérgeno_objetos]
 	}
+
 }
 
 ?>

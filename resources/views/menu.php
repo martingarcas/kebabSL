@@ -29,7 +29,7 @@ $usuario = Logger::obtenerUsuario();
 					</li>
 				<?php elseif ($usuario !== null && $usuario->getRol() === 'administrador'): ?>
 					<!-- Menú para administradores -->
-					<li><a href="/">Kebabs</a></li>
+					<li><a href="/kebabs">Kebabs</a></li>
 					<li><a href="/ingredientes">Ingredientes</a></li>
 					<li><a href="/">Gráficos-estados</a></li>
 					<li class="user-menu">

@@ -119,6 +119,7 @@ class Ingrediente {
 			'alergenos' => $this->getAlergenosAsArray(),
 		];
 	}
+
 }
 
 
