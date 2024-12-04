@@ -239,5 +239,11 @@ class AuthController {
 		echo $this->templates->render($view, ['message' => $message]);
 	}
 
+	// Renderizar vista de kebabs
+	public function showMenuKebabs($view) {
+		// Renderizar la vista con el mensaje flash si existe
+		echo $this->templates->render($view);
+	}
+
 }
 ?>

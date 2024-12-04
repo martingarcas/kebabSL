@@ -25,6 +25,7 @@ $routes = [
 	'apiContact' 		=> [ApiContact::class, 'handleRequest', 'null'],
 	'profile' 			=> [AuthController::class, 'showProfile', 'profile'],
 	'apiUser' 			=> [ApiUser::class, 'handleRequest', 'null'],
+	'carta' 			=> [AuthController::class, 'showMenuKebabs', 'carta'],
 ];
 
 return $routes;
