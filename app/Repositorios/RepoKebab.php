@@ -249,6 +249,16 @@ class RepoKebab {
 		return $_mm_resolve; // Retorna la relación kebab_id => [ingrediente_objetos]
 	}
 
+	// Método para verificar si existe un kebab por un campo genérico
+	public function existePorCampo($campo, $valor) {
+
+		$con = Conexion::getConection();
+		$stm = $con->prepare("SELECT COUNT(*) FROM kebab WHERE $campo = :valor");
+		$stm->execute(['valor' => $valor]);
+
+		return $stm->fetchColumn() > 0;
+	}
+
 }
 
 ?>

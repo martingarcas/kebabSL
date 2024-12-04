@@ -21,7 +21,8 @@ class Validator {
 			'telefono'    => 'El teléfono',
 			'foto'        => 'La foto',
 			'monedero'    => 'El monedero',
-			'carrito'     => 'El carrito'
+			'carrito'     => 'El carrito',
+			'precio'      => 'El precio'
 		];
 	}
 
@@ -122,6 +123,13 @@ class Validator {
 		return true;
 	}
 
+	// Validación de campo numérico
+	public function Numerico($campo, $data) {
+		if (!is_numeric($data[$campo])) {
+			return $this->obtenerEtiqueta($campo) . " debe ser un número.";
+		}
+		return true;
+	}
 
 	// Método para validar duplicados, debe delegar la validación al repositorio
 	public function validarDuplicado($campo, $valor, $repositorio) {

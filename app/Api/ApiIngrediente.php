@@ -5,6 +5,7 @@ namespace App\Api;
 use App\Models\Ingrediente;
 use App\Repositorios\RepoAlergeno;
 use App\Repositorios\RepoIngrediente;
+use App\Utils\Validator;
 use Dompdf\Dompdf;
 
 class ApiIngrediente {
@@ -65,6 +66,30 @@ class ApiIngrediente {
 	}
 
 	public function insertIngredients($data) {
+		$validator = new Validator(); // Instanciamos el validador
+
+		// Definir las reglas de validación
+		$camposRequeridos = [
+			'nombre' => 'Requerido', // nombre es obligatorio
+			'precio' => 'Requerido|Numerico' // precio es obligatorio y debe ser un número
+		];
+
+		// Validar los campos obligatorios y las validaciones personalizadas
+		$errores = $validator->validarCampos($data, $camposRequeridos);
+
+		$repoIngrediente = new RepoIngrediente();
+
+		// Validar si el nombre ya está registrado (duplicado)
+		if (empty($errores['nombre']) && $validator->validarDuplicado('nombre', $data['nombre'], $repoIngrediente)) {
+			$errores['nombre'] = 'El nombre ya está registrado.';
+		}
+
+		// Si hay errores, devolvemos la respuesta con los errores encontrados
+		if (count($errores) > 0) {
+			http_response_code(400); // Código HTTP 400 para errores de validación
+			return json_encode(['errores' => $errores]);
+		}
+
 		// Verificar que se está haciendo una petición POST
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$nombre = $data['nombre'];
@@ -147,6 +172,31 @@ class ApiIngrediente {
 	}
 
 	public function updateIngredients($data) {
+
+		$validator = new Validator(); // Instanciamos el validador
+
+		// Definir las reglas de validación
+		$camposRequeridos = [
+			'nombre' => 'Requerido', // nombre es obligatorio
+			'precio' => 'Requerido|Numerico' // precio es obligatorio y debe ser un número
+		];
+
+		// Validar los campos obligatorios y las validaciones personalizadas
+		$errores = $validator->validarCampos($data, $camposRequeridos);
+
+		$repoIngrediente = new RepoIngrediente();
+
+		// Validar si el nombre ya está registrado (duplicado)
+		if (empty($errores['nombre']) && $validator->validarDuplicado('nombre', $data['nombre'], $repoIngrediente)) {
+			$errores['nombre'] = 'El nombre ya está registrado.';
+		}
+
+		// Si hay errores, devolvemos la respuesta con los errores encontrados
+		if (count($errores) > 0) {
+			http_response_code(400); // Código HTTP 400 para errores de validación
+			return json_encode(['errores' => $errores]);
+		}
+
 		// Verificar que se está haciendo una petición POST
 		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 			http_response_code(405); // Código de error: método no permitido

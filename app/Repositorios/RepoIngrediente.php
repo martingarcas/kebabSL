@@ -250,6 +250,16 @@ class RepoIngrediente {
 		return $_mm_resolve; // Retorna la relación ingrediente_id => [alérgeno_objetos]
 	}
 
+	// Método para verificar si existe un ingrediente por un campo genérico
+	public function existePorCampo($campo, $valor) {
+
+		$con = Conexion::getConection();
+		$stm = $con->prepare("SELECT COUNT(*) FROM ingrediente WHERE $campo = :valor");
+		$stm->execute(['valor' => $valor]);
+
+		return $stm->fetchColumn() > 0;
+	}
+
 }
 
 ?>

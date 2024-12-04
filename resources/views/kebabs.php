@@ -164,6 +164,11 @@
 				spinner.style.display = 'block';
 			}
 
+			// Función para ocultar el spinner
+			function hideSpinner(spinner) {
+				spinner.style.display = 'none';
+			}
+
 			// Llamar a la función para obtener los kebabs e ingredientes
 			obtenerKebabsEIngredientes();
 
@@ -389,6 +394,44 @@
 				event.preventDefault();  // Evitar comportamiento por defecto del formulario
 				showSpinner(spinnerEdit);
 
+				// Verificar si los campos "nombre" y "precio" están vacíos
+				const nombre = formEditarKebab.querySelector('input[name="nombre"]');
+				const precio = formEditarKebab.querySelector('input[name="precio"]');
+
+				if (!nombre.value.trim()) {
+					mostrarError(nombre, 'El nombre es obligatorio.');
+					hideSpinner(spinnerEdit);
+					// Habilitar o deshabilitar el botón según la validación
+					valid = false;
+					// return;  // Si el nombre está vacío, no se envía el formulario
+				} else {
+					valid = true;
+				}
+
+				// Validar el campo "precio"
+				if (!precio.value.trim()) {
+					mostrarError(precio, 'El precio es obligatorio.');
+					hideSpinner(spinnerEdit);
+					valid = false;
+				} else if (isNaN(precio.value.trim())) {
+					hideSpinner(spinnerEdit);
+					mostrarError(precio, 'El precio debe ser un número.');
+					valid = false;
+				} else {
+					valid = true;
+				}
+
+				// Si algún campo es inválido, no se envía el formulario
+				if (!valid) {
+					guardarBoton.disabled = true;
+					return;
+				}
+
+				// Verificar si algún campo no es válido
+				if (!formEditarKebab.checkValidity()) {
+					return;  // Si algún campo es inválido, no se envía el formulario
+				}
+
 				// Obtener el botón que fue presionado
 				const botonPresionado = event.submitter;
 
@@ -594,7 +637,7 @@
 
 			// Función para manejar la vista previa de la imagen al seleccionar un archivo
 			//FORMULARIO DE AGREGAR INGREDIENTE
-			const formAgregarIngredienteElement = document.querySelector('#form-agregar-kebab');
+			const formAgregarKebabElement = document.querySelector('#form-agregar-kebab');
 			const fotoInput = document.querySelector('#foto');
 			const fotoContainer = document.querySelector('#foto-container');
 			const fotoPreview = document.querySelector('#foto-preview');
@@ -603,7 +646,7 @@
 			const player = document.querySelector('#player');
 			const nombreInput = document.querySelector('#nombre');
 			const precioInput = document.querySelector('#precio');
-			const guardarBoton = formAgregarIngredienteElement.querySelector('#guardar-kebab');
+			const guardarBoton = formAgregarKebabElement.querySelector('#guardar-kebab');
 
 			// Variable para almacenar el blob de la foto capturada
 			let capturedBlob = null;
@@ -706,20 +749,55 @@
 			});
 
 			// Llamar a la función validarCampos cada vez que se cambie un campo
-			nombreInput.addEventListener('change', () => validarCampos(formAgregarIngredienteElement, guardarBoton));
-			precioInput.addEventListener('change', () => validarCampos(formAgregarIngredienteElement, guardarBoton));
+			nombreInput.addEventListener('change', () => validarCampos(formAgregarKebabElement, guardarBoton));
+			precioInput.addEventListener('change', () => validarCampos(formAgregarKebabElement, guardarBoton));
 
 			// Función para manejar el envío del formulario para agregar un ingrediente
-			formAgregarIngredienteElement.addEventListener('submit', async (event) => {
+			formAgregarKebabElement.addEventListener('submit', async (event) => {
+
+				let valid;
 				event.preventDefault();  // Evitar comportamiento por defecto del formulario
 				showSpinner(spinnerAdd);
 
+				// Verificar si los campos "nombre" y "precio" están vacíos
+				const nombre = formAgregarKebabElement.querySelector('input[name="nombre"]');
+				const precio = formAgregarKebabElement.querySelector('input[name="precio"]');
+
+				if (!nombre.value.trim()) {
+					mostrarError(nombre, 'El nombre es obligatorio.');
+					hideSpinner(spinnerAdd);
+					// Habilitar o deshabilitar el botón según la validación
+					valid = false;
+					// return;  // Si el nombre está vacío, no se envía el formulario
+				} else {
+					valid = true;
+				}
+
+				// Validar el campo "precio"
+				if (!precio.value.trim()) {
+					mostrarError(precio, 'El precio es obligatorio.');
+					hideSpinner(spinnerAdd);
+					valid = false;
+				} else if (isNaN(precio.value.trim())) {
+					hideSpinner(spinnerAdd);
+					mostrarError(precio, 'El precio debe ser un número.');
+					valid = false;
+				} else {
+					valid = true;
+				}
+
+				// Si algún campo es inválido, no se envía el formulario
+				if (!valid) {
+					guardarBoton.disabled = true;
+					return;
+				}
+
 				// Verificar si algún campo no es válido
-				if (!formAgregarIngredienteElement.checkValidity()) {
+				if (!formAgregarKebabElement.checkValidity()) {
 					return;  // Si algún campo es inválido, no se envía el formulario
 				}
 
-				const formData = new FormData(formAgregarIngredienteElement);
+				const formData = new FormData(formAgregarKebabElement);
 				formData.append('action', 'insert');
 
 				// Añadir los ingredientes seleccionados al FormData
@@ -748,7 +826,7 @@
 							message: data.message || 'Kebab agregado correctamente',
 							type: 'success'
 						}));
-						formAgregarIngredienteElement.reset();
+						formAgregarKebabElement.reset();
 						await obtenerKebabsEIngredientes();  // Recargar los ingredientes después de agregar uno nuevo
 						window.location.href = data.redirect_url || '/kebabs';  // Redirigir a la página de ingredientes
 					} else {
@@ -757,7 +835,7 @@
 							message: data.message || 'Hubo un error al agregar el kebab',
 							type: 'error'
 						}));
-						// window.location.href = '/kebabs';  // Redirigir a la página de ingredientes
+						window.location.href = '/kebabs';  // Redirigir a la página de ingredientes
 					}
 				} catch (error) {
 					console.error('Error al enviar la solicitud:', error);

@@ -5,6 +5,7 @@ namespace App\Api;
 use App\Models\Kebab;
 use App\Repositorios\RepoKebab;
 use App\Repositorios\RepoIngrediente;
+use App\Utils\Validator;
 
 class ApiKebab {
 
@@ -58,6 +59,31 @@ class ApiKebab {
 	}
 
 	public function insertKebab($data) {
+
+		$validator = new Validator(); // Instanciamos el validador
+
+		// Definir las reglas de validación
+		$camposRequeridos = [
+			'nombre' => 'Requerido', // nombre es obligatorio
+			'precio' => 'Requerido|Numerico' // precio es obligatorio y debe ser un número
+		];
+
+		// Validar los campos obligatorios y las validaciones personalizadas
+		$errores = $validator->validarCampos($data, $camposRequeridos);
+
+		$repoKebab = new RepoKebab();
+
+		// Validar si el nombre ya está registrado (duplicado)
+		if (empty($errores['nombre']) && $validator->validarDuplicado('nombre', $data['nombre'], $repoKebab)) {
+			$errores['nombre'] = 'El nombre ya está registrado.';
+		}
+
+		// Si hay errores, devolvemos la respuesta con los errores encontrados
+		if (count($errores) > 0) {
+			http_response_code(400); // Código HTTP 400 para errores de validación
+			return json_encode(['errores' => $errores]);
+		}
+
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$nombre = $data['nombre'];
 			$precio = $data['precio'];
@@ -139,6 +165,31 @@ class ApiKebab {
 	}
 
 	public function updateKebab($data) {
+
+		$validator = new Validator(); // Instanciamos el validador
+
+		// Definir las reglas de validación
+		$camposRequeridos = [
+			'nombre' => 'Requerido', // nombre es obligatorio
+			'precio' => 'Requerido|Numerico' // precio es obligatorio y debe ser un número
+		];
+
+		// Validar los campos obligatorios y las validaciones personalizadas
+		$errores = $validator->validarCampos($data, $camposRequeridos);
+
+		$repoKebab = new RepoKebab();
+
+		// Validar si el nombre ya está registrado (duplicado)
+		if (empty($errores['nombre']) && $validator->validarDuplicado('nombre', $data['nombre'], $repoKebab)) {
+			$errores['nombre'] = 'El nombre ya está registrado.';
+		}
+
+		// Si hay errores, devolvemos la respuesta con los errores encontrados
+		if (count($errores) > 0) {
+			http_response_code(400); // Código HTTP 400 para errores de validación
+			return json_encode(['errores' => $errores]);
+		}
+
 		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 			http_response_code(405);
 			return json_encode(['error' => 'Método no permitido.']);
