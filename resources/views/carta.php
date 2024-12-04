@@ -34,7 +34,7 @@
 						<div class="inputs-kebab">
 
 							<div class="foto-container" id="foto-container">
-								<img src="/img/kebabs/kebabcustom.jpeg" alt="Imagen seleccionada" class="foto-preview-img">;
+								<img src="/img/kebabs/kebabcustom.jpeg" alt="Imagen seleccionada" class="foto-preview-img">
 							</div>
 
 						</div>
@@ -47,17 +47,26 @@
 
 							<!-- Precio -->
 							<!-- Indicador de Precio Base -->
-							<div id="precio-base-container">
-								<label>Precio Base (pan incluido): </label>
-								<span id="precio-base">2€</span>
+							<div class="precios">
+								<div id="precio-base-container">
+									<label>Precio Base (pan incluido): </label>
+									<span id="precio-base">2€</span>
+								</div>
+
+								<!-- Indicador de Precio Total Dinámico -->
+								<div id="precio-total-container">
+									<label>Precio Total: </label>
+									<span id="precio-total-crear">2.00€</span>
+								</div>
 							</div>
 
-							<!-- Indicador de Precio Total Dinámico -->
-							<div id="precio-total-container">
-								<label>Precio Total: </label>
-								<span id="precio-total-crear">2.00€</span>
-							</div>
+						</div>
 
+						<div class="inputs-kebab">
+							<div class="cantidad">
+								<label>Cantidad: </label>
+								<input type="number" min="1" class="input-cantidad" value="1">
+							</div>
 						</div>
 					</fieldset>
 
@@ -97,17 +106,26 @@
 
 							<!-- Precio -->
 							<!-- Indicador de Precio Base -->
-							<div id="precio-base-container">
-								<label>Precio Base (pan incluido): </label>
-								<span id="precio-base">2€</span>
+							<div class="precios">
+								<div id="precio-base-container">
+									<label>Precio Base (pan incluido): </label>
+									<span id="precio-base">2€</span>
+								</div>
+
+								<!-- Indicador de Precio Total Dinámico -->
+								<div id="precio-total-container">
+									<label>Precio Total: </label>
+									<span id="precio-total-edit">2.00€</span>
+								</div>
 							</div>
 
-							<!-- Indicador de Precio Total Dinámico -->
-							<div id="precio-total-container">
-								<label>Precio Total: </label>
-								<span id="precio-total-edit">2.00€</span>
-							</div>
+						</div>
 
+						<div class="inputs-kebab">
+							<div class="cantidad">
+								<label>Cantidad: </label>
+								<input type="number" min="1" class="input-cantidad" value="1">
+							</div>
 						</div>
 					</fieldset>
 
@@ -268,8 +286,19 @@
 
 			}
 
-			const formEditarKebab = document.querySelector('#form-edit-kebab');
-			const btnUpdate = document.querySelector('#edit-kebab');
+			const formEditarKebab 	= document.querySelector('#form-edit-kebab');
+			const nombreEdit 		= formEditarKebab.querySelector('#nombre');
+			const cantidadEdit 		= formEditarKebab.querySelector('.input-cantidad');
+			const btnUpdate 		= formEditarKebab.querySelector('#edit-kebab');
+
+			btnUpdate.addEventListener('click', function(e) {
+				e.preventDefault();
+				const nombreKebab = nombreEdit.textContent;  // Suponiendo que "kebab" tiene el nombre
+				const cantidadSeleccionada = cantidadEdit.value;  // Obtener la cantidad seleccionada del input
+
+				// Llamar a la función addToCart, pasando el nombre del kebab y la cantidad seleccionada
+				addToCart(nombreKebab, cantidadSeleccionada);
+			});
 
 
 			// Crear un objeto para almacenar los valores originales de cada campo
@@ -299,76 +328,6 @@
 					}
 				});
 			}
-
-			formEditarKebab.addEventListener('submit', async (event) => {
-
-				event.preventDefault();  // Evitar comportamiento por defecto del formulario
-
-				// Obtener el botón que fue presionado
-				const botonPresionado = event.submitter;
-
-				const formData = new FormData(formEditarKebab);
-				formData.append('id', formularioContainerEdit.id);  // Aseguramos que siempre se pase el ID del kebab
-				// Añadir los ingredientes seleccionados al FormData si es necesario
-				const selectedIngredientes = [];
-				document.querySelectorAll('input[name="ingredientes[]"]:checked').forEach(checkbox => {
-					selectedIngredientes.push(checkbox.value);
-				});
-				formData.append('ingredientes', JSON.stringify(selectedIngredientes));
-
-				// Verificar si se ha seleccionado una nueva imagen
-				const imageInput 	= document.querySelector('input[name="foto"]');  // O el selector de tu campo de imagen
-				const existingImage = document.querySelector('.foto-preview-img');  // Asegúrate de que este ID sea el correcto
-
-				if (!imageInput.files.length && existingImage) {
-					// Si no se ha seleccionado una nueva imagen, enviar la imagen anterior
-					formData.append('foto', existingImage.src);
-				}
-
-				try {
-					if (botonPresionado.id === btnUpdate.id) {
-						// Si el botón presionado es el de actualizar
-						formData.append('action', 'update');
-
-						const response = await fetch('/apiKebab', {
-							method: 'POST',
-							body: formData
-						});
-
-						const data = await response.json();
-
-						if (data.success) {
-							// console.log(data);
-							// Guardar mensaje de éxito en sessionStorage
-							sessionStorage.setItem('flash_message', JSON.stringify({
-								message: data.message || 'Kebab actualizado correctamente',
-								type: 'success'
-							}));
-
-							await obtenerKebabsEIngredientes();  // Recargar los ingredientes después de actualizar uno
-							window.location.href = data.redirect_url || '/kebabs';  // Redirigir a la página de kebabs
-						} else {
-							// Guardar mensaje de error en sessionStorage
-							sessionStorage.setItem('flash_message', JSON.stringify({
-								message: data.message || 'Hubo un error al actualizar el kebabs',
-								type: 'error'
-							}));
-
-							window.location.href = '/kebabs';  // Redirigir a la página de kebabs
-						}
-					}
-
-				} catch (error) {
-					console.error('Error al enviar la solicitud:', error);
-					// Guardar mensaje de error en sessionStorage en caso de fallo
-					sessionStorage.setItem('flash_message', JSON.stringify({
-						message: 'Hubo un problema al procesar el kebab. Intenta nuevamente.',
-						type: 'error'
-					}));
-
-					window.location.href = '/kebabs';  // Redirigir a la página de kebabs
-				}
-			});
 
 			/* -------------------------------------- */
 			/*  SECCIÓN 2: CREACIÓN DE KEBAB */
@@ -567,14 +526,15 @@
 			// Función para manejar la vista previa de la imagen al seleccionar un archivo
 			//FORMULARIO DE AGREGAR INGREDIENTE
 			const formAgregarKebabElement = document.querySelector('#form-agregar-kebab');
-			const fotoPreview = document.querySelector('#foto-preview');
 			const nombreInput = document.querySelector('#nombre');
-			const precioInput = document.querySelector('#precio');
+			const cantidad = formAgregarKebabElement.querySelector('.input-cantidad');
 			const guardarBoton = formAgregarKebabElement.querySelector('#guardar-kebab');
 
-			guardarBoton.addEventListener('click', function() {
-				const nombreKebab = kebab.nombre;  // Suponiendo que "kebab" tiene el nombre
-				const cantidadSeleccionada = cantidadInput.value;  // Obtener la cantidad seleccionada del input
+
+			guardarBoton.addEventListener('click', function(e) {
+				e.preventDefault();
+				const nombreKebab = nombreInput.value;  // Suponiendo que "kebab" tiene el nombre
+				const cantidadSeleccionada = cantidad.value;  // Obtener la cantidad seleccionada del input
 
 				// Llamar a la función addToCart, pasando el nombre del kebab y la cantidad seleccionada
 				addToCart(nombreKebab, cantidadSeleccionada);
@@ -605,9 +565,52 @@
 			}
 
 			// Función para actualizar el precio total dinámicamente
+			// function actualizarPrecioTotalEdit(precio) {
+			// 	let preciosIngredientesSeleccionados = [];
+			// 	let precioMaximo = 0;
+			// 	let precioTotal = parseFloat(precio) || 0; // Aseguramos que precioTotal sea un número
+			//
+			// 	// Obtener todos los checkboxes de ingredientes
+			// 	let ingredientes = document.querySelectorAll('input[name="ingredientes[]"]');
+			//
+			// 	// Iteramos sobre todos los checkboxes
+			// 	ingredientes.forEach(checkbox => {
+			// 		// Obtener el precio del ingrediente del atributo 'data-precio'
+			// 		const precioIngrediente = parseFloat(checkbox.precio || 0);
+			//
+			// 		// Si el ingrediente está marcado
+			// 		if (checkbox.checked) {
+			// 			// Si el ingrediente no ha sido marcado previamente, lo agregamos
+			// 			if (!checkbox.classList.contains('ya-seleccionado')) {
+			// 				// Añadir el precio al total
+			// 				precioTotal += precioIngrediente;
+			// 			}
+			// 		}
+			// 	});
+			//
+			// 	// Para obtener el precio máximo de los ingredientes seleccionados (solo los nuevos)
+			// 	preciosIngredientesSeleccionados = Array.from(ingredientes).filter(checkbox => checkbox.checked && !checkbox.classList.contains('ya-seleccionado')).map(checkbox => parseFloat(checkbox.getAttribute('data-precio') || 0));
+			//
+			// 	if (preciosIngredientesSeleccionados.length > 0) {
+			// 		precioMaximo = Math.max(...preciosIngredientesSeleccionados);
+			// 	}
+			//
+			// 	// Sumamos el precio máximo al total (si existe un precio máximo)
+			// 	if (precioMaximo > 0) {
+			// 		precioTotal += precioMaximo;
+			// 	}
+			//
+			// 	// Actualizar el texto del precio total en el DOM
+			// 	const precioTotalElementoEdit = document.querySelector('#precio-total-edit');
+			// 	if (precioTotalElementoEdit) {
+			// 		precioTotalElementoEdit.textContent = `${precioTotal.toFixed(2)}€`;
+			// 	}
+			// }
+
+			// Función para actualizar el precio total dinámicamente
 			function actualizarPrecioTotalEdit(precio) {
 				let preciosIngredientesSeleccionados = [];
-				let precioMaximo = 0;
+				let ingredientesNuevos = 0; // Contador de ingredientes nuevos
 				let precioTotal = parseFloat(precio) || 0; // Aseguramos que precioTotal sea un número
 
 				// Obtener todos los checkboxes de ingredientes
@@ -620,25 +623,27 @@
 
 					// Si el ingrediente está marcado
 					if (checkbox.checked) {
-						// Si el ingrediente no ha sido marcado previamente, lo agregamos
+						// Si el ingrediente no ha sido marcado previamente, lo contamos como nuevo
 						if (!checkbox.classList.contains('ya-seleccionado')) {
-							// Añadir el precio al total
-							precioTotal += precioIngrediente;
+							ingredientesNuevos++; // Incrementamos el contador de ingredientes nuevos
 						}
+
+						// Guardamos el precio de todos los ingredientes seleccionados (nuevos y antiguos)
+						preciosIngredientesSeleccionados.push(precioIngrediente);
 					}
 				});
 
-				// Para obtener el precio máximo de los ingredientes seleccionados (solo los nuevos)
-				preciosIngredientesSeleccionados = Array.from(ingredientes).filter(checkbox => checkbox.checked && !checkbox.classList.contains('ya-seleccionado')).map(checkbox => parseFloat(checkbox.getAttribute('data-precio') || 0));
+				// Ordenamos los precios de mayor a menor
+				preciosIngredientesSeleccionados.sort((a, b) => b - a);
 
-				if (preciosIngredientesSeleccionados.length > 0) {
-					precioMaximo = Math.max(...preciosIngredientesSeleccionados);
-				}
+				// Seleccionamos los N ingredientes más caros según el número de ingredientes nuevos añadidos
+				const ingredientesMasCaros = preciosIngredientesSeleccionados.slice(0, ingredientesNuevos);
 
-				// Sumamos el precio máximo al total (si existe un precio máximo)
-				if (precioMaximo > 0) {
-					precioTotal += precioMaximo;
-				}
+				// Sumamos los precios de los ingredientes más caros seleccionados
+				const sumaIngredientesNuevos = ingredientesMasCaros.reduce((suma, precio) => suma + precio, 0);
+
+				// Sumamos la diferencia al precio total
+				precioTotal += sumaIngredientesNuevos;
 
 				// Actualizar el texto del precio total en el DOM
 				const precioTotalElementoEdit = document.querySelector('#precio-total-edit');
@@ -646,6 +651,7 @@
 					precioTotalElementoEdit.textContent = `${precioTotal.toFixed(2)}€`;
 				}
 			}
+
 
 
 
