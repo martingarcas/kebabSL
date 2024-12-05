@@ -22,8 +22,6 @@ class ApiKebab {
 					return $this->updateKebab($data);
 				case 'delete':
 					return $this->deleteKebab($data);
-				case 'pdf':
-					return $this->generatePdf($data);
 				default:
 					http_response_code(400);
 					return json_encode(['error' => 'Acción no válida.']);
@@ -167,6 +165,10 @@ class ApiKebab {
 	public function updateKebab($data) {
 
 		$validator = new Validator(); // Instanciamos el validador
+		$repoKebab = new RepoKebab();
+
+		// Recuperar el ingrediente actual
+		$kebabActual = $repoKebab->getById($data['id']);
 
 		// Definir las reglas de validación
 		$camposRequeridos = [
@@ -177,11 +179,12 @@ class ApiKebab {
 		// Validar los campos obligatorios y las validaciones personalizadas
 		$errores = $validator->validarCampos($data, $camposRequeridos);
 
-		$repoKebab = new RepoKebab();
-
-		// Validar si el nombre ya está registrado (duplicado)
-		if (empty($errores['nombre']) && $validator->validarDuplicado('nombre', $data['nombre'], $repoKebab)) {
-			$errores['nombre'] = 'El nombre ya está registrado.';
+		// Si el nombre del ingrediente no cambia, no validamos duplicados
+		if ($kebabActual->getNombre() != $data['nombre']) {
+			// Aquí se valida si el nombre es único solo si es diferente al actual
+			if ($validator->validarDuplicado('nombre', $data['nombre'], $repoKebab)) {
+				$errores['nombre'] = 'El nombre ya está registrado.';
+			}
 		}
 
 		// Si hay errores, devolvemos la respuesta con los errores encontrados
@@ -254,7 +257,6 @@ class ApiKebab {
 			$rutaRelativa = $data['foto'] ?? '';
 		}
 
-		$repoKebab = new RepoKebab();
 		$kebab = new Kebab($kebab_id, $nombre, $rutaRelativa, $precio, $ingredientes);
 
 		try {

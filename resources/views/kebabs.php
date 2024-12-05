@@ -499,9 +499,10 @@
 							await obtenerKebabsEIngredientes();  // Recargar los ingredientes después de actualizar uno
 							window.location.href = data.redirect_url || '/kebabs';  // Redirigir a la página de kebabs
 						} else {
+							console.log(data)
 							// Guardar mensaje de error en sessionStorage
 							sessionStorage.setItem('flash_message', JSON.stringify({
-								message: data.message || 'Hubo un error al actualizar el kebabs',
+								message: data.errores.nombre || 'Hubo un error al actualizar el kebabs',
 								type: 'error'
 							}));
 

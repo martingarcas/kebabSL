@@ -260,6 +260,39 @@ class RepoIngrediente {
 		return $stm->fetchColumn() > 0;
 	}
 
+	public function getById($id) {
+		$con = Conexion::getConection();
+
+		// Preparar y ejecutar la consulta para obtener un ingrediente por su ID
+		$stm = $con->prepare("SELECT * FROM ingrediente WHERE id = :id");
+		$stm->execute(['id' => $id]);
+
+		// Recuperar el resultado
+		$response = $stm->fetch(PDO::FETCH_ASSOC);
+
+		// Si no existe el ingrediente, retornar null
+		if (!$response) {
+			return null;
+		}
+
+		// Crear el objeto Ingrediente con los datos obtenidos
+		$ingrediente = new Ingrediente(
+			$response['id'],
+			$response['nombre'],
+			$response['foto'],
+			$response['precio'],
+			[] // Inicialmente no asignamos los alérgenos
+		);
+
+		// Obtener y asignar los alérgenos asociados
+		$ingrediente_alergenos = $this->__mm__alergenos([$response['id']]);
+
+		// Asignar los alérgenos al objeto Ingrediente
+		$ingrediente->setAlergenos($ingrediente_alergenos[$response['id']] ?? []);
+
+		return $ingrediente;
+	}
+
 }
 
 ?>

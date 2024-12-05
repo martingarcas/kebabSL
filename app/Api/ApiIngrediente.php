@@ -174,6 +174,10 @@ class ApiIngrediente {
 	public function updateIngredients($data) {
 
 		$validator = new Validator(); // Instanciamos el validador
+		$repoIngrediente = new RepoIngrediente();
+
+		// Recuperar el ingrediente actual
+		$ingredienteActual = $repoIngrediente->getById($data['id']);
 
 		// Definir las reglas de validación
 		$camposRequeridos = [
@@ -184,11 +188,12 @@ class ApiIngrediente {
 		// Validar los campos obligatorios y las validaciones personalizadas
 		$errores = $validator->validarCampos($data, $camposRequeridos);
 
-		$repoIngrediente = new RepoIngrediente();
-
-		// Validar si el nombre ya está registrado (duplicado)
-		if (empty($errores['nombre']) && $validator->validarDuplicado('nombre', $data['nombre'], $repoIngrediente)) {
-			$errores['nombre'] = 'El nombre ya está registrado.';
+		// Si el nombre del ingrediente no cambia, no validamos duplicados
+		if ($ingredienteActual->getNombre() != $data['nombre']) {
+			// Aquí se valida si el nombre es único solo si es diferente al actual
+			if ($validator->validarDuplicado('nombre', $data['nombre'], $repoIngrediente)) {
+				$errores['nombre'] = 'El nombre ya está registrado.';
+			}
 		}
 
 		// Si hay errores, devolvemos la respuesta con los errores encontrados

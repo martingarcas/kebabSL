@@ -259,6 +259,39 @@ class RepoKebab {
 		return $stm->fetchColumn() > 0;
 	}
 
+	public function getById($id) {
+		$con = Conexion::getConection();
+
+		// Preparar y ejecutar la consulta para obtener un ingrediente por su ID
+		$stm = $con->prepare("SELECT * FROM kebab WHERE id = :id");
+		$stm->execute(['id' => $id]);
+
+		// Recuperar el resultado
+		$response = $stm->fetch(PDO::FETCH_ASSOC);
+
+		// Si no existe el ingrediente, retornar null
+		if (!$response) {
+			return null;
+		}
+
+		// Crear el objeto Ingrediente con los datos obtenidos
+		$kebab = new Kebab(
+			$response['id'],
+			$response['nombre'],
+			$response['foto'],
+			$response['precio'],
+			[] // Inicialmente no asignamos los alérgenos
+		);
+
+		// Obtener y asignar los alérgenos asociados
+		$kebab_ingredientes = $this->__mm__ingredientes([$response['id']]);
+
+		// Asignar los alérgenos al objeto Ingrediente
+		$kebab->setIngredientes($kebab_ingredientes[$response['id']] ?? []);
+
+		return $kebab;
+	}
+
 }
 
 ?>

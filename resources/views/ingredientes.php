@@ -525,7 +525,7 @@
 						} else {
 							// Guardar mensaje de error en sessionStorage
 							sessionStorage.setItem('flash_message', JSON.stringify({
-								message: data.message || 'Hubo un error al actualizar el ingrediente',
+								message: data.errores.nombre || 'Hubo un error al actualizar el ingrediente',
 								type: 'error'
 							}));
 
