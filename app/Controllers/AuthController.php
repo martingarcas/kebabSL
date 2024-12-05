@@ -241,6 +241,14 @@ class AuthController {
 
 	// Renderizar vista de kebabs
 	public function showMenuKebabs($view) {
+
+		$usuario = Logger::obtenerUsuario();
+
+		if ($usuario->getRol() === 'administrador') {
+			http_response_code(403); // Código HTTP 403: Prohibido
+			FlashMessage::setMessage("ACCESO DENEGADO.", 'error');
+			header('Location: /');
+		}
 		// Renderizar la vista con el mensaje flash si existe
 		echo $this->templates->render($view);
 	}
