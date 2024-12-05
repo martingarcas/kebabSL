@@ -34,13 +34,12 @@ class Logger {
 	 * @return void
 	 */
 	public static function login(Usuario $usuario) : void {
-		self::iniciaSesion();  // Asegúrate de que la sesión esté iniciada
+		self::iniciaSesion();  // Aseguramos que la sesión esté iniciada
 
-		// Serializa el objeto Usuario antes de guardarlo en la sesión
-		$_SESSION['user'] = serialize($usuario);  // Serializamos el objeto
+		// Serializamos el objeto Usuario antes de guardarlo en la sesión
+		$_SESSION['user'] = serialize($usuario);
 
-		// Agrega un var_dump para verificar si el objeto se ha serializado correctamente
-//		var_dump($_SESSION['user']);  // Verifica que se trata de una cadena serializada
+//		var_dump($_SESSION['user']);
 	}
 
 	// Método para actualizar los datos del usuario en la sesión
