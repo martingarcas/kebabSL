@@ -244,7 +244,7 @@ class AuthController {
 
 		$usuario = Logger::obtenerUsuario();
 
-		if ($usuario->getRol() === 'administrador') {
+		if ($usuario && $usuario->getRol() === 'administrador') {
 			http_response_code(403); // Código HTTP 403: Prohibido
 			FlashMessage::setMessage("ACCESO DENEGADO.", 'error');
 			header('Location: /');
