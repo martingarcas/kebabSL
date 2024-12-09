@@ -289,15 +289,28 @@
 			const formEditarKebab 	= document.querySelector('#form-edit-kebab');
 			const nombreEdit 		= formEditarKebab.querySelector('#nombre');
 			const cantidadEdit 		= formEditarKebab.querySelector('.input-cantidad');
+			const precioKebabEdit 		= formEditarKebab.querySelector('#precio-total-edit');
 			const btnUpdate 		= formEditarKebab.querySelector('#edit-kebab');
 
 			btnUpdate.addEventListener('click', function(e) {
 				e.preventDefault();
-				const nombreKebab = nombreEdit.textContent;  // Suponiendo que "kebab" tiene el nombre
-				const cantidadSeleccionada = cantidadEdit.value;  // Obtener la cantidad seleccionada del input
+				const nombreKebab = nombreEdit.textContent + " - custom";  // Suponiendo que "kebab" tiene el nombre
+				const ingredientesKebabSelect = formEditarKebab.querySelectorAll('.ingrediente-checkbox input');
+				const precioTotalKebab = precioKebabEdit.textContent.replace('€', '').trim();
+				const cantidadSeleccionada 	= cantidadEdit.value;  // Obtener la cantidad seleccionada del input
+
+				// Filtramos los que están seleccionados y obtenemos el texto del label hermano
+				const ingredientesSeleccionados = Array.from(ingredientesKebabSelect)
+					.filter(input => input.checked)
+					.map(input => {
+						const label = document.querySelector(`label[for="${input.id}"]`);
+						return label ? label.textContent.trim() : null;
+					});
+
+				const ingredientesComoCadena = ingredientesSeleccionados.join(', ');
 
 				// Llamar a la función addToCart, pasando el nombre del kebab y la cantidad seleccionada
-				addToCart(nombreKebab, cantidadSeleccionada);
+				addToCart(nombreKebab, ingredientesComoCadena, precioTotalKebab, cantidadSeleccionada);
 			});
 
 
@@ -528,23 +541,30 @@
 			// Función para manejar la vista previa de la imagen al seleccionar un archivo
 			const formAgregarKebabElement = document.querySelector('#form-agregar-kebab');
 			const nombreInput 		= formAgregarKebabElement.querySelector('#nombre');
-			const ingredientesKebabSelect = formAgregarKebabElement.querySelector('.ingredientes-texto');
-			const precioKebab 		= formAgregarKebabElement.querySelector('.precio');
+			const precioKebab 		= formAgregarKebabElement.querySelector('#precio-total-crear');
 			const cantidad 			= formAgregarKebabElement.querySelector('.input-cantidad');
 			const guardarBoton 		= formAgregarKebabElement.querySelector('#guardar-kebab');
 
-
 			guardarBoton.addEventListener('click', function(e) {
+
 				e.preventDefault();
 				const nombreKebab 			= nombreInput.value;  // Suponiendo que "kebab" tiene el nombre
-				const ingredientesKebab 	= ingredientesKebabSelect.textContent;  // Obtener la cantidad seleccionada del input
-				const precioTotalKebab 		= precioKebab.textContent;  // Obtener la cantidad seleccionada del input
+				const ingredientesKebabSelect = formAgregarKebabElement.querySelectorAll('.ingrediente-checkbox input');
+				const precioTotalKebab = precioKebab.textContent.replace('€', '').trim();
 				const cantidadSeleccionada 	= cantidad.value;  // Obtener la cantidad seleccionada del input
 
-				console.log(ingredientesKebab)
-				console.log(precioTotalKebab)
+				// Filtramos los que están seleccionados y obtenemos el texto del label hermano
+				const ingredientesSeleccionados = Array.from(ingredientesKebabSelect)
+					.filter(input => input.checked)
+					.map(input => {
+						const label = document.querySelector(`label[for="${input.id}"]`);
+						return label ? label.textContent.trim() : null;
+					});
+
+				const ingredientesComoCadena = ingredientesSeleccionados.join(', ');
+
 				// Llamar a la función addToCart, pasando el nombre del kebab y la cantidad seleccionada
-				// addToCart(nombreKebab, ingredientesKebab, precioTotalKebab, cantidadSeleccionada);
+				addToCart(nombreKebab, ingredientesComoCadena, precioTotalKebab, cantidadSeleccionada);
 			});
 
 

@@ -23,8 +23,8 @@
 				<span class="total-precio">€0.00</span>
 			</div>
 			<div class="botones-globales">
-				<button class="btn vaciar" onclick="vaciarCarrito()">Vaciar Carrito</button>
-				<button class="btn realizar" onclick="realizarPedido()">Realizar Pedido</button>
+				<button class="btn vaciar">Vaciar Carrito</button>
+				<button class="btn realizar">Realizar Pedido</button>
 			</div>
 		</header>
 
@@ -39,7 +39,7 @@
 				<span>Total:</span>
 				<span class="total-precio">€0.00</span>
 			</div>
-			<button class="btn realizar grande" onclick="realizarPedido()">Realizar Pedido</button>
+			<button class="btn realizar grande">Realizar Pedido</button>
 		</footer>
 	</div>
 
@@ -49,7 +49,6 @@
 <?php $this->start('scripts'); ?>
 
 	<script>
-
 		document.addEventListener('DOMContentLoaded', () => {
 
 			// Función para mostrar el carrito
@@ -62,59 +61,81 @@
 
 				// Encabezado del carrito (estático)
 				carritoContainer.innerHTML = `
-					<header class="carrito-header">
-						<h1>Tu Carrito</h1>
-						<div class="total">
-							<span class="total-precio">€${calcularTotalPrecio(carrito.lineasPedido)}</span>
-						</div>
-						<div class="botones-globales">
-							<button class="btn vaciar" onclick="vaciarCarrito()">Vaciar Carrito</button>
-							<button class="btn realizar" onclick="realizarPedido()">Realizar Pedido</button>
-						</div>
-					</header>
+                <header class="carrito-header">
+                    <h1>Tu Carrito</h1>
+                    <div class="total">
+                        <span class="total-precio">€${calcularTotalPrecio(carrito.lineasPedido)}</span>
+                    </div>
+                    <div class="botones-globales">
+                        <button class="btn vaciar">Vaciar Carrito</button>
+                        <button class="btn realizar">Realizar Pedido</button>
+                    </div>
+                </header>
 
-					<section class="lineas-pedido">
-						${crearLineasPedido(carrito.lineasPedido)}
-					</section>
+                <section class="lineas-pedido">
+                    ${crearLineasPedido(carrito.lineasPedido)}
+                </section>
 
-					<footer class="carrito-footer">
-						<div class="total">
-							<span>Total:</span>
-							<span class="total-precio">€${calcularTotalPrecio(carrito.lineasPedido)}</span>
-						</div>
-						<button class="btn realizar grande" onclick="realizarPedido()">Realizar Pedido</button>
-					</footer>
-				`
+                <footer class="carrito-footer">
+                    <div class="total">
+                        <span>Total:</span>
+                        <span class="total-precio">€${calcularTotalPrecio(carrito.lineasPedido)}</span>
+                    </div>
+                    <button class="btn realizar grande">Realizar Pedido</button>
+                </footer>
+            `;
 
+				// Añadir los eventos a los botones
+				document.querySelector('.btn.vaciar').addEventListener('click', vaciarCarrito);
+				let buttonsRelizar = document.querySelectorAll('.btn.realizar');
+				buttonsRelizar.forEach(btn => {
+					btn.addEventListener('click', realizarPedido)
+				});
+
+				// Agregar eventos a los botones dinámicos
+				document.querySelector('.lineas-pedido').addEventListener('click', function(event) {
+					const button = event.target;
+					const nombreKebab = button.getAttribute('data-nombre');
+
+					if (button.classList.contains('mas')) {
+						incrementarCantidad(nombreKebab);
+					} else if (button.classList.contains('menos')) {
+						decrementarCantidad(nombreKebab);
+					} else if (button.classList.contains('eliminar')) {
+						eliminarDelCarrito(nombreKebab);
+					}
+				});
 			}
 
 			// Función para crear las líneas de pedido dinámicamente
 			function crearLineasPedido(lineasPedido) {
-				return lineasPedido.map(linea => `
-							<article class="linea-pedido">
-							<div class="info">
-							<h2 class="nombre-kebab">${linea.nombre}</h2>
-							<p class="ingredientes">Ingredientes: ${linea.ingredientes || ''}</p>
-							<p class="precio">Precio: €${linea.precio * linea.cantidad || '0.00'}</p>
-							</div>
-							<div class="controles">
-							<div class="cantidad">
-							<button class="btn menos" onclick="decrementarCantidad('${linea.nombre}')">-</button>
-							<span class="cantidad-numero">${linea.cantidad}</span>
-							<button class="btn mas" onclick="incrementarCantidad('${linea.nombre}')">+</button>
-							</div>
-							<button class="btn eliminar" onclick="eliminarDelCarrito('${linea.nombre}')">Eliminar</button>
-							</div>
-							</article>
-							`).join('');
+				return lineasPedido.map(linea => {
+					return `
+                    <article class="linea-pedido">
+                        <div class="info">
+                            <h2 class="nombre-kebab">${linea.nombre || 'Custom'}</h2>
+                            <p class="ingredientes">Ingredientes: ${linea.ingredientes || ''}</p>
+                            <p class="precio">Precio: €${(linea.precio * linea.cantidad).toFixed(2)}</p>
+                        </div>
+                        <div class="controles">
+                            <div class="cantidad">
+                                <button class="btn menos" data-nombre="${linea.nombre}">-</button>
+                                <span class="cantidad-numero">${linea.cantidad}</span>
+                                <button class="btn mas" data-nombre="${linea.nombre}">+</button>
+                            </div>
+                            <button class="btn eliminar" data-nombre="${linea.nombre}">Eliminar</button>
+                        </div>
+                    </article>
+                `;
+				}).join('');
 			}
 
 			// Función para calcular el total del carrito
 			function calcularTotalPrecio(lineasPedido) {
-				return lineasPedido.reduce((total, linea) => total + linea.precio * linea.cantidad, 0).toFixed(2);
+				return lineasPedido.reduce((total, linea) => total + (linea.precio * linea.cantidad), 0).toFixed(2);
 			}
 
-			// Funciones de manejo del carrito (Ejemplo, puedes agregar más según las necesidades)
+			// Funciones de manejo del carrito
 			function vaciarCarrito() {
 				sessionStorage.removeItem('carrito');
 				mostrarCarrito();
@@ -150,12 +171,13 @@
 			function realizarPedido() {
 				// Aquí se puede definir la lógica para procesar el pedido
 				alert('Pedido realizado con éxito!');
+				vaciarCarrito();
 			}
 
 			mostrarCarrito();
 
 		});
-
 	</script>
+
 
 <?php $this->stop(); ?>
