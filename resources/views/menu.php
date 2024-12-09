@@ -15,7 +15,7 @@ $usuario = Logger::obtenerUsuario();
 				<!-- Menú para usuarios logueados -->
 				<?php if ($usuario !== null && $usuario->getRol() === 'cliente'): ?>
 					<li><a href="/carta">Carta</a></li>
-					<li><a href="/">Carrito</a></li>
+					<li><a href="/carrito">Carrito</a></li>
 					<li><a href="/contacto">Contacto</a></li>
 					<!-- Foto del usuario con submenú desplegable -->
 					<li class="user-menu">
@@ -49,7 +49,7 @@ $usuario = Logger::obtenerUsuario();
 					<!-- Menú para usuarios no logueados -->
 					<li><a href="/">Inicio</a></li>
 					<li><a href="/carta">Carta</a></li>
-					<li><a href="/">Carrito</a></li>
+					<li><a href="/carrito">Carrito</a></li>
 					<li><a href="/contacto">Contacto</a></li>
 					<li><a href="/login">Iniciar sesión</a></li>
 					<li><a href="/register">Regístrate</a></li>

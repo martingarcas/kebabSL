@@ -475,9 +475,11 @@
 				addToCartButton.addEventListener('click', function() {
 					const nombreKebab = kebab.nombre;  // Suponiendo que "kebab" tiene el nombre
 					const cantidadSeleccionada = cantidadInput.value;  // Obtener la cantidad seleccionada del input
+					const ingredientesKebab 	= card.querySelector('.ingredientes-texto') .textContent // Obtener la cantidad seleccionada del input
+					const precioKebab = kebab.precio;  // Suponiendo que "kebab" tiene el nombre
 
 					// Llamar a la función addToCart, pasando el nombre del kebab y la cantidad seleccionada
-					addToCart(nombreKebab, cantidadSeleccionada);
+					addToCart(nombreKebab, ingredientesKebab, precioKebab, cantidadSeleccionada);
 				});
 
 				addToCartContainer.appendChild(cantidadInput);
@@ -524,20 +526,25 @@
 			/* -------------------------------------- */
 
 			// Función para manejar la vista previa de la imagen al seleccionar un archivo
-			//FORMULARIO DE AGREGAR INGREDIENTE
 			const formAgregarKebabElement = document.querySelector('#form-agregar-kebab');
-			const nombreInput = document.querySelector('#nombre');
-			const cantidad = formAgregarKebabElement.querySelector('.input-cantidad');
-			const guardarBoton = formAgregarKebabElement.querySelector('#guardar-kebab');
+			const nombreInput 		= formAgregarKebabElement.querySelector('#nombre');
+			const ingredientesKebabSelect = formAgregarKebabElement.querySelector('.ingredientes-texto');
+			const precioKebab 		= formAgregarKebabElement.querySelector('.precio');
+			const cantidad 			= formAgregarKebabElement.querySelector('.input-cantidad');
+			const guardarBoton 		= formAgregarKebabElement.querySelector('#guardar-kebab');
 
 
 			guardarBoton.addEventListener('click', function(e) {
 				e.preventDefault();
-				const nombreKebab = nombreInput.value;  // Suponiendo que "kebab" tiene el nombre
-				const cantidadSeleccionada = cantidad.value;  // Obtener la cantidad seleccionada del input
+				const nombreKebab 			= nombreInput.value;  // Suponiendo que "kebab" tiene el nombre
+				const ingredientesKebab 	= ingredientesKebabSelect.textContent;  // Obtener la cantidad seleccionada del input
+				const precioTotalKebab 		= precioKebab.textContent;  // Obtener la cantidad seleccionada del input
+				const cantidadSeleccionada 	= cantidad.value;  // Obtener la cantidad seleccionada del input
 
+				console.log(ingredientesKebab)
+				console.log(precioTotalKebab)
 				// Llamar a la función addToCart, pasando el nombre del kebab y la cantidad seleccionada
-				addToCart(nombreKebab, cantidadSeleccionada);
+				// addToCart(nombreKebab, ingredientesKebab, precioTotalKebab, cantidadSeleccionada);
 			});
 
 
@@ -563,49 +570,6 @@
 					precioTotalElementoCrear.textContent = `${precioTotal.toFixed(2)}€`;
 				}
 			}
-
-			// Función para actualizar el precio total dinámicamente
-			// function actualizarPrecioTotalEdit(precio) {
-			// 	let preciosIngredientesSeleccionados = [];
-			// 	let precioMaximo = 0;
-			// 	let precioTotal = parseFloat(precio) || 0; // Aseguramos que precioTotal sea un número
-			//
-			// 	// Obtener todos los checkboxes de ingredientes
-			// 	let ingredientes = document.querySelectorAll('input[name="ingredientes[]"]');
-			//
-			// 	// Iteramos sobre todos los checkboxes
-			// 	ingredientes.forEach(checkbox => {
-			// 		// Obtener el precio del ingrediente del atributo 'data-precio'
-			// 		const precioIngrediente = parseFloat(checkbox.precio || 0);
-			//
-			// 		// Si el ingrediente está marcado
-			// 		if (checkbox.checked) {
-			// 			// Si el ingrediente no ha sido marcado previamente, lo agregamos
-			// 			if (!checkbox.classList.contains('ya-seleccionado')) {
-			// 				// Añadir el precio al total
-			// 				precioTotal += precioIngrediente;
-			// 			}
-			// 		}
-			// 	});
-			//
-			// 	// Para obtener el precio máximo de los ingredientes seleccionados (solo los nuevos)
-			// 	preciosIngredientesSeleccionados = Array.from(ingredientes).filter(checkbox => checkbox.checked && !checkbox.classList.contains('ya-seleccionado')).map(checkbox => parseFloat(checkbox.getAttribute('data-precio') || 0));
-			//
-			// 	if (preciosIngredientesSeleccionados.length > 0) {
-			// 		precioMaximo = Math.max(...preciosIngredientesSeleccionados);
-			// 	}
-			//
-			// 	// Sumamos el precio máximo al total (si existe un precio máximo)
-			// 	if (precioMaximo > 0) {
-			// 		precioTotal += precioMaximo;
-			// 	}
-			//
-			// 	// Actualizar el texto del precio total en el DOM
-			// 	const precioTotalElementoEdit = document.querySelector('#precio-total-edit');
-			// 	if (precioTotalElementoEdit) {
-			// 		precioTotalElementoEdit.textContent = `${precioTotal.toFixed(2)}€`;
-			// 	}
-			// }
 
 			// Función para actualizar el precio total dinámicamente
 			function actualizarPrecioTotalEdit(precio) {
@@ -656,16 +620,36 @@
 
 
 			// Función para agregar al carrito
-			function addToCart(nombreKebab, cantidadSeleccionada) {
-				// Mostrar un mensaje con el nombre del kebab y la cantidad seleccionada
-				alert(`El kebab "${nombreKebab}" ha sido añadido correctamente al carrito. Cantidad: ${cantidadSeleccionada} unidad(es).`);
+			function addToCart(nombreKebab, ingredientesKebab, precioTotalKebab, cantidadSeleccionada) {
+				// Obtener las líneas de pedido existentes o inicializar un objeto vacío
+				let carrito = JSON.parse(sessionStorage.getItem('carrito')) || { lineasPedido: [] };
 
-				// Aquí puedes agregar el kebab al carrito. Suponiendo que tienes una variable carrito:
-				// carrito.push({ nombre: nombreKebab, cantidad: cantidadSeleccionada });
+				// Ver si el kebab ya está en el carrito
+				const lineaExistente = carrito.lineasPedido.find(linea => linea.nombre === nombreKebab);
 
-				// O actualizar el carrito visualmente:
-				// actualizarCarrito();
+				if (lineaExistente) {
+					// Si ya existe, simplemente incrementamos la cantidad
+					lineaExistente.cantidad += parseInt(cantidadSeleccionada, 10);
+				} else {
+					// Si no existe, agregamos una nueva línea de pedido
+					carrito.lineasPedido.push({
+						nombre: nombreKebab,
+						ingredientes: ingredientesKebab,
+						precio: precioTotalKebab,
+						cantidad: parseInt(cantidadSeleccionada, 10)
+					});
+				}
+
+				// Guardar el carrito en sessionStorage
+				sessionStorage.setItem('carrito', JSON.stringify(carrito));
+
+				// Mostrar un mensaje al usuario
+				alert(`El kebab "${nombreKebab}" ha sido añadido al carrito con ${cantidadSeleccionada} unidad(es).`);
+
+				// Opcional: Actualizar un contador visual del carrito
+				actualizarCarrito();
 			}
+
 
 			// Función para actualizar el carrito visualmente (ejemplo)
 			function actualizarCarrito() {

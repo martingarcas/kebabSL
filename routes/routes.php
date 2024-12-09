@@ -26,6 +26,7 @@ $routes = [
 	'profile' 			=> [AuthController::class, 'showProfile', 'profile'],
 	'apiUser' 			=> [ApiUser::class, 'handleRequest', 'null'],
 	'carta' 			=> [AuthController::class, 'showMenuKebabs', 'carta'],
+	'carrito' 			=> [AuthController::class, 'showCarrito', 'carrito'],
 ];
 
 return $routes;
