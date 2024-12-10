@@ -329,7 +329,6 @@ $this->layout('master'); ?>
 
 			async function guardarCampo(input, campo) {
 				// console.log(input, campo)
-				document
 				const valor = input.value.trim(); // Obtener el valor del input
 				const fila = input.closest('tr'); // Obtener la fila asociada
 
@@ -339,8 +338,10 @@ $this->layout('master'); ?>
 				validarCampo(input);
 
 				// Verificar si hay errores locales (mensaje de error en el input)
+				// console.log(input)
+				// console.log(input.nextElementSibling)
 				if (input.nextElementSibling && input.nextElementSibling.textContent !== '' && campo != 'monedero') {
-					return; // Si hay errores, detenemos el flujo
+					return; // Si hay errores, salimos
 				}
 
 				// Verificar si hay una foto seleccionada o capturada
@@ -365,9 +366,9 @@ $this->layout('master'); ?>
 				}
 
 				// Verificar que el FormData esté construyéndose correctamente
-				formData.forEach((value, key) => {
-					console.log(key, value);  // Mostrar las claves y valores del FormData
-				});
+				// formData.forEach((value, key) => {
+				// 	console.log(key, value);
+				// });
 
 				// Enviar el dato al backend con la foto si está disponible
 				try {
@@ -388,7 +389,7 @@ $this->layout('master'); ?>
 
 						// Si la foto se actualizó, mostrarla en la tabla
 						if (data.fotoUrl) {
-							// Asumimos que la respuesta tiene una URL para la foto actualizada
+							// URL para la foto actualizada
 							const fotoActualizada = data.fotoUrl;
 							// Inserta la imagen en el contenedor de previsualización
 							fotoPreview.innerHTML = `<img src="${fotoActualizada}" alt="Foto de usuario" class="foto-preview-img">`;
@@ -624,11 +625,6 @@ $this->layout('master'); ?>
 					errorMessage.textContent = '';
 				}
 			}
-
-
-			// MONEDERO
-			const guardarMontoButton 	= document.getElementById('guardar-monto');
-
 
 			fetchUserData();
 		});

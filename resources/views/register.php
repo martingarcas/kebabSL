@@ -105,25 +105,37 @@
 		async function validarCampo(campo) {
 			try {
 				const formData = new FormData();
-				formData.append('action', 'validate');
-				formData.append(campo.name, campo.value);
+				formData.append('action', 'validate');  // Tipo de acción
+				formData.append(campo.name, campo.value); // Asegúrate de agregar el campo correcto
+
+				console.log("Datos enviados a la API:", [...formData.entries()]);  // Verificación
+
+				// Hacemos la llamada a la API y esperamos la respuesta
 				const response = await fetch('/apiRegister', { method: 'POST', body: formData });
+
+				// Esperamos la respuesta JSON
 				const data = await response.json();
 
-				// Limpiar cualquier error previo
+				console.log("Datos recibidos:", data);  // Verificación de datos recibidos
+
+				// Limpiamos cualquier error previo
 				limpiarErrores(campo);
 
-				// Validar y actualizar la validez del campo sin eliminar/agregar del Set
-				if (data.errores && data.errores[campo.name]) {
+				// Verificamos si la validación fue exitosa (basado en data.success)
+				if (data.success) {
+					// Si la validación fue exitosa, agregamos el campo al conjunto de campos validados
+					camposValidados.add(campo.name);
+				} else if (data.errores && data.errores[campo.name]) {
+					// Si hay errores en el campo, mostramos el error y eliminamos del conjunto
 					mostrarError(campo, data.errores[campo.name]);
-					camposValidados.delete(campo.name); // Si hay error, eliminamos el campo del Set
-				} else {
-					camposValidados.add(campo.name); // Si no hay error, lo agregamos al Set
+					camposValidados.delete(campo.name);
 				}
 
-				actualizarEstadoFormulario(); // Actualizamos el estado del formulario tras validar un campo
+				// Actualizamos el estado del formulario tras la validación
+				actualizarEstadoFormulario();
+
 			} catch (error) {
-				console.error('Error al validar el campo:', error);
+				console.error('Error al validar el campo:', error);  // Manejamos cualquier error de la solicitud
 			}
 		}
 

@@ -621,12 +621,12 @@
 				preciosIngredientesSeleccionados.sort((a, b) => b - a);
 
 				// Seleccionamos los N ingredientes más caros según el número de ingredientes nuevos añadidos
-				const ingredientesMasCaros = preciosIngredientesSeleccionados.slice(0, ingredientesNuevos);
+				const ingredientesMasCaros = preciosIngredientesSeleccionados.slice(0, ingredientesNuevos); //copia del  array de los elementos más caros
 
 				// Sumamos los precios de los ingredientes más caros seleccionados
 				const sumaIngredientesNuevos = ingredientesMasCaros.reduce((suma, precio) => suma + precio, 0);
 
-				// Sumamos la diferencia al precio total
+				// Sumamos la diferencia al precio total/inicial
 				precioTotal += sumaIngredientesNuevos;
 
 				// Actualizar el texto del precio total en el DOM
@@ -635,9 +635,6 @@
 					precioTotalElementoEdit.textContent = `${precioTotal.toFixed(2)}€`;
 				}
 			}
-
-
-
 
 			// Función para agregar al carrito
 			function addToCart(nombreKebab, ingredientesKebab, precioTotalKebab, cantidadSeleccionada) {

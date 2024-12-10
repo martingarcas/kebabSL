@@ -55,20 +55,21 @@
 <?php $this->stop() ?>
 
 <?php $this->start('scripts') ?>
-<script>
-	document.addEventListener('DOMContentLoaded', () => {
-		// Agregar el evento de clic al enlace de "Recuperar Contraseña"
-		document.querySelector('#recuperar-contrasenna').addEventListener('click', function() {
-			// Establecer el mensaje flash en sessionStorage
-			sessionStorage.setItem('flash_message', JSON.stringify({
-				message: 'Se te ha enviado un correo electrónico con tu nueva contraseña.',
-				type: 'success'
-			}));
 
-			// Redirigir a la página de login
-			window.location.href = '/login';
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			// Agregar el evento de clic al enlace de "Recuperar Contraseña"
+			document.querySelector('#recuperar-contrasenna').addEventListener('click', function() {
+				// Establecer el mensaje flash en sessionStorage
+				sessionStorage.setItem('flash_message', JSON.stringify({
+					message: 'Se te ha enviado un correo electrónico con tu nueva contraseña.',
+					type: 'success'
+				}));
+
+				// Redirigir a la página de login
+				window.location.href = '/login';
+			});
 		});
-	});
-</script>
+	</script>
 
 <?php $this->stop() ?>

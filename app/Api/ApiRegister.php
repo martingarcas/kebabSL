@@ -36,9 +36,14 @@ class ApiRegister {
 	public function procesarValidacion($data) {
 		// Agregar encabezado para indicar que la respuesta es JSON
 		header('Content-Type: application/json');
-		$validator = new Validator(); // Instanciamos el validador
 
-		// Definir los campos requeridos para la validación
+		// Si no se reciben datos
+		if (empty($data)) {
+			http_response_code(400); // Si no hay datos en la solicitud
+			return json_encode(['error' => 'No se recibieron datos.']);
+		}
+
+		// Definir las reglas de validación para los campos
 		$camposRequeridos = [
 			'nombre'      => 'Requerido',
 			'contrasenna' => 'Requerido',
@@ -49,31 +54,109 @@ class ApiRegister {
 			'numero'      => 'Requerido'
 		];
 
-		// Validar los campos obligatorios
-		$errores = $validator->validarCampos($data, $camposRequeridos);
+		// Instanciamos el validador
+		$validator = new Validator();
 
-		$repoUser = new RepoUser();
+		// Array para almacenar los errores
+		$errores = [];
 
-		// Validar si el correo electrónico ya está registrado
-		if (empty($errores['email']) && $validator->validarDuplicado('email', $data['email'], $repoUser)) {
-			$errores['email'] = 'El correo electrónico ya está registrado.';
+		// Recorrer los datos recibidos para encontrar el campo a validar
+		$campoValidado = null;
+		foreach ($data as $campo => $valor) {
+			if (isset($camposRequeridos[$campo])) {
+				$campoValidado = $campo;
+				break; // Cuando encontramos el primer campo válido, lo asignamos y salimos del bucle
+			}
 		}
 
-		// Validar si el DNI ya está registrado
-		if (empty($errores['dni']) && $validator->validarDuplicado('dni', $data['dni'], $repoUser)) {
-			$errores['dni'] = 'El DNI ya está registrado.';
+		// Si no encontramos un campo válido, devolver un error
+		if (!$campoValidado) {
+			http_response_code(400);
+			return json_encode(['error' => 'No se encontró un campo válido para validar.']);
 		}
 
-		// Si hay errores, devolvemos la respuesta con los errores encontrados
+		// Validar el campo encontrado
+		// En el primer parametro obtengo el array con el nombre y el valor que me llega
+		// En el segundo parámetro para hacer una validación individual obtengo como clave el nombre del campo y le aplico la regla que pertenezca a esa campo en camposRequeridos
+		$erroresCampo = $validator->validarCampos([$campoValidado => $data[$campoValidado]], [$campoValidado => $camposRequeridos[$campoValidado]]);
+
+		// Si hay errores en la validación del campo, agregarlos al array de errores
+		if (!empty($erroresCampo)) {
+			$errores[$campoValidado] = $erroresCampo[$campoValidado];
+		}
+
+		// Validación extra para correo electrónico
+		if ($campoValidado === 'email' && empty($errores['email'])) {
+			$repoUser = new RepoUser();
+			if ($validator->validarDuplicado('email', $data['email'], $repoUser)) {
+				$errores['email'] = 'El correo electrónico ya está registrado.';
+			}
+		}
+
+		// Validación extra para DNI
+		if ($campoValidado === 'dni' && empty($errores['dni'])) {
+			$repoUser = new RepoUser();
+			if ($validator->validarDuplicado('dni', $data['dni'], $repoUser)) {
+				$errores['dni'] = 'El DNI ya está registrado.';
+			}
+		}
+
+		// Si hay errores, devolverlos con código 400
 		if (count($errores) > 0) {
-			http_response_code(400); // Código HTTP 400 para errores de validación
+			http_response_code(400);  // Error si hay validaciones fallidas
 			return json_encode(['errores' => $errores]);
 		}
 
-		// Si todo es válido, devolvemos un mensaje de éxito
-		http_response_code(200); // Código HTTP 200, indicando que los datos son válidos y listos para ser procesados
-		return json_encode(['success' => 'Formulario válido y listo para ser procesado.']);
+		// Si no hay errores, devolver el éxito con código 200
+		http_response_code(200);  // OK si todo es correcto
+		return json_encode(['success' => 'Campo validado correctamente.']);
 	}
+
+
+	/**
+	 * Método para procesar la validación de los datos recibidos en el formulario
+	 */
+//	public function procesarValidacion($data) {
+//		// Agregar encabezado para indicar que la respuesta es JSON
+//		header('Content-Type: application/json');
+//		$validator = new Validator(); // Instanciamos el validador
+//
+//		// Definir los campos requeridos para la validación
+//		$camposRequeridos = [
+//			'nombre'      => 'Requerido',
+//			'contrasenna' => 'Requerido',
+//			'dni'         => 'Requerido|Dni',
+//			'email'       => 'Requerido|Email',
+//			'localidad'   => 'Requerido',
+//			'calle'       => 'Requerido',
+//			'numero'      => 'Requerido'
+//		];
+//
+//		// Validar los campos obligatorios
+//		$errores = $validator->validarCampos($data, $camposRequeridos);
+//
+//		$repoUser = new RepoUser();
+//
+//		// Validar si el correo electrónico ya está registrado
+//		if (empty($errores['email']) && $validator->validarDuplicado('email', $data['email'], $repoUser)) {
+//			$errores['email'] = 'El correo electrónico ya está registrado.';
+//		}
+//
+//		// Validar si el DNI ya está registrado
+//		if (empty($errores['dni']) && $validator->validarDuplicado('dni', $data['dni'], $repoUser)) {
+//			$errores['dni'] = 'El DNI ya está registrado.';
+//		}
+//
+//		// Si hay errores, devolvemos la respuesta con los errores encontrados
+//		if (count($errores) > 0) {
+//			http_response_code(400); // Código HTTP 400 para errores de validación
+//			return json_encode(['errores' => $errores]);
+//		}
+//
+//		// Si todo es válido, devolvemos un mensaje de éxito
+//		http_response_code(200); // Código HTTP 200, indicando que los datos son válidos y listos para ser procesados
+//		return json_encode(['success' => 'Formulario válido y listo para ser procesado.']);
+//	}
 
 	/**
 	 * Método para procesar el registro del usuario (creación de usuario y dirección)
@@ -102,7 +185,7 @@ class ApiRegister {
 		$data['contrasenna'] = password_hash($data['contrasenna'], PASSWORD_BCRYPT);
 
 		// Crear el objeto Usuario con los datos recibidos
-		$usuario = new Usuario(
+		$usuario = new Usuario(null,
 			$nombre, $apellido1, $apellido2,
 			$data['contrasenna'], $telefono, $data['email'],
 			$data['dni'], $foto, $monedero, $carrito,

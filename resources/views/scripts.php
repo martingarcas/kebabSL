@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	window.addEventListener('resize', checkMediaQuery);
 
-// Agregamos un listener para manejar el clic en el menú
+	// Agregamos un listener para manejar el clic en el menú
 	menuIcon.addEventListener('click', function() {
 		// Alternar la clase 'show' para mostrar/ocultar el menú
 
@@ -39,18 +39,16 @@ document.addEventListener("DOMContentLoaded", function() {
 	// Verificamos si hay un mensaje en sessionStorage
 	const flashMessage = sessionStorage.getItem('flash_message');
 	if (flashMessage) {
-		const messageObj = JSON.parse(flashMessage);  // Parseamos el mensaje desde sessionStorage
+		const messageObj = JSON.parse(flashMessage);  // Parseamos el mensaje
 
-		// Creamos un elemento div para mostrar el mensaje
 		const flashMessageDiv = document.createElement('div');
 		flashMessageDiv.id = 'flashMessage';
-		flashMessageDiv.classList.add('flash-message', messageObj.type);  // Asignamos la clase con el tipo
+		flashMessageDiv.classList.add('flash-message', messageObj.type);  // Asignamos la clase con el tipo (success)
 		flashMessageDiv.textContent = messageObj.message;  // Asignamos el mensaje
 
-		// Buscamos el elemento con la clase "form-wrapper"
 		const formWrapper = document.querySelector('.form-wrapper');
 
-		// Insertamos el mensaje flash justo antes de ".form-wrapper"
+		// Insertamos el mensaje flash justo antes de ".form-wrapper" (contenedor padre)
 		if (formWrapper) {
 			formWrapper.parentNode.insertBefore(flashMessageDiv, formWrapper);
 		}
