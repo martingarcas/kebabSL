@@ -76,10 +76,11 @@ a
 		display: block
 
 		a
-			display: block
+			//display: block
+			display: ruby
 			text-decoration: none
 			color: #ffffff /* Blanco */
-			padding: 0 0.8em
+			padding: 1em
 			transition: all 0.2s ease
 			border-bottom: 1px solid #ff7043 /* Naranja suave */
 
@@ -102,13 +103,16 @@ a
 
 	&.photo
 		position: absolute
-		top: calc(50% - 44px)
+		top: 0
+		//top: calc(50% - 44px)
 
 .user-photo
-	width: 30px
-	height: 30px
+	display: block
+	width: 40px
+	height: 42px
 	border-radius: 50%
-	margin-right: 10px
+	object-fit: cover
+	//margin-right: 10px
 
 /* Submenú */
 .submenu
@@ -178,7 +182,8 @@ a
 		display: none /* El ícono del menú se oculta en pantallas grandes */
 
 	.menu li
-		display: inline-block
+		//display: inline-block
+		display: ruby
 		text-align: center
 
 		a
@@ -211,6 +216,7 @@ a
 		left: 0
 		background-color: #ff7043
 		z-index: 10
+		height: 100dvh 
 
 	.menu
 		width: 100% /* Hace que las opciones del menú ocupen todo el ancho */
@@ -232,4 +238,26 @@ a
 		position: absolute
 		top: 10px
 		right: 10px
+
+	/* Estilos para el submenú */
+	.user-menu
+		width: stretch
+
+	.user-link
+		&.photo
+			position: absolute
+			top: 0
+
+	.user-menu:hover .submenu
+		display: block
+		text-align: center
+
+	/* Submenú */
+	.submenu
+		left: 72px
+
+		li
+			width: 200px
+			a
+				display: initial
 

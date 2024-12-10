@@ -10,7 +10,7 @@ $usuario = Logger::obtenerUsuario();
 	<div class="wrap">
 		<header class="main-menu-logo"><a href="/"><img class="main-menu-logo" src="/img/logo/kebablogo.png" alt="kebabsl"></a></header>
 		<a id="menu-icon">&#9776; Menu</a> <!-- Icono del menú hamburguesa -->
-		<nav class="navbar">
+		<nav class="navbar" style="display: none">
 			<ul class="menu">
 				<!-- Menú para usuarios logueados -->
 				<?php if ($usuario !== null && $usuario->getRol() === 'cliente'): ?>

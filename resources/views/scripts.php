@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	function checkMediaQuery() {
 		if (mediaQuery.matches) {
-			menuExt.style.display = 'block';
+			menuExt.style.display = 'flex';
+			navbar.style.display = 'block';
 		} else {
 			menuExt.style.display = 'none';
 		}
@@ -23,7 +24,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
 		if (!navbar.classList.contains('show')) {
 			menuExt.style.display = 'block';
-			navbar.classList.add('show');
+			navbar.style.display = 'block';
+			setTimeout(() => {
+				navbar.classList.add('show');
+			}, "100");
 			document.body.style.overflow = 'hidden';
 
 		} else {
@@ -31,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			navbar.classList.remove('show');
 			setTimeout(() => {
 				menuExt.style.display = 'none';
+				navbar.style.display = 'none';
 			}, "500");
 			document.body.style.overflow = '';
 		}
