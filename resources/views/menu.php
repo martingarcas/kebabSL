@@ -20,7 +20,11 @@ $usuario = Logger::obtenerUsuario();
 					<!-- Foto del usuario con submenú desplegable -->
 					<li class="user-menu">
 						<a href="#" class="user-link">
+							<?php if ($usuario->getFoto()): ?>
 							<img src="<?= htmlspecialchars($usuario->getFoto()); ?>" alt="Foto de <?= htmlspecialchars($usuario->getNombre()); ?>" class="user-photo">
+							<?php else: ?>
+							<img src="/img/perfil/default-avatar.png" class="user-photo">
+							<?php endif; ?>
 						</a>
 						<ul class="submenu">
 							<li><a href="/profile">Mi perfil</a></li>

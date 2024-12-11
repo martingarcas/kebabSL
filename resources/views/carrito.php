@@ -81,6 +81,18 @@
                         <span>Total:</span>
                         <span class="total-precio">€${calcularTotalPrecio(carrito.lineasPedido)}</span>
                     </div>
+
+					 <div class="direccion-envio">
+
+						<label for="direccionEnvio">Dirección de Envío:</label>
+						<select id="direccionEnvio">
+							<option value="direccion1" selected>Infanta Pilar, nº 21, Jaén</option>
+							<option value="direccion2">Alameda Central, Bloque 3, 2º-B, Jaén</option>
+							<option value="direccion3">Infanta Margarita, nº 3, Jaén</option>
+						</select>
+
+					</div>
+
                     <button class="btn realizar grande">Realizar Pedido</button>
                 </footer>
             `;
