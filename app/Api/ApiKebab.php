@@ -144,7 +144,7 @@ class ApiKebab {
 			$kebabCreado = $repoKebab->create($kebab);
 
 			if (!empty($ingredientes)) {
-				$repoKebab->assoc_ingredientes($kebabCreado->getId(), $ingredientes);
+				$repoKebab->assoc_ingredientes($kebabCreado->getId(), $ingredientes); // begin transaction
 			}
 
 			http_response_code(200);

@@ -189,7 +189,7 @@ class ApiRegister {
 			$nombre, $apellido1, $apellido2,
 			$data['contrasenna'], $telefono, $data['email'],
 			$data['dni'], $foto, $monedero, $carrito,
-			'administrador' // El rol de usuario
+			'cliente' // El rol de usuario
 		);
 
 		// Guardar el usuario en la base de datos

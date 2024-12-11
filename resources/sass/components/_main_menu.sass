@@ -102,8 +102,8 @@ a
 	cursor: pointer
 
 	&.photo
-		position: absolute
-		top: 0
+		//position: absolute
+		//top: 0
 		//top: calc(50% - 44px)
 
 .user-photo
@@ -112,6 +112,7 @@ a
 	height: 42px
 	border-radius: 50%
 	object-fit: cover
+	vertical-align: middle
 	//margin-right: 10px
 
 /* Submenú */
@@ -119,7 +120,8 @@ a
 	display: none
 	position: absolute
 	top: 100%
-	left: 0
+	left: -110%
+	//left: 0
 	background-color: #333
 	list-style-type: none
 	padding: 0
@@ -141,7 +143,7 @@ a
 				background-color: #555
 
 .user-menu:hover .submenu
-	display: block
+	display: ruby-text
 
 /* Mobile menu */
 #menu-icon
@@ -249,11 +251,12 @@ a
 			top: 0
 
 	.user-menu:hover .submenu
-		display: block
+		display: ruby-text
 		text-align: center
 
 	/* Submenú */
 	.submenu
+		top: 23%
 		left: 72px
 
 		li
