@@ -17,7 +17,8 @@ a
 	position: relative
 	width: 100%
 	height: 100px /* Incrementa la altura de la barra */
-	line-height: 100px /* Alinea el contenido verticalmente */
+	//line-height: 100px /* Alinea el contenido verticalmente */
+	line-height: 80px /* Alinea el contenido verticalmente */
 	background: #ff7043 /* Naranja suave */
 	box-shadow: 0 -3px 0 #ff7043 inset
 
@@ -74,13 +75,14 @@ a
 	li
 		list-style-type: none
 		display: block
+		padding: 0 8px
 
 		a
 			//display: block
 			display: ruby
 			text-decoration: none
 			color: #ffffff /* Blanco */
-			padding: 1em
+			//padding: 1em
 			transition: all 0.2s ease
 			border-bottom: 1px solid #ff7043 /* Naranja suave */
 
@@ -89,6 +91,11 @@ a
 
 			&.active
 				background-color: #d32f2f /* Rojo para el enlace activo */
+
+#carrito-cantidad-display
+	position: absolute
+	top: -4px
+	font-size: 12px
 
 /* Estilos para el submenú */
 .user-menu

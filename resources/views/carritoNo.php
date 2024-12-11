@@ -88,15 +88,15 @@
                         <span class="total-precio">€${calcularTotalPrecio(carrito.lineasPedido)}</span>
                     </div>
 
-					 <div class="direccion-envio">
-
-						<label for="direccionEnvio">Dirección de Envío:</label>
-						<select id="direccionEnvio">
-							<option value="direccion1" selected>Infanta Pilar, nº 21, Jaén</option>
-							<option value="direccion2">Alameda Central, Bloque 3, 2º-B, Jaén</option>
-							<option value="direccion3">Infanta Margarita, nº 3, Jaén</option>
-						</select>
-
+					 <div class="direccion-envio" style="display: flex; flex-wrap: wrap; gap: 18px; align-items: baseline">
+						<div>
+							<label for="email" style="margin-bottom: 8px;">Email:</label>
+							<input type="email" id="email" placeholder="Introduce tu email" style="width:inherit; padding: 8px; font-size: 12px">
+						</div>
+						<div>
+							<label for="direccion" style="margin-bottom: 8px;">Dirección:</label>
+							<input type="text" id="direccion" placeholder="Introduce tu dirección" style="width:inherit; padding: 8px; font-size: 12px">
+						</div>
 					</div>
 
                     <button class="btn realizar grande">Realizar Pedido</button>
@@ -158,7 +158,7 @@
 				sessionStorage.removeItem('carrito');
 				sessionStorage.removeItem('carrito_cantidad');
 				// mostrarCarrito();
-				window.location.href = '/carrito';
+				window.location.href = '/carritoNo';
 			}
 
 			function eliminarDelCarrito(nombreKebab) {
@@ -222,12 +222,12 @@
 			function realizarPedido() {
 				// Aquí se puede definir la lógica para procesar el pedido
 				sessionStorage.setItem('flash_message', JSON.stringify({
-					message: '¡Pedido realizado con éxito!',
+					message: '¡Pedido realizado con éxito, revisa los datos en tu correo!',
 					type: 'success'
 				}));
 				sessionStorage.removeItem('carrito');
 				sessionStorage.removeItem('carrito_cantidad');
-				window.location.href = '/carrito'
+				window.location.href = '/carritoNo'
 			}
 
 			mostrarCarrito();

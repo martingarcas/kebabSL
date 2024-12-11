@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	function checkMediaQuery() {
 		if (mediaQuery.matches) {
 			menuExt.style.display = 'flex';
+			menuExt.style.gap = '24px';
 			navbar.style.display = 'block';
 		} else {
 			menuExt.style.display = 'none';
@@ -41,33 +42,58 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 	});
 
-	// Verificamos si hay un mensaje en sessionStorage
-	const flashMessage = sessionStorage.getItem('flash_message');
-	if (flashMessage) {
-		const messageObj = JSON.parse(flashMessage);  // Parseamos el mensaje
+	function obtenerFlash() {
+		// Verificamos si hay un mensaje en sessionStorage
+		const flashMessage = sessionStorage.getItem('flash_message');
+		if (flashMessage) {
+			const messageObj = JSON.parse(flashMessage);  // Parseamos el mensaje
 
-		const flashMessageDiv = document.createElement('div');
-		flashMessageDiv.id = 'flashMessage';
-		flashMessageDiv.classList.add('flash-message', messageObj.type);  // Asignamos la clase con el tipo (success)
-		flashMessageDiv.textContent = messageObj.message;  // Asignamos el mensaje
+			const flashMessageDiv = document.createElement('div');
+			flashMessageDiv.id = 'flashMessage';
+			flashMessageDiv.classList.add('flash-message', messageObj.type);  // Asignamos la clase con el tipo (success)
+			flashMessageDiv.textContent = messageObj.message;  // Asignamos el mensaje
 
-		const formWrapper = document.querySelector('.form-wrapper');
+			const formWrapper = document.querySelector('.form-wrapper');
 
-		// Insertamos el mensaje flash justo antes de ".form-wrapper" (contenedor padre)
-		if (formWrapper) {
-			formWrapper.parentNode.insertBefore(flashMessageDiv, formWrapper);
+			// Insertamos el mensaje flash justo antes de ".form-wrapper" (contenedor padre)
+			if (formWrapper) {
+				formWrapper.parentNode.insertBefore(flashMessageDiv, formWrapper);
+			}
+
+			// Limpiamos el sessionStorage después de mostrar el mensaje
+			sessionStorage.removeItem('flash_message');
 		}
 
-		// Limpiamos el sessionStorage después de mostrar el mensaje
-		sessionStorage.removeItem('flash_message');
+		setTimeout(function() {
+			var flashMessages = document.querySelectorAll('#flashMessage');
+			if (flashMessages) {
+				flashMessages.forEach(function (flash) {
+					flash.style.display = 'none';
+				});
+				// flashMessage.style.display = 'none';  // Ocultamos el mensaje
+			}
+		}, 5000);  // 5000 milisegundos = 5 segundos
 	}
 
-	setTimeout(function() {
-		var flashMessage = document.querySelector('#flashMessage');
-		if (flashMessage) {
-			flashMessage.style.display = 'none';  // Ocultamos el mensaje
-		}
-	}, 5000);  // 5000 milisegundos = 5 segundos
+	// Obtener el valor de carrito_cantidad desde sessionStorage
+	const carritoCantidadDisplay = document.getElementById('carrito-cantidad-display');
+
+	// Actualizar el contenido del elemento con la cantidad del carrito
+	const actualizarCarritoCantidadDisplay = () => {
+		const carritoCantidad = parseInt(sessionStorage.getItem('carrito_cantidad'), 10) || 0;
+		carritoCantidadDisplay.textContent = carritoCantidad > 0 ? `(${carritoCantidad})` : '';
+	}
+
+	// Iniciar la actualización inicial
+	actualizarCarritoCantidadDisplay();
+
+	// Escuchar el evento de actualización del carrito
+	document.addEventListener('carritoActualizado', (event) => {
+		obtenerFlash();
+		carritoCantidadDisplay.textContent = `(${event.detail.carritoCantidad})`;
+	});
+
+	obtenerFlash();
 });
 </script>
 

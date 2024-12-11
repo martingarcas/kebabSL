@@ -27,6 +27,10 @@ $routes = [
 	'apiUser' 			=> [ApiUser::class, 'handleRequest', 'null'],
 	'carta' 			=> [AuthController::class, 'showMenuKebabs', 'carta'],
 	'carrito' 			=> [AuthController::class, 'showCarrito', 'carrito'],
+	'carritoNo' 		=> [AuthController::class, 'showCarritoNo', 'carritoNo'],
+	'estados' 			=> [AuthController::class, 'showEstados', 'estados'],
+	'datos.php' 		=> [AuthController::class, 'datos', null],
+
 ];
 
 return $routes;

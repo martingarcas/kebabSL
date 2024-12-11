@@ -311,6 +311,7 @@
 
 				// Llamar a la función addToCart, pasando el nombre del kebab y la cantidad seleccionada
 				addToCart(nombreKebab, ingredientesComoCadena, precioTotalKebab, cantidadSeleccionada);
+				// window.location.href = '/carta';
 			});
 
 
@@ -492,7 +493,7 @@
 					const precioKebab = kebab.precio;  // Suponiendo que "kebab" tiene el nombre
 
 					// Llamar a la función addToCart, pasando el nombre del kebab y la cantidad seleccionada
-					addToCart(nombreKebab, ingredientesKebab, precioKebab, cantidadSeleccionada);
+					addToCart(nombreKebab, ingredientesKebab, precioKebab, cantidadSeleccionada, addToCartButton);
 				});
 
 				addToCartContainer.appendChild(cantidadInput);
@@ -565,6 +566,7 @@
 
 				// Llamar a la función addToCart, pasando el nombre del kebab y la cantidad seleccionada
 				addToCart(nombreKebab, ingredientesComoCadena, precioTotalKebab, cantidadSeleccionada);
+				// window.location.href = '/carta';
 			});
 
 
@@ -637,9 +639,12 @@
 			}
 
 			// Función para agregar al carrito
-			function addToCart(nombreKebab, ingredientesKebab, precioTotalKebab, cantidadSeleccionada) {
+			function addToCart(nombreKebab, ingredientesKebab, precioTotalKebab, cantidadSeleccionada, boton = null) {
 				// Obtener las líneas de pedido existentes o inicializar un objeto vacío
 				let carrito = JSON.parse(sessionStorage.getItem('carrito')) || { lineasPedido: [] };
+
+				// Obtener la cantidad total acumulada del carrito o inicializar en 0
+				let carritoCantidad = parseInt(sessionStorage.getItem('carrito_cantidad'), 10) || 0;
 
 				// Ver si el kebab ya está en el carrito
 				const lineaExistente = carrito.lineasPedido.find(linea => linea.nombre === nombreKebab);
@@ -657,14 +662,35 @@
 					});
 				}
 
+				// Sumar la cantidad seleccionada al total acumulado
+				carritoCantidad += parseInt(cantidadSeleccionada, 10);
+
 				// Guardar el carrito en sessionStorage
 				sessionStorage.setItem('carrito', JSON.stringify(carrito));
+				// Guardar mensaje de error en sessionStorage
+				sessionStorage.setItem('flash_message', JSON.stringify({
+					message: `El kebab "${nombreKebab || "Custom"}" ha sido añadido al carrito con ${cantidadSeleccionada} unidad(es).`,
+					type: 'success'
+				}));
+
+				sessionStorage.setItem('carrito_cantidad', carritoCantidad.toString());
+
+				// Disparar evento de actualización de carrito
+				if (boton != null) {
+					const evento = new CustomEvent('carritoActualizado', { detail: { carritoCantidad } });
+					document.dispatchEvent(evento);
+				} else {
+					window.location.href = '/carta';
+				}
+
 
 				// Mostrar un mensaje al usuario
-				alert(`El kebab "${nombreKebab}" ha sido añadido al carrito con ${cantidadSeleccionada} unidad(es).`);
+				// alert(`El kebab "${nombreKebab}" ha sido añadido al carrito con ${cantidadSeleccionada} unidad(es).`);
 
 				// Opcional: Actualizar un contador visual del carrito
-				actualizarCarrito();
+				// actualizarCarrito();
+
+				// window.location.href = '/carta';
 			}
 
 
