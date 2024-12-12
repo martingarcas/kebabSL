@@ -4,14 +4,16 @@
 	.contact-cnt-inner
 		max-width: 1400px
 		margin: 0 auto
-		padding: 50px 0
+		//padding: 50px 0
 		background-color: white
 		//box-shadow: 0 0 10px 0 rgba(0,0,0,.2)
 
 		.contact-description
 			text-align: left
 			padding: 0 50px
-			margin-bottom: 50px
+			//margin-bottom: 50px
+			max-width: 960px
+			margin: 0 auto 50px
 
 			&.end
 				font-weight: 600
@@ -29,16 +31,21 @@
 			display: flex
 			flex-direction: column
 			width: 100%
+			max-width: 960px
 			margin-bottom: 50px
 			padding: 24px
+			margin: 0 auto
 
 		.map-responsive
 			//max-height: 750px//736
-			height: 509px
+			//height: 509px
+			//height: 279px
+			height: 50%
 
 		.contact-form-data
 			background-color: #333
 			padding: 50px
+			margin-bottom: 24px
 			//margin-bottom: 60px
 
 			.messageError
@@ -93,6 +100,40 @@
 			.form-send-data:hover
 				background-color: #ff7043
 
+.information
+	width: 100%
+
+	.contact-description
+		height: 50%
+		&.end
+			margin-bottom: 50px
+
+	.main-data-box-list
+		a
+			color: #333333
+		a:hover
+			text-decoration: underline
+			color: #ff7043
+			transition: 0.2s
+		.list-item
+			display: flex
+			gap: 6px
+			position: relative
+			align-items: center
+			margin-bottom: 26px
+			list-style: none
+
+			.list-item-direction
+				line-height: 150%
+
+			.position-icon
+				display: flex
+				flex-direction: column
+				align-items: center
+
+			&:last-child
+				margin-bottom: 0
+
 @media (min-width: 768px)
 	.contact-cnt
 		.contact-cnt-inner
@@ -104,15 +145,23 @@
 				justify-content: space-between
 				padding: 0 50px
 				.contact-form-data
-					width: 580px
+					//width: 580px
+					width: 50%
 					border-top-left-radius: 6px
 					border-bottom-left-radius: 6px
+					margin-bottom: 0
 				.map-responsive
-					height: initial
-					width: 900px
+					//height: initial
+					//width: 900px
 					& iframe
 						border-top-right-radius: 6px
 						border-bottom-right-radius: 6px
+
+		.information
+			width: 50%
+			.contact-description
+				&.end
+					margin-bottom: 0 !important
 
 @media (min-width: 1402px)
 	.contact-cnt

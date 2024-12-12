@@ -53,20 +53,38 @@
 
 			</form>
 
-			<div class="map-responsive">
-				<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3153.486614612925!2d-3.7944687!3d37.7786343!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd6dd70f9f1b7a6f%3A0xb4562ab27bdf4f45!2sRestaurante%20Kebab%20Espa%C3%B1a!5e0!3m2!1ses!2ses!4v1731842115604!5m2!1ses!2ses" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+			<!-- Párrafo descriptivo sobre el mapa -->
+			<div class="information">
+				<div class="contact-description end">
+					<p style="margin-bottom: 24px">
+						Nuestro horario: de lunes a domingo de 11:30-17:00 / 20:00-05:00
+					</p>
+
+					<ul class="main-data-box-list">
+						<li class="list-item">
+							<span class="material-icons-outlined">mail</span>
+							<a href="mailto:martingar1997@hotmail.com">kebabsl@gmail.com</a>
+						</li>
+						<li class="list-item">
+							<span class="material-icons">phonelink_ring</span>
+							<a href="tel:693209523" target="_blank">(+34) 693 20 95 23</a>
+						</li>
+						<li class="list-item">
+							<span class="material-icons-outlined">place</span>
+							<a href="https://maps.app.goo.gl/YzHb53DVPXKmbZ9V6" target="_blank">
+								C. Enrique Ponce, 4<br/>
+								C.P: 23006 · Jaén
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<div class="map-responsive">
+					<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3153.486614612925!2d-3.7944687!3d37.7786343!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd6dd70f9f1b7a6f%3A0xb4562ab27bdf4f45!2sRestaurante%20Kebab%20Espa%C3%B1a!5e0!3m2!1ses!2ses!4v1731842115604!5m2!1ses!2ses" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+				</div>
 			</div>
 
 		</div>
-
-		<p class="contact-description end">
-			Nuestro horario: de lunes a domingo de 11:30-17:00 / 20:00-5:00
-		</p>
-
-		<p class="contact-description end">
-			Recuerda que antes cualquier duda, ¡contacte con nosotros!
-		</p>
-
 	</div>
 </div>
 
