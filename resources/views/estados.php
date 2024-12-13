@@ -42,12 +42,19 @@
 		.filtros {
 			display: flex;
 			justify-content: center;
+			gap: 42px;
 			margin-top: 10px;
+		}
+
+		.filtro {
+			display: flex;
+			gap: 4px;
+			align-items: baseline;
 		}
 
 		.filtros label {
 			font-size: 1rem;
-			margin-right: 10px;
+			/*margin-right: 10px;*/
 		}
 
 		.filtros select {
@@ -91,6 +98,7 @@
 			.filtros {
 				flex-direction: column;
 				align-items: center;
+				gap: 24px;
 			}
 
 			.filtros label {
@@ -117,12 +125,23 @@
 		<header>
 			<h1>Panel de Ventas</h1>
 			<div class="filtros">
-				<label for="periodo">Seleccionar periodo: </label>
-				<select id="periodo">
-					<option value="2024">2024</option>
-					<option value="2023">2023</option>
-					<option value="2022">2022</option>
-				</select>
+				<div class="filtro">
+					<label for="periodo">Seleccionar año: </label>
+					<select id="periodo">
+						<option value="2024">2024</option>
+						<option value="2023">2023</option>
+						<option value="2022">2022</option>
+					</select>
+				</div>
+				<div class="filtro">
+					<label for="periodo">Seleccionar periodo: </label>
+					<select id="periodo">
+						<option value="2024">Completo</option>
+						<option value="2024">1º Trimestre</option>
+						<option value="2023">2º Trimestre</option>
+						<option value="2022">3º Trimestre</option>
+					</select>
+				</div>
 			</div>
 		</header>
 
