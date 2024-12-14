@@ -154,6 +154,10 @@ $this->layout('master'); ?>
 		gap: 12px;
 	}
 
+	.direccion-fija {
+		width: 320px;
+	}
+
 	@media (max-width: 860px) {
 		.profile-card .profile-header .profile-photo button {
 			left: 30%
@@ -184,6 +188,10 @@ $this->layout('master'); ?>
 		}
 		.profile-card .profile-header {
 			padding-bottom: 50px;
+		}
+		.direccion-fija {
+			width: initial;
+		}
 	}
 
 	@media (max-width: 400px) {
@@ -251,11 +259,15 @@ $this->layout('master'); ?>
 				<h3>Dirección</h3>
 				<div class="direccion-list">
 					<div class="direccion-item">
-						<input type="text" id="direccion-1" placeholder="Dirección" value="Infanta Pilar, nº 21 - Jaén">
+						<input type="text" class="direccion-fija" id="direccion-1" placeholder="Dirección" value="Infanta Pilar, nº 21 - Jaén">
 						<input type="checkbox" id="direccion-activa-1" class="direccion-activa" checked>
 					</div>
 					<div class="direccion-item">
-						<input type="text" id="direccion-2" placeholder="Dirección">
+						<input type="text" class="direccion-fija" id="direccion-2" placeholder="Dirección" value="Avenida Ruiz Jiménez, nº 2, 3º.B - Jaén">
+						<input type="checkbox" id="direccion-activa-2" class="direccion-activa">
+					</div>
+					<div class="direccion-item">
+						<input type="text" class="direccion-fija" id="direccion-2" placeholder="Dirección">
 						<input type="checkbox" id="direccion-activa-2" class="direccion-activa">
 					</div>
 				</div>

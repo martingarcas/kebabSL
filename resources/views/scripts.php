@@ -80,8 +80,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	// Actualizar el contenido del elemento con la cantidad del carrito
 	const actualizarCarritoCantidadDisplay = () => {
-		const carritoCantidad = parseInt(sessionStorage.getItem('carrito_cantidad'), 10) || 0;
-		carritoCantidadDisplay.textContent = carritoCantidad > 0 ? `(${carritoCantidad})` : '';
+		if (sessionStorage.getItem('carrito_cantidad')) {
+
+			const carritoCantidad = parseInt(sessionStorage.getItem('carrito_cantidad'), 10) || 0;
+			carritoCantidadDisplay.textContent = carritoCantidad > 0 ? `(${carritoCantidad})` : '';
+		}
 	}
 
 	// Iniciar la actualización inicial
