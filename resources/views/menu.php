@@ -19,6 +19,7 @@ $usuario = Logger::obtenerUsuario();
 						<a href="/carrito">Carrito</a><span id="carrito-cantidad-display"></span>
 					</li>
 					<li><a href="/contacto">Contacto</a></li>
+					<li><a href="/pedidos-client">Panel de Pedidos</a></li>
 					<!-- Foto del usuario con submenú desplegable -->
 					<li class="user-menu">
 						<a href="#" class="user-link">
@@ -37,7 +38,8 @@ $usuario = Logger::obtenerUsuario();
 					<!-- Menú para administradores -->
 					<li><a href="/kebabs">Kebabs</a></li>
 					<li><a href="/ingredientes">Ingredientes</a></li>
-					<li><a href="/estados">Gráficos-estados</a></li>
+					<li><a href="/ventas">Panel de Ventas</a></li>
+					<li><a href="/pedidos-admin">Panel de Pedidos</a></li>
 					<li class="user-menu">
 						<a href="#" class="user-link photo">
 							<?php if (!$usuario->getFoto()): ?>

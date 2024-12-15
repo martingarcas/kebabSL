@@ -289,14 +289,43 @@ class AuthController {
 		echo $this->templates->render($view, ['message' => $message]);
 	}
 
-	// Renderizar vista de kebabs
-	public function showEstados($view) {
+	public function showVentas($view) {
 		// Obtener el mensaje flash
 		$message = FlashMessage::getMessage();
 		// Verificar si el usuario está logueado y es administrador
 		$usuario = Logger::obtenerUsuario();
 
 		if (!$usuario || $usuario->getRol() !== 'administrador') {
+			http_response_code(403); // Código HTTP 403: Prohibido
+			FlashMessage::setMessage("ACCESO DENEGADO.", 'error');
+			header('Location: /');
+		}
+		// Renderizar la vista con el mensaje flash si existe
+		echo $this->templates->render($view, ['message' => $message]);
+	}
+
+	public function showPedidosAdmin($view) {
+		// Obtener el mensaje flash
+		$message = FlashMessage::getMessage();
+		// Verificar si el usuario está logueado y es administrador
+		$usuario = Logger::obtenerUsuario();
+
+		if (!$usuario || $usuario->getRol() !== 'administrador') {
+			http_response_code(403); // Código HTTP 403: Prohibido
+			FlashMessage::setMessage("ACCESO DENEGADO.", 'error');
+			header('Location: /');
+		}
+		// Renderizar la vista con el mensaje flash si existe
+		echo $this->templates->render($view, ['message' => $message]);
+	}
+
+	public function showPedidosClient($view) {
+		// Obtener el mensaje flash
+		$message = FlashMessage::getMessage();
+		// Verificar si el usuario está logueado y es administrador
+		$usuario = Logger::obtenerUsuario();
+
+		if (!$usuario || $usuario->getRol() !== 'cliente') {
 			http_response_code(403); // Código HTTP 403: Prohibido
 			FlashMessage::setMessage("ACCESO DENEGADO.", 'error');
 			header('Location: /');

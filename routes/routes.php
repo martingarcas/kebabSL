@@ -28,7 +28,9 @@ $routes = [
 	'carta' 			=> [AuthController::class, 'showMenuKebabs', 'carta'],
 	'carrito' 			=> [AuthController::class, 'showCarrito', 'carrito'],
 	'carritoNo' 		=> [AuthController::class, 'showCarritoNo', 'carritoNo'],
-	'estados' 			=> [AuthController::class, 'showEstados', 'estados'],
+	'ventas' 			=> [AuthController::class, 'showVentas', 'ventas'],
+	'pedidos-admin' 	=> [AuthController::class, 'showPedidosAdmin', 'pedidos_admin'],
+	'pedidos-client' 	=> [AuthController::class, 'showPedidosClient', 'pedidos_client'],
 	'datos.php' 		=> [AuthController::class, 'datos', null],
 
 ];
