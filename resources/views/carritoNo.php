@@ -15,7 +15,59 @@
 
 <?php $this->start('formulario') ?>
 
+	<div class="ccc-modal-overlay"></div>
+
 	<div class="form-wrapper">
+
+		<div class="container">
+			<span class="close">&times;</span>
+			<div id="Checkout" class="inline">
+				<h1>Pay Invoice</h1>
+				<div class="card-row">
+					<span class="visa"></span>
+					<span class="mastercard"></span>
+					<span class="amex"></span>
+					<span class="discover"></span>
+				</div>
+				<form>
+					<div class="form-group">
+						<label for="PaymentAmount">Payment amount</label>
+						<div class="amount-placeholder">
+							<span></span>
+							<span class="total-payment"></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label or="NameOnCard">Name on card</label>
+						<input id="NameOnCard" class="form-control" type="text" maxlength="255" required>
+					</div>
+					<div class="form-group">
+						<label for="CreditCardNumber">Card number</label>
+						<input id="CreditCardNumber" class="null card-image form-control" type="text" required>
+					</div>
+					<div class="expiry-date-group form-group">
+						<label for="ExpiryDate">Expiry date</label>
+						<input id="ExpiryDate" class="form-control" type="text" placeholder="MM / YY" maxlength="7" required>
+					</div>
+					<div class="security-code-group form-group">
+						<label for="SecurityCode">Security code</label>
+						<div class="input-container" >
+							<input id="SecurityCode" class="form-control" type="text" required>
+						</div>
+					</div>
+					<div class="zip-code-group form-group">
+						<label for="ZIPCode">ZIP/Postal code</label>
+						<div class="input-container">
+							<input id="ZIPCode" class="form-control" type="text" maxlength="10" required>
+						</div>
+					</div>
+					<button id="PayButton" class="btn btn-block btn-success submit-button">
+						<span class="submit-button-lock"></span>
+						<span class="total-payment"></span>
+					</button>
+				</form>
+			</div>
+		</div>
 
 		<div class="carrito">
 			<!-- Encabezado -->
@@ -107,7 +159,7 @@
 				document.querySelector('.btn.vaciar').addEventListener('click', vaciarCarrito);
 				let buttonsRelizar = document.querySelectorAll('.btn.realizar');
 				buttonsRelizar.forEach(btn => {
-					btn.addEventListener('click', realizarPedido)
+					btn.addEventListener('click', openModalPayment)
 				});
 
 				// Agregar eventos a los botones dinámicos
@@ -219,7 +271,18 @@
 				}
 			}
 
+			let pagoModal = document.querySelector('.container');
+			var span = document.getElementsByClassName("close")[0];
+			let totalPayments = document.querySelectorAll('.total-payment');
+			// Cerrar la modal cuando se hace clic en la "x"
+			span.onclick = function() {
+				pagoModal.style.display = "none";
+				document.querySelector('body').style.overflow = "auto";
+				document.querySelector('.ccc-modal-overlay').style.display = 'none';
+			}
+
 			function realizarPedido() {
+
 				// Aquí se puede definir la lógica para procesar el pedido
 				sessionStorage.setItem('flash_message', JSON.stringify({
 					message: '¡Pedido realizado con éxito, revisa los datos en tu correo!',
@@ -227,8 +290,24 @@
 				}));
 				sessionStorage.removeItem('carrito');
 				sessionStorage.removeItem('carrito_cantidad');
-				window.location.href = '/carritoNo'
+				window.location.href = '/carritoNo';
 			}
+			
+			function openModalPayment() {
+				let totalPedido = document.querySelector('.total-precio').textContent.split('€')[1];
+				console.log(totalPedido)
+				totalPayments.forEach(totalPayment => {
+					totalPayment.textContent = totalPedido + '€';
+				});
+				document.querySelector('body').style.overflow = 'hidden';
+				document.querySelector('.ccc-modal-overlay').style.display = 'block';
+				pagoModal.style.display = "block";
+			}
+
+			document.querySelector('#PayButton').addEventListener('click', function (e) {
+				e.preventDefault();
+				realizarPedido();
+			});
 
 			mostrarCarrito();
 
