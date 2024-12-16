@@ -74,6 +74,7 @@
 			<header class="carrito-header">
 				<h1>Tu Carrito</h1>
 				<div class="total">
+					<span>Total:</span>
 					<span class="total-precio">€0.00</span>
 				</div>
 				<div class="botones-globales">
@@ -89,11 +90,13 @@
 
 			<!-- Pie del carrito -->
 			<footer class="carrito-footer">
-				<div class="total">
+				<div class="total"  style="display: block !important;">
 					<span>Total:</span>
 					<span class="total-precio">€0.00</span>
 				</div>
-				<button class="btn realizar grande">Realizar Pedido</button>
+				<div style="width: 100%; text-align: center">
+					<button class="btn realizar grande">Realizar Pedido</button>
+				</div>
 			</footer>
 		</div>
 
@@ -122,6 +125,7 @@
                 <header class="carrito-header">
                     <h1>Tu Carrito</h1>
                     <div class="total">
+						<span>Total:</span>
                         <span class="total-precio">€${calcularTotalPrecio(carrito.lineasPedido)}</span>
                     </div>
                     <div class="botones-globales">
@@ -135,7 +139,7 @@
                 </section>
 
                 <footer class="carrito-footer">
-                    <div class="total">
+                    <div class="total" style="display: block !important;">
                         <span>Total:</span>
                         <span class="total-precio">€${calcularTotalPrecio(carrito.lineasPedido)}</span>
                     </div>
@@ -151,7 +155,9 @@
 						</div>
 					</div>
 
-                    <button class="btn realizar grande">Realizar Pedido</button>
+                    <div style="width: 100%; text-align: center">
+						<button class="btn realizar grande">Realizar Pedido</button>
+					</div>
                 </footer>
             `;
 

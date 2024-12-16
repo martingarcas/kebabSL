@@ -21,8 +21,13 @@
 			<!-- Encabezado -->
 			<header class="carrito-header">
 				<h1>Tu Carrito</h1>
-				<div class="total">
-					<span class="total-precio">€0.00</span>
+				<div>
+					<span>Total:</span>
+					<span class="total-precio">0.00€</span>
+				</div>
+				<div class="saldo">
+					<span>Saldo actual:</span>
+					<span class="total-saldo">50€</span>
 				</div>
 				<div class="botones-globales">
 					<button class="btn vaciar">Vaciar Carrito</button>
@@ -39,9 +44,11 @@
 			<footer class="carrito-footer">
 				<div class="total">
 					<span>Total:</span>
-					<span class="total-precio">€0.00</span>
+					<span class="total-precio">0.00€</span>
 				</div>
-				<button class="btn realizar grande">Realizar Pedido</button>
+				<div style="width: 100%; text-align: center">
+					<button class="btn realizar grande">Realizar Pedido</button>
+				</div>
 			</footer>
 		</div>
 
@@ -55,10 +62,14 @@
 	<script>
 		document.addEventListener('DOMContentLoaded', () => {
 
+			// Aquí se puede definir la lógica para procesar el pedido
+			let saldo = document.querySelector('.total-saldo').textContent.split('€')[0];
+
 			// console.log(sessionStorage.getItem('flash_message'))
 
 			// Función para mostrar el carrito
-			function mostrarCarrito() {
+			function mostrarCarrito(saldo) {
+				console.log(saldo)
 				// Obtener el carrito desde sessionStorage
 				const carrito = JSON.parse(sessionStorage.getItem('carrito')) || { lineasPedido: [] };
 
@@ -70,7 +81,8 @@
                 <header class="carrito-header">
                     <h1>Tu Carrito</h1>
                     <div class="total">
-                        <span class="total-precio">€${calcularTotalPrecio(carrito.lineasPedido)}</span>
+						Total:
+                        <span class="total-precio">${calcularTotalPrecio(carrito.lineasPedido)}€</span>
                     </div>
                     <div class="botones-globales">
                         <button class="btn vaciar">Vaciar Carrito</button>
@@ -84,9 +96,16 @@
 
                 <footer class="carrito-footer">
                     <div class="total">
-                        <span>Total:</span>
-                        <span class="total-precio">€${calcularTotalPrecio(carrito.lineasPedido)}</span>
+						<div>
+							<span>Total:</span>
+							<span class="total-precio">${calcularTotalPrecio(carrito.lineasPedido)}€</span>
+						</div>
+						<div class="saldo">
+							<span>Saldo actual:</span>
+							<span class="total-saldo">${saldo || 50}€</span>
+						</div>
                     </div>
+
 
 					 <div class="direccion-envio">
 
@@ -99,7 +118,9 @@
 
 					</div>
 
-                    <button class="btn realizar grande">Realizar Pedido</button>
+					<div style="width: 100%; text-align: center">
+						<button class="btn realizar grande">Realizar Pedido</button>
+					</div>
                 </footer>
             `;
 
@@ -133,7 +154,7 @@
                         <div class="info">
                             <h2 class="nombre-kebab">${linea.nombre || 'Custom'}</h2>
                             <p class="ingredientes">Ingredientes: ${linea.ingredientes || ''}</p>
-                            <p class="precio">Precio: €${(linea.precio * linea.cantidad).toFixed(2)}</p>
+                            <p class="precio">Precio: ${(linea.precio * linea.cantidad).toFixed(2)}€</p>
                         </div>
                         <div class="controles">
                             <div class="cantidad">
@@ -220,17 +241,26 @@
 			}
 
 			function realizarPedido() {
-				// Aquí se puede definir la lógica para procesar el pedido
+
+				let precioTotal = document.querySelector('.total-precio').textContent.split('€')[0];
+
+				saldo -= precioTotal;
+				// console.log(saldo)
 				sessionStorage.setItem('flash_message', JSON.stringify({
 					message: '¡Pedido realizado con éxito!',
 					type: 'success'
 				}));
 				sessionStorage.removeItem('carrito');
 				sessionStorage.removeItem('carrito_cantidad');
-				window.location.href = '/carrito'
+				// window.location.href = '/carrito'
+				mostrarCarrito(saldo);
+				// Disparar evento de actualización de carrito
+				let carritoCantidad = 0;
+				const evento = new CustomEvent('carritoActualizado', { detail: { carritoCantidad } });
+				document.dispatchEvent(evento);
 			}
 
-			mostrarCarrito();
+			mostrarCarrito(saldo);
 
 		});
 	</script>
