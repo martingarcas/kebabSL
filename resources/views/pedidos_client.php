@@ -282,6 +282,7 @@
 						<th>Productos</th>
 						<th>Método de Pago</th>
 						<th>Incidencias</th>
+						<th>Acciones</th>
 					</tr>
 					</thead>
 					<tbody id="pedidoTable">
@@ -295,6 +296,7 @@
 						<td data-header="Productos">Kebab Clásico x2<span class="information">&#9432;</span></td>
 						<td data-header="Método de Pago">Tarjeta</td>
 						<td data-header="Incidencias">Ninguna</td>
+						<td data-header="cancelar"><button style="cursor: pointer">Cancelar</button></td>
 					</tr>
 					<tr data-id="002" data-status="preparando">
 						<td data-header="ID Pedido">002</td>
@@ -306,6 +308,7 @@
 						<td data-header="Productos">Kebab Vegetal x1, Bebida x1<span class="information">&#9432;</span></td>
 						<td data-header="Método de Pago">PayPal</td>
 						<td data-header="Incidencias">Demora en el envío</td>
+						<td data-header="cancelar"><button style="cursor: pointer">Cancelar</button></td>
 					</tr>
 					<tr data-id="003" data-status="enviado">
 						<td data-header="ID Pedido">003</td>
@@ -317,6 +320,7 @@
 						<td data-header="Productos">Kebab de Pollo Picante x1<span class="information">&#9432;</span></td>
 						<td data-header="Método de Pago">Efectivo</td>
 						<td data-header="Incidencias">Pedido mal ingresado</td>
+						<td data-header="cancelar"><button style="cursor: pointer">Cancelar</button></td>
 					</tr>
 					<tr data-id="004" data-status="completado">
 						<td data-header="ID Pedido">004</td>
@@ -328,6 +332,7 @@
 						<td data-header="Productos">Kebab Mixto x2, Postre x1<span class="information">&#9432;</span></td>
 						<td data-header="Método de Pago">Tarjeta</td>
 						<td data-header="Incidencias">Pago aceptado</td>
+						<td data-header="cancelar"><button style="cursor: pointer">Cancelar</button></td>
 					</tr>
 					<tr data-id="005" data-status="pendiente">
 						<td data-header="ID Pedido">005</td>
@@ -339,6 +344,7 @@
 						<td data-header="Productos">Kebab Clásico x1, Bebida x1<span class="information">&#9432;</span></td>
 						<td data-header="Método de Pago">Transferencia</td>
 						<td data-header="Incidencias">Falta de confirmación</td>
+						<td data-header="cancelar"><button style="cursor: pointer">Cancelar</button></td>
 					</tr>
 					<tr data-id="006" data-status="recibido">
 						<td data-header="ID Pedido">006</td>
@@ -350,6 +356,7 @@
 						<td data-header="Productos">Kebab Mixto x3<span class="information">&#9432;</span></td>
 						<td data-header="Método de Pago">Tarjeta</td>
 						<td data-header="Incidencias">Pedido incompleto</td>
+						<td data-header="cancelar"><button style="cursor: pointer">Cancelar</button></td>
 					</tr>
 					<tr data-id="007" data-status="completado">
 						<td data-header="ID Pedido">007</td>
@@ -361,6 +368,7 @@
 						<td data-header="Productos">Kebab Clásico x4<span class="information">&#9432;</span></td>
 						<td data-header="Método de Pago">Efectivo</td>
 						<td data-header="Incidencias">Demora en el procesamiento</td>
+						<td data-header="cancelar"><button style="cursor: pointer">Cancelar</button></td>
 					</tr>
 					<tr data-id="008" data-status="cancelado">
 						<td data-header="ID Pedido">008</td>
@@ -372,6 +380,7 @@
 						<td data-header="Productos">Kebab de Pollo x2, Bebida x1<span class="information">&#9432;</span></td>
 						<td data-header="Método de Pago">Tarjeta</td>
 						<td data-header="Incidencias">Problema con la entrega</td>
+						<td data-header="cancelar"><button style="cursor: pointer">Cancelar</button></td>
 					</tr>
 					<tr data-id="009" data-status="enviado">
 						<td data-header="ID Pedido">009</td>
@@ -383,6 +392,7 @@
 						<td data-header="Productos">Kebab de Pollo Picante x1<span class="information">&#9432;</span></td>
 						<td data-header="Método de Pago">PayPal</td>
 						<td data-header="Incidencias">Ninguna</td>
+						<td data-header="cancelar"><button style="cursor: pointer">Cancelar</button></td>
 					</tr>
 					<tr data-id="010" data-status="completado">
 						<td data-header="ID Pedido">010</td>
@@ -394,6 +404,7 @@
 						<td data-header="Productos">Kebab Clásico x1<span class="information">&#9432;</span></td>
 						<td data-header="Método de Pago">Transferencia</td>
 						<td data-header="Incidencias">Pago aceptado</td>
+						<td data-header="cancelar"><button style="cursor: pointer">Cancelar</button></td>
 					</tr>
 					</tbody>
 				</table>
