@@ -15,7 +15,7 @@ $usuario = Logger::obtenerUsuario();
 				<!-- Menú para usuarios logueados -->
 				<?php if ($usuario !== null && $usuario->getRol() === 'cliente'): ?>
 					<li><a href="/carta">Carta</a></li>
-					<li>
+					<li style="position:relative;">
 						<a href="/carrito">Carrito</a><span id="carrito-cantidad-display"></span>
 					</li>
 					<li><a href="/contacto">Contacto</a></li>
@@ -57,7 +57,7 @@ $usuario = Logger::obtenerUsuario();
 					<!-- Menú para usuarios no logueados -->
 					<li><a href="/">Inicio</a></li>
 					<li><a href="/carta">Carta</a></li>
-					<li>
+					<li style="position:relative;">
 						<a href="/carritoNo">Carrito</a><span id="carrito-cantidad-display"></span>
 					</li>
 					<li><a href="/contacto">Contacto</a></li>
